@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */; };
+		4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2441FC3EBCB00EC8818 /* ViewController.swift */; };
+		4227F2481FC3EBCB00EC8818 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4227F2461FC3EBCB00EC8818 /* Main.storyboard */; };
+		4227F24B1FC3EBCB00EC8818 /* Nuntius.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2491FC3EBCB00EC8818 /* Nuntius.xcdatamodeld */; };
+		4227F24D1FC3EBCB00EC8818 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4227F24C1FC3EBCB00EC8818 /* Assets.xcassets */; };
+		4227F2501FC3EBCB00EC8818 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4227F24E1FC3EBCB00EC8818 /* LaunchScreen.storyboard */; };
+		4227F25B1FC3EBCB00EC8818 /* NuntiusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F25A1FC3EBCB00EC8818 /* NuntiusTests.swift */; };
+		4227F2661FC3EBCB00EC8818 /* NuntiusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2651FC3EBCB00EC8818 /* NuntiusUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4227F2571FC3EBCB00EC8818 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4227F2371FC3EBCB00EC8818 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4227F23E1FC3EBCB00EC8818;
+			remoteInfo = Nuntius;
+		};
+		4227F2621FC3EBCB00EC8818 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4227F2371FC3EBCB00EC8818 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4227F23E1FC3EBCB00EC8818;
+			remoteInfo = Nuntius;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4227F23F1FC3EBCB00EC8818 /* Nuntius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nuntius.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4227F2441FC3EBCB00EC8818 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4227F2471FC3EBCB00EC8818 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4227F24A1FC3EBCB00EC8818 /* Nuntius.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nuntius.xcdatamodel; sourceTree = "<group>"; };
+		4227F24C1FC3EBCB00EC8818 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4227F24F1FC3EBCB00EC8818 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4227F2511FC3EBCB00EC8818 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4227F2561FC3EBCB00EC8818 /* NuntiusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NuntiusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4227F25A1FC3EBCB00EC8818 /* NuntiusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuntiusTests.swift; sourceTree = "<group>"; };
+		4227F25C1FC3EBCB00EC8818 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4227F2611FC3EBCB00EC8818 /* NuntiusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NuntiusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4227F2651FC3EBCB00EC8818 /* NuntiusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuntiusUITests.swift; sourceTree = "<group>"; };
+		4227F2671FC3EBCB00EC8818 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4227F23C1FC3EBCB00EC8818 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F2531FC3EBCB00EC8818 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F25E1FC3EBCB00EC8818 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4227F2361FC3EBCB00EC8818 = {
+			isa = PBXGroup;
+			children = (
+				4227F2411FC3EBCB00EC8818 /* Nuntius */,
+				4227F2591FC3EBCB00EC8818 /* NuntiusTests */,
+				4227F2641FC3EBCB00EC8818 /* NuntiusUITests */,
+				4227F2401FC3EBCB00EC8818 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4227F2401FC3EBCB00EC8818 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4227F23F1FC3EBCB00EC8818 /* Nuntius.app */,
+				4227F2561FC3EBCB00EC8818 /* NuntiusTests.xctest */,
+				4227F2611FC3EBCB00EC8818 /* NuntiusUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4227F2411FC3EBCB00EC8818 /* Nuntius */ = {
+			isa = PBXGroup;
+			children = (
+				4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */,
+				4227F2441FC3EBCB00EC8818 /* ViewController.swift */,
+				4227F2461FC3EBCB00EC8818 /* Main.storyboard */,
+				4227F24C1FC3EBCB00EC8818 /* Assets.xcassets */,
+				4227F24E1FC3EBCB00EC8818 /* LaunchScreen.storyboard */,
+				4227F2511FC3EBCB00EC8818 /* Info.plist */,
+				4227F2491FC3EBCB00EC8818 /* Nuntius.xcdatamodeld */,
+			);
+			path = Nuntius;
+			sourceTree = "<group>";
+		};
+		4227F2591FC3EBCB00EC8818 /* NuntiusTests */ = {
+			isa = PBXGroup;
+			children = (
+				4227F25A1FC3EBCB00EC8818 /* NuntiusTests.swift */,
+				4227F25C1FC3EBCB00EC8818 /* Info.plist */,
+			);
+			path = NuntiusTests;
+			sourceTree = "<group>";
+		};
+		4227F2641FC3EBCB00EC8818 /* NuntiusUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4227F2651FC3EBCB00EC8818 /* NuntiusUITests.swift */,
+				4227F2671FC3EBCB00EC8818 /* Info.plist */,
+			);
+			path = NuntiusUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4227F23E1FC3EBCB00EC8818 /* Nuntius */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4227F26A1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "Nuntius" */;
+			buildPhases = (
+				4227F23B1FC3EBCB00EC8818 /* Sources */,
+				4227F23C1FC3EBCB00EC8818 /* Frameworks */,
+				4227F23D1FC3EBCB00EC8818 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nuntius;
+			productName = Nuntius;
+			productReference = 4227F23F1FC3EBCB00EC8818 /* Nuntius.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4227F2551FC3EBCB00EC8818 /* NuntiusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4227F26D1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusTests" */;
+			buildPhases = (
+				4227F2521FC3EBCB00EC8818 /* Sources */,
+				4227F2531FC3EBCB00EC8818 /* Frameworks */,
+				4227F2541FC3EBCB00EC8818 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4227F2581FC3EBCB00EC8818 /* PBXTargetDependency */,
+			);
+			name = NuntiusTests;
+			productName = NuntiusTests;
+			productReference = 4227F2561FC3EBCB00EC8818 /* NuntiusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4227F2601FC3EBCB00EC8818 /* NuntiusUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4227F2701FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusUITests" */;
+			buildPhases = (
+				4227F25D1FC3EBCB00EC8818 /* Sources */,
+				4227F25E1FC3EBCB00EC8818 /* Frameworks */,
+				4227F25F1FC3EBCB00EC8818 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4227F2631FC3EBCB00EC8818 /* PBXTargetDependency */,
+			);
+			name = NuntiusUITests;
+			productName = NuntiusUITests;
+			productReference = 4227F2611FC3EBCB00EC8818 /* NuntiusUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4227F2371FC3EBCB00EC8818 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0910;
+				LastUpgradeCheck = 0910;
+				ORGANIZATIONNAME = "Finoit Technologies";
+				TargetAttributes = {
+					4227F23E1FC3EBCB00EC8818 = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+					};
+					4227F2551FC3EBCB00EC8818 = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 4227F23E1FC3EBCB00EC8818;
+					};
+					4227F2601FC3EBCB00EC8818 = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 4227F23E1FC3EBCB00EC8818;
+					};
+				};
+			};
+			buildConfigurationList = 4227F23A1FC3EBCB00EC8818 /* Build configuration list for PBXProject "Nuntius" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4227F2361FC3EBCB00EC8818;
+			productRefGroup = 4227F2401FC3EBCB00EC8818 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4227F23E1FC3EBCB00EC8818 /* Nuntius */,
+				4227F2551FC3EBCB00EC8818 /* NuntiusTests */,
+				4227F2601FC3EBCB00EC8818 /* NuntiusUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4227F23D1FC3EBCB00EC8818 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4227F2501FC3EBCB00EC8818 /* LaunchScreen.storyboard in Resources */,
+				4227F24D1FC3EBCB00EC8818 /* Assets.xcassets in Resources */,
+				4227F2481FC3EBCB00EC8818 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F2541FC3EBCB00EC8818 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F25F1FC3EBCB00EC8818 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4227F23B1FC3EBCB00EC8818 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */,
+				4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */,
+				4227F24B1FC3EBCB00EC8818 /* Nuntius.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F2521FC3EBCB00EC8818 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4227F25B1FC3EBCB00EC8818 /* NuntiusTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4227F25D1FC3EBCB00EC8818 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4227F2661FC3EBCB00EC8818 /* NuntiusUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4227F2581FC3EBCB00EC8818 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4227F23E1FC3EBCB00EC8818 /* Nuntius */;
+			targetProxy = 4227F2571FC3EBCB00EC8818 /* PBXContainerItemProxy */;
+		};
+		4227F2631FC3EBCB00EC8818 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4227F23E1FC3EBCB00EC8818 /* Nuntius */;
+			targetProxy = 4227F2621FC3EBCB00EC8818 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4227F2461FC3EBCB00EC8818 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4227F2471FC3EBCB00EC8818 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4227F24E1FC3EBCB00EC8818 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4227F24F1FC3EBCB00EC8818 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4227F2681FC3EBCB00EC8818 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4227F2691FC3EBCB00EC8818 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4227F26B1FC3EBCB00EC8818 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = Nuntius/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.Nuntius";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4227F26C1FC3EBCB00EC8818 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = Nuntius/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.Nuntius";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4227F26E1FC3EBCB00EC8818 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = NuntiusTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.NuntiusTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nuntius.app/Nuntius";
+			};
+			name = Debug;
+		};
+		4227F26F1FC3EBCB00EC8818 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = NuntiusTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.NuntiusTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nuntius.app/Nuntius";
+			};
+			name = Release;
+		};
+		4227F2711FC3EBCB00EC8818 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = NuntiusUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.NuntiusUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Nuntius;
+			};
+			name = Debug;
+		};
+		4227F2721FC3EBCB00EC8818 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 78XE2RJ3DA;
+				INFOPLIST_FILE = NuntiusUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Finoit-Technologies.NuntiusUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Nuntius;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4227F23A1FC3EBCB00EC8818 /* Build configuration list for PBXProject "Nuntius" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4227F2681FC3EBCB00EC8818 /* Debug */,
+				4227F2691FC3EBCB00EC8818 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4227F26A1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "Nuntius" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4227F26B1FC3EBCB00EC8818 /* Debug */,
+				4227F26C1FC3EBCB00EC8818 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4227F26D1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4227F26E1FC3EBCB00EC8818 /* Debug */,
+				4227F26F1FC3EBCB00EC8818 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4227F2701FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4227F2711FC3EBCB00EC8818 /* Debug */,
+				4227F2721FC3EBCB00EC8818 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4227F2491FC3EBCB00EC8818 /* Nuntius.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4227F24A1FC3EBCB00EC8818 /* Nuntius.xcdatamodel */,
+			);
+			currentVersion = 4227F24A1FC3EBCB00EC8818 /* Nuntius.xcdatamodel */;
+			path = Nuntius.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 4227F2371FC3EBCB00EC8818 /* Project object */;
+}
