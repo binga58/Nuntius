@@ -13,6 +13,11 @@ class NTXMPPAccount: NSObject {
     var userName : String?
     var password : String?
     var port : UInt16! = 5222
+    var retryCount = 5
+    var retryInfiniteTimesOnDisconnection = false
+    var timeoutInterval : Double! = 10.0
+    var allowSelfSignedCertificates : Bool! = false
+    var allowSSLHostNameMismatch: Bool! = false
     
     init(serverDomain : String, userName : String, password : String){
         super.init()
