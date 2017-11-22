@@ -15,6 +15,12 @@
 		4227F2501FC3EBCB00EC8818 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4227F24E1FC3EBCB00EC8818 /* LaunchScreen.storyboard */; };
 		4227F25B1FC3EBCB00EC8818 /* NuntiusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F25A1FC3EBCB00EC8818 /* NuntiusTests.swift */; };
 		4227F2661FC3EBCB00EC8818 /* NuntiusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2651FC3EBCB00EC8818 /* NuntiusUITests.swift */; };
+		42D4BE321FC4405100057D12 /* NTXMPPConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D4BE311FC4405100057D12 /* NTXMPPConnection.swift */; };
+		42D4BE341FC4496D00057D12 /* NTXMPPAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D4BE331FC4496C00057D12 /* NTXMPPAccount.swift */; };
+		42D4BE391FC44D0D00057D12 /* NTXMPPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D4BE381FC44D0D00057D12 /* NTXMPPManager.swift */; };
+		7FFC96F670CDF45CB016135B /* Pods_NuntiusUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 523D1D164D5F165A9ED7E0AB /* Pods_NuntiusUITests.framework */; };
+		9F2F67DDB7A8ADC110A5C3AF /* Pods_NuntiusTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E5100F8DD622455232EB05 /* Pods_NuntiusTests.framework */; };
+		D8D8FCACDF0D78128DF7AEB2 /* Pods_Nuntius.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C4B3B9EB1FF636E644E5B08 /* Pods_Nuntius.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +41,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01E5100F8DD622455232EB05 /* Pods_NuntiusTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NuntiusTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B1720DABBD894B1E0AC1439 /* Pods-NuntiusTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests.debug.xcconfig"; sourceTree = "<group>"; };
+		39AD6A6ECE78050E3944667D /* Pods-Nuntius.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nuntius.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius.debug.xcconfig"; sourceTree = "<group>"; };
+		3AAEE02467CEA2DC9D02BE65 /* Pods-NuntiusTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests.release.xcconfig"; sourceTree = "<group>"; };
 		4227F23F1FC3EBCB00EC8818 /* Nuntius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nuntius.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4227F2441FC3EBCB00EC8818 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +59,14 @@
 		4227F2611FC3EBCB00EC8818 /* NuntiusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NuntiusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4227F2651FC3EBCB00EC8818 /* NuntiusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuntiusUITests.swift; sourceTree = "<group>"; };
 		4227F2671FC3EBCB00EC8818 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42D4BE311FC4405100057D12 /* NTXMPPConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPConnection.swift; sourceTree = "<group>"; };
+		42D4BE331FC4496C00057D12 /* NTXMPPAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPAccount.swift; sourceTree = "<group>"; };
+		42D4BE381FC44D0D00057D12 /* NTXMPPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPManager.swift; sourceTree = "<group>"; };
+		523D1D164D5F165A9ED7E0AB /* Pods_NuntiusUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NuntiusUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C4B3B9EB1FF636E644E5B08 /* Pods_Nuntius.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nuntius.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88D449A0D89A59371C591D8A /* Pods-NuntiusUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		A69C0A9EB0E2A7BDA1DF222A /* Pods-NuntiusUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests.release.xcconfig"; sourceTree = "<group>"; };
+		DCD8FB6CEFAD1C678E1AC889 /* Pods-Nuntius.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nuntius.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8D8FCACDF0D78128DF7AEB2 /* Pods_Nuntius.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F2F67DDB7A8ADC110A5C3AF /* Pods_NuntiusTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +90,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FFC96F670CDF45CB016135B /* Pods_NuntiusUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		354B7D75101A122B038B91D2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5C4B3B9EB1FF636E644E5B08 /* Pods_Nuntius.framework */,
+				01E5100F8DD622455232EB05 /* Pods_NuntiusTests.framework */,
+				523D1D164D5F165A9ED7E0AB /* Pods_NuntiusUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4227F2361FC3EBCB00EC8818 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +114,8 @@
 				4227F2591FC3EBCB00EC8818 /* NuntiusTests */,
 				4227F2641FC3EBCB00EC8818 /* NuntiusUITests */,
 				4227F2401FC3EBCB00EC8818 /* Products */,
+				A2360835DA3CF6E3A95DA2CF /* Pods */,
+				354B7D75101A122B038B91D2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +134,7 @@
 			children = (
 				4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */,
 				4227F2441FC3EBCB00EC8818 /* ViewController.swift */,
+				42D4BE2E1FC43F7F00057D12 /* XMPPConnection */,
 				4227F2461FC3EBCB00EC8818 /* Main.storyboard */,
 				4227F24C1FC3EBCB00EC8818 /* Assets.xcassets */,
 				4227F24E1FC3EBCB00EC8818 /* LaunchScreen.storyboard */,
@@ -128,6 +162,29 @@
 			path = NuntiusUITests;
 			sourceTree = "<group>";
 		};
+		42D4BE2E1FC43F7F00057D12 /* XMPPConnection */ = {
+			isa = PBXGroup;
+			children = (
+				42D4BE311FC4405100057D12 /* NTXMPPConnection.swift */,
+				42D4BE331FC4496C00057D12 /* NTXMPPAccount.swift */,
+				42D4BE381FC44D0D00057D12 /* NTXMPPManager.swift */,
+			);
+			path = XMPPConnection;
+			sourceTree = "<group>";
+		};
+		A2360835DA3CF6E3A95DA2CF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				39AD6A6ECE78050E3944667D /* Pods-Nuntius.debug.xcconfig */,
+				DCD8FB6CEFAD1C678E1AC889 /* Pods-Nuntius.release.xcconfig */,
+				1B1720DABBD894B1E0AC1439 /* Pods-NuntiusTests.debug.xcconfig */,
+				3AAEE02467CEA2DC9D02BE65 /* Pods-NuntiusTests.release.xcconfig */,
+				88D449A0D89A59371C591D8A /* Pods-NuntiusUITests.debug.xcconfig */,
+				A69C0A9EB0E2A7BDA1DF222A /* Pods-NuntiusUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +192,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4227F26A1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "Nuntius" */;
 			buildPhases = (
+				20E9C30D50066266C4868FE7 /* [CP] Check Pods Manifest.lock */,
 				4227F23B1FC3EBCB00EC8818 /* Sources */,
 				4227F23C1FC3EBCB00EC8818 /* Frameworks */,
 				4227F23D1FC3EBCB00EC8818 /* Resources */,
+				CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */,
+				9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -152,9 +212,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4227F26D1FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusTests" */;
 			buildPhases = (
+				B44D42231AAB98C1F1E75EEB /* [CP] Check Pods Manifest.lock */,
 				4227F2521FC3EBCB00EC8818 /* Sources */,
 				4227F2531FC3EBCB00EC8818 /* Frameworks */,
 				4227F2541FC3EBCB00EC8818 /* Resources */,
+				6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */,
+				58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -170,9 +233,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4227F2701FC3EBCB00EC8818 /* Build configuration list for PBXNativeTarget "NuntiusUITests" */;
 			buildPhases = (
+				C21215A585916FD886A65EC6 /* [CP] Check Pods Manifest.lock */,
 				4227F25D1FC3EBCB00EC8818 /* Sources */,
 				4227F25E1FC3EBCB00EC8818 /* Frameworks */,
 				4227F25F1FC3EBCB00EC8818 /* Resources */,
+				20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */,
+				38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -190,6 +256,7 @@
 		4227F2371FC3EBCB00EC8818 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = NT;
 				LastSwiftUpdateCheck = 0910;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Finoit Technologies";
@@ -257,13 +324,174 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		20E9C30D50066266C4868FE7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nuntius-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B44D42231AAB98C1F1E75EEB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NuntiusTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C21215A585916FD886A65EC6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NuntiusUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/KissXML/KissXML.framework",
+				"${BUILT_PRODUCTS_DIR}/XMPPFramework/XMPPFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/libidn/libidn.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KissXML.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XMPPFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libidn.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4227F23B1FC3EBCB00EC8818 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42D4BE391FC44D0D00057D12 /* NTXMPPManager.swift in Sources */,
+				42D4BE321FC4405100057D12 /* NTXMPPConnection.swift in Sources */,
 				4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */,
 				4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */,
+				42D4BE341FC4496D00057D12 /* NTXMPPAccount.swift in Sources */,
 				4227F24B1FC3EBCB00EC8818 /* Nuntius.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +656,7 @@
 		};
 		4227F26B1FC3EBCB00EC8818 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39AD6A6ECE78050E3944667D /* Pods-Nuntius.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -443,6 +672,7 @@
 		};
 		4227F26C1FC3EBCB00EC8818 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCD8FB6CEFAD1C678E1AC889 /* Pods-Nuntius.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -458,6 +688,7 @@
 		};
 		4227F26E1FC3EBCB00EC8818 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B1720DABBD894B1E0AC1439 /* Pods-NuntiusTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -475,6 +706,7 @@
 		};
 		4227F26F1FC3EBCB00EC8818 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3AAEE02467CEA2DC9D02BE65 /* Pods-NuntiusTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -492,6 +724,7 @@
 		};
 		4227F2711FC3EBCB00EC8818 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88D449A0D89A59371C591D8A /* Pods-NuntiusUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -508,6 +741,7 @@
 		};
 		4227F2721FC3EBCB00EC8818 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A69C0A9EB0E2A7BDA1DF222A /* Pods-NuntiusUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
