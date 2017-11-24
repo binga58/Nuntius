@@ -17,7 +17,7 @@ enum XMPPStreamError {
     case streamNotConnected, userNotAuthenticated, userNotRegistered, streamDisconnected, connectionTimedOut, unknownError
 }
 
-class NTXMPPStreamError: NSObject, GlobalError {
+class NTStreamError: NSObject, GlobalError {
     var error: Error?
     
     var stanza: String?

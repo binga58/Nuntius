@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NTXMPPUtility: NSObject {
+class NTUtility: NSObject {
     
     static var account: NTXMPPAccount{
         get{
@@ -32,6 +32,10 @@ class NTXMPPUtility: NSObject {
         }
         return ""
         
+    }
+    
+    class func getMessageId() -> String {
+        return UUID().uuidString
     }
     
 }

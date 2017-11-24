@@ -8,11 +8,17 @@
 
 import UIKit
 
+//protocol MessageEvents: Class {
+////    fun
+//}
+
+
 
 class NTXMPPManager: NSObject {
     
     static var xmppManager : NTXMPPManager!
     static var xmppConnection : NTXMPPConnection?
+    var xmppServerTimeDifference : TimeInterval? = 0
     
     var xmppAccount : NTXMPPAccount!
     let xmppQueue = DispatchQueue(label: "queuename", attributes: .concurrent)
@@ -62,6 +68,25 @@ class NTXMPPManager: NSObject {
     
 }
 
+//MARK:-------------- Send Messages -------------------
+extension NTXMPPManager{
+    func sendMessage(messageText: String, userId: String){
+        let message = NTMessageManager.createMessage(messageText: messageText, userId: userId)
+        NTXMPPManager.xmppConnection?.sendElement(element: message)
+    }
+    
+}
+
+//MARK:--------------- Send presence ---------------------
+extension NTXMPPManager{
+    func sendPresence(myPresence : MyPresence) -> () {
+        let presence = NTPresenceManager.sendMyPresence(myPresence: myPresence)
+        NTXMPPManager.xmppConnection?.sendElement(element: presence)
+    }
+}
+
+
+
 //MARK:-------------- Stream utility callbacks -----------------
 extension NTXMPPManager {
     func streamConnected() -> () {
@@ -69,7 +94,9 @@ extension NTXMPPManager {
     }
     
     func userAuthenticated() -> () {
-        
+        self.sendPresence(myPresence: .online)
+        self.synchronizeXMPPServerTime()
+        NTXMPPManager.xmppConnection?.sendArchiveRequest()
     }
     
 }
@@ -78,7 +105,17 @@ extension NTXMPPManager {
 
 //MARK:-------------- Errors ---------------
 extension NTXMPPManager {
-    func xmppStreamError(streamError: NTXMPPStreamError) -> () {
+    func xmppStreamError(streamError: NTStreamError) -> () {
         
     }
+}
+
+//MARK:------------- Utility functions ------------
+extension NTXMPPManager{
+    func synchronizeXMPPServerTime() {
+        let element = NTIQManger.getXMPPServerTime()
+        NTXMPPManager.xmppConnection?.sendElement(element: element)
+    }
+    
+    
 }

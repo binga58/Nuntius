@@ -21,13 +21,24 @@ class ViewController: UIViewController {
     }
 
     @IBAction func connectTap(_ sender: Any) {
-        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "232", password:  "35e5bd12-d732-4243-9580-9ab4057003d3")
-        NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
-        NTXMPPManager.sharedManager().connect()
+        
     }
     
     @IBAction func disconnectTap(_ sender: Any) {
         NTXMPPManager.sharedManager().disconnect()
+    }
+    @IBAction func chatTaped(_ sender: Any) {
+        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
+//        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "610", password:  "dacd0e23-01dc-486d-8a8a-02665c0d4941", groupChatServiceName: "groupChat")
+        NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
+        NTXMPPManager.sharedManager().connect()
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let chatViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ChatViewController.self))
+        
+//        let chatViewController = ChatViewController.init(nibName: String(describing: ChatViewController.self), bundle: nil)
+        self.navigationController?.pushViewController(chatViewController, animated: true)
+        
     }
 }
 
