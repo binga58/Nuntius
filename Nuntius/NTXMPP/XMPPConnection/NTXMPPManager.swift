@@ -8,11 +8,6 @@
 
 import UIKit
 import XMPPFramework
-//protocol MessageEvents: Class {
-////    fun
-//}
-
-
 
 class NTXMPPManager: NSObject {
     
@@ -119,8 +114,5 @@ extension NTXMPPManager{
         if let element = NTXMPPManager.xmppConnection?.sharedIQManger().getXMPPServerTime(){
             NTXMPPManager.xmppConnection?.sendElement(element: element)
         }
-        
     }
-    
-    
 }

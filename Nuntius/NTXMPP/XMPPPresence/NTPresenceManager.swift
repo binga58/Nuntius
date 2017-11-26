@@ -58,3 +58,18 @@ class NTPresenceManager: NSObject {
     
     
 }
+
+//MARK:------------------ XMPPStream presence delegate -------------
+extension NTPresenceManager: XMPPStreamDelegate{
+    func xmppStream(_ sender: XMPPStream, didFailToSend presence: XMPPPresence, error: Error) {
+        
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didSend presence: XMPPPresence) {
+        
+    }
+}

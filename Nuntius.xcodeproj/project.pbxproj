@@ -270,13 +270,13 @@
 		42745DBF1FC7F30400D3DBEF /* NTXMPP */ = {
 			isa = PBXGroup;
 			children = (
+				42D4BE2E1FC43F7F00057D12 /* XMPPConnection */,
 				42745DC01FC7F32600D3DBEF /* XMPPIq */,
-				423F36B51FC6F29C00AE9987 /* XMPPCoreData */,
 				423F36B21FC6E0A900AE9987 /* XMPPPresence */,
 				4283ADC81FC5A9FC00F95560 /* XMPPMessage */,
+				423F36B51FC6F29C00AE9987 /* XMPPCoreData */,
 				4283ADC51FC5834E00F95560 /* XMPPError */,
 				4283ADC21FC5768200F95560 /* XMPPUtitlities */,
-				42D4BE2E1FC43F7F00057D12 /* XMPPConnection */,
 			);
 			path = NTXMPP;
 			sourceTree = "<group>";
@@ -350,6 +350,8 @@
 		FC09BBFA1FC985F400B49643 /* XMPPModels */ = {
 			isa = PBXGroup;
 			children = (
+				FCEF16CF1FCB20FB0067E2E4 /* NTUser */,
+				FCEF16CD1FCB20C60067E2E4 /* NTGroup */,
 				FC09BC0E1FC988CE00B49643 /* NTMessage */,
 			);
 			path = XMPPModels;
@@ -379,6 +381,20 @@
 				FC09BC171FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift */,
 			);
 			path = NTGroupData;
+			sourceTree = "<group>";
+		};
+		FCEF16CD1FCB20C60067E2E4 /* NTGroup */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NTGroup;
+			sourceTree = "<group>";
+		};
+		FCEF16CF1FCB20FB0067E2E4 /* NTUser */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NTUser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

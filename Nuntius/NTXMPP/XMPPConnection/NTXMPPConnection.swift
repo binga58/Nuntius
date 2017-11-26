@@ -14,7 +14,7 @@ class NTXMPPConnection: NSObject {
     lazy var myJID: XMPPJID? = {
         
         return XMPPJID.init(string: NTUtility.getCurrentUserFullId())
-        }()
+    }()
     
     var iqManager: NTIQManger!
     
@@ -186,7 +186,7 @@ extension NTXMPPConnection {
         xmppStream.hostName = self.xmppAccount?.serverDomain
         xmppStream.hostPort = (self.xmppAccount?.port)!
         xmppStream.tag = self.xmppAccount?.userName
-        xmppStream.startTLSPolicy = .allowed
+        xmppStream.startTLSPolicy = .preferred
         
         //initialize XXMPPStreamManagement
         xmppStreamManagementMemoryStorage = XMPPStreamManagementMemoryStorage()
@@ -239,15 +239,18 @@ extension NTXMPPConnection {
         xmppMessageArchiveManagement.activate(xmppStream)
         xmppvCardTemp.activate(xmppStream)
         xmppStreamManagement.activate(xmppStream)
-//        xmppvCardAvatar.activate(xmppStream)
+        //        xmppvCardAvatar.activate(xmppStream)
         xmppCapabilities.activate(xmppStream)
         
         //add delegate
         xmppStream.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppStream.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue());
+        xmppStream.addDelegate(self.sharedIQManger(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppStream.addDelegate(self.sharedPresenceManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppRoster.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppReconnect.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
-        xmppMessageArchiveManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppMessageArchiveManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         
         xmppRoomCoreDataStorage = XMPPRoomCoreDataStorage()
         xmppRoomCoreDataStorage.autoRecreateDatabaseFile = false
@@ -272,6 +275,9 @@ extension NTXMPPConnection {
     func clearXMPPStream() {
         if xmppStream != nil{
             xmppStream.removeDelegate(self)
+            xmppStream.removeDelegate(messageManager)
+            xmppStream.removeDelegate(iqManager)
+            xmppStream.removeDelegate(presenceManager)
         }
         if xmppRoster != nil{
             xmppRoster.removeDelegate(self)
@@ -302,21 +308,31 @@ extension NTXMPPConnection {
             xmppMessageArchivingModule.deactivate()
         }
         if xmppMessageArchiveManagement != nil{
-            xmppMessageArchiveManagement.removeDelegate(self)
+            xmppMessageArchiveManagement.removeDelegate(self.sharedMessageManager())
             xmppMessageArchiveManagement.deactivate()
+        }
+        if xmppvCardAvatar != nil{
+            xmppvCardAvatar.removeDelegate(self)
+            xmppvCardAvatar.deactivate()
         }
         //clear objects
         xmppReconnect = nil
         xmppRoster = nil
         xmppRosterCoreDataStorage = nil
         xmppvCardCoreDataStorage = nil
+        
         xmppvCardTemp = nil
+        xmppvCardAvatar = nil
+        
         xmppPing = nil
         xmppAutoPing = nil
+        
         xmppStreamManagement = nil
         xmppStreamManagementMemoryStorage = nil
+        
         xmppMessageArchiveManagement = nil
         xmppMessageArchivingModule = nil
+        xmppMessageArchivingCoreDataStorage = nil
         
         //xmppvCardAvatar = nil
         xmppCapabilities = nil
@@ -329,6 +345,7 @@ extension NTXMPPConnection {
         
         
         xmppStream.disconnect()
+        xmppStream = nil
     }
     
 }
@@ -354,16 +371,16 @@ extension NTXMPPConnection: XMPPStreamDelegate {
         let streamError = NTStreamError.init(error: nil, stanza: nil, streamError: XMPPStreamError.connectionTimedOut)
         NTXMPPManager.sharedManager().xmppStreamError(streamError: streamError)
     }
-
+    
     func xmppStreamDidRegister(_ sender: XMPPStream) {
-
+        
     }
-
+    
     func xmppStream(_ sender: XMPPStream, didNotRegister error: DDXMLElement) {
         let streamError = NTStreamError.init(error: nil, stanza: String(describing: error), streamError: XMPPStreamError.userNotRegistered)
         NTXMPPManager.sharedManager().xmppStreamError(streamError: streamError)
     }
-
+    
     func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
         let streamError = NTStreamError.init(error: nil, stanza: String(describing: error), streamError: XMPPStreamError.unknownError)
         NTXMPPManager.sharedManager().xmppStreamError(streamError: streamError)
@@ -379,84 +396,33 @@ extension NTXMPPConnection: XMPPStreamDelegate {
         NTXMPPManager.sharedManager().xmppStreamError(streamError: streamError)
     }
     
-    func xmppStream(_ sender: XMPPStream, didFailToSend iq: XMPPIQ, error: Error) {
-        self.sharedIQManger().callAndRemoveOutstandingBlock(success: false, iq: iq)
-    }
-
-    func xmppStream(_ sender: XMPPStream, didFailToSend message: XMPPMessage, error: Error) {
-
-    }
-    
-    func xmppStream(_ sender: XMPPStream, didFailToSend presence: XMPPPresence, error: Error) {
-        
-    }
-    
-    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
-        self.sharedIQManger().callAndRemoveOutstandingBlock(success: true, iq: iq)
-        return true
-    }
-
-    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        self.sharedMessageManager().messageReceived(message: message)
-    }
-
-    func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
-        
-    }
-    
-    func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
-        
-    }
-    
     func xmppStream(_ sender: XMPPStream, didSendCustomElement element: DDXMLElement) {
         
     }
     
-    func xmppStream(_ sender: XMPPStream, didSend iq: XMPPIQ) {
-        
-    }
     
-//    func xmppStream(_ sender: XMPPStream, willSecureWithSettings settings: NSMutableDictionary) {
-//        if (self.xmppAccount?.allowSelfSignedCertificates)!{
-//            settings.setObject(NSNumber.init(value: allowSelfSignedCertificates), forKey: String(kCFStreamSSLValidatesCertificateChain) as NSCopying)
-//        }
-//        if (self.xmppAccount?.allowSSLHostNameMismatch)!{
-//            settings.setObject(NSNull(), forKey: String(kCFStreamSSLPeerName) as NSCopying)
-//        }else{
-//            let serverDomain = sender.hostName
-//            let virtualDomain = sender.myJID?.domain
-//            let expectedCertName: String
-//            if serverDomain == nil{
-//                expectedCertName = virtualDomain!
-//            }else{
-//                expectedCertName = serverDomain!
-//            }
-//            if expectedCertName.count > 0{
-//                settings.setObject(expectedCertName, forKey: String(kCFStreamSSLPeerName) as NSCopying)
-//            }
-//        }
-//    }
     
-}
-
-extension NTXMPPConnection : XMPPMessageArchiveManagementDelegate{
-    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveMAMMessage message: XMPPMessage) {
-        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body){
-            self.sharedMessageManager().messageReceived(message: XMPPMessage.init(from: msg))
-        }
-    }
+    //    func xmppStream(_ sender: XMPPStream, willSecureWithSettings settings: NSMutableDictionary) {
+    //        if (self.xmppAccount?.allowSelfSignedCertificates)!{
+    //            settings.setObject(NSNumber.init(value: allowSelfSignedCertificates), forKey: String(kCFStreamSSLValidatesCertificateChain) as NSCopying)
+    //        }
+    //        if (self.xmppAccount?.allowSSLHostNameMismatch)!{
+    //            settings.setObject(NSNull(), forKey: String(kCFStreamSSLPeerName) as NSCopying)
+    //        }else{
+    //            let serverDomain = sender.hostName
+    //            let virtualDomain = sender.myJID?.domain
+    //            let expectedCertName: String
+    //            if serverDomain == nil{
+    //                expectedCertName = virtualDomain!
+    //            }else{
+    //                expectedCertName = serverDomain!
+    //            }
+    //            if expectedCertName.count > 0{
+    //                settings.setObject(expectedCertName, forKey: String(kCFStreamSSLPeerName) as NSCopying)
+    //            }
+    //        }
+    //    }
     
-    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFailToReceiveMessages error: XMPPIQ) {
-        
-    }
-    
-    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFinishReceivingMessagesWith resultSet: XMPPResultSet) {
-        
-    }
-    
-    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveFormFields iq: XMPPIQ) {
-        
-    }
 }
 
 

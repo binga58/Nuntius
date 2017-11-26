@@ -75,3 +75,39 @@ class NTMessageManager: NSObject {
     
 }
 
+//MARK:------------------ XMPPStream Message delegate -------------
+extension NTMessageManager: XMPPStreamDelegate{
+    func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
+        
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        self.messageReceived(message: message)
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didFailToSend message: XMPPMessage, error: Error) {
+        
+    }
+}
+
+//MARK:------------------ Archive message delegate -------------
+extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
+    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveMAMMessage message: XMPPMessage) {
+        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body){
+            self.messageReceived(message: XMPPMessage.init(from: msg))
+        }
+    }
+    
+    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFailToReceiveMessages error: XMPPIQ) {
+        
+    }
+    
+    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFinishReceivingMessagesWith resultSet: XMPPResultSet) {
+        
+    }
+    
+    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveFormFields iq: XMPPIQ) {
+        
+    }
+}
+

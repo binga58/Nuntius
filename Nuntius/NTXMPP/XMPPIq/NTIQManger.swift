@@ -56,7 +56,14 @@ class NTIQManger: NSObject {
         
         return serverTimeNode
     }
-    
+
+}
+
+//MARK:----------------- IQ result completion --------------
+extension NTIQManger{
+    /**
+     Perform completion block on completion of iq query
+     */
     func callAndRemoveOutstandingBlock(success: Bool,iq: XMPPIQ){
         
         if let messageId = iq.elementID, let block = outstandingXMPPStanzaResponseBlocks[messageId]{
@@ -65,5 +72,20 @@ class NTIQManger: NSObject {
         }
         
     }
+}
 
+//MARK:----------------- XMPPStream IQ delegates----------------
+extension NTIQManger: XMPPStreamDelegate{
+    func xmppStream(_ sender: XMPPStream, didFailToSend iq: XMPPIQ, error: Error) {
+        self.callAndRemoveOutstandingBlock(success: false, iq: iq)
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
+        self.callAndRemoveOutstandingBlock(success: true, iq: iq)
+        return true
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didSend iq: XMPPIQ) {
+        
+    }
 }
