@@ -10,18 +10,6 @@ import UIKit
 import XMPPFramework
 
 class NTMessageManager: NSObject {
-//    static let message = "message"
-//    static let type = "type"
-//    static let chat = "chat"
-//    static let id = "id"
-//    static let to = "to"
-//    static let from = "from"
-//    static let body = "body"
-//    static let request = "request"
-//    static let xmlns = "xmlns"
-//    static let receiptXmlns = "urn:xmpp:receipts"
-    
-    static let mid = NTUtility.getMessageId()
     
     /**
      Creates message node with body and deleivery recipt request
@@ -30,7 +18,7 @@ class NTMessageManager: NSObject {
      - Returns: XML stanza of message for xmpp server
      */
     
-    class func createMessage(messageText: String?, userId: String?) -> DDXMLElement {
+    func createMessage(messageText: String?, userId: String?) -> DDXMLElement {
         guard let _ = messageText, let user = userId, user.count > 0 else {
             return DDXMLElement()
         }
@@ -65,7 +53,7 @@ class NTMessageManager: NSObject {
         }
         
         receiptNode.addAttribute(withName: Constants.xmlns, stringValue: Constants.xmlnsType.receipt)
-        receiptNode.addAttribute(withName: Constants.id, stringValue: mid)
+        receiptNode.addAttribute(withName: Constants.id, stringValue: messageId)
         
         //Add body and receipt to message node
         messageNode.addChild(bodyNode)
@@ -87,10 +75,3 @@ class NTMessageManager: NSObject {
     
 }
 
-
-extension NTMessageManager{
-    class func sendMAMRequest() {
-        
-    }
-    
-}

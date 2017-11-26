@@ -26,8 +26,21 @@ struct Constants {
     static let field = "field"
     static let start = "start"
     static let varXMPP = "var"
+    static let query = "query"
+    static let queryId = "queryid"
+    static let submit = "submit"
+    static let hidden = "hidden"
+    static let formType = "FORM_TYPE"
+    static let x = "x"
+    static let max = "max"
+    static let set = "set"
+    static let result = "result"
+    static let forwarded = "forwarded"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"
+        static let mam = "urn:xmpp:mam:1"
+        static let jabberXData = "jabber:x:data"
+        static let rsm = "http://jabber.org/protocol/rsm"
     }
 }

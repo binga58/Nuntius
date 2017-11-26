@@ -29,9 +29,10 @@ class ChatViewController: UIViewController {
     @IBAction func sendTaped(_ sender: Any) {
         messages.append(textVIew.text)
         textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: "123", userId: NTXMPPManager.sharedManager().xmppAccount.userName == "612" ? "637" : "612" )
+        NTXMPPManager.sharedManager().sendMessage(messageText: "123", userId: NTXMPPManager.sharedManager().xmppAccount.userName == "612" ? "103" : "612" )
         chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
         self.goToBottom()
+//        NTXMPPManager.xmppConnection?.loadarchivemsg()
         
     }
     
@@ -69,7 +70,7 @@ extension ChatViewController : UITableViewDataSource{
             return cell!
         }
         
-        return UITableViewCell()
+//        return UITableViewCell()
     }
 }
 

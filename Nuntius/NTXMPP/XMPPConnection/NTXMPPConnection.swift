@@ -16,6 +16,14 @@ class NTXMPPConnection: NSObject {
         return XMPPJID.init(string: NTUtility.getCurrentUserFullId())
         }()
     
+    var iqManager: NTIQManger!
+    
+    var presenceManager: NTPresenceManager!
+    
+    var messageManager: NTMessageManager!
+    
+    
+    
     //XMPPSteam
     var xmppStream: XMPPStream!
     var xmppReconnect: XMPPReconnect!
@@ -60,7 +68,29 @@ class NTXMPPConnection: NSObject {
     
     var timeout = 10
     
+    public override init() {
+        super.init()
+        self.iqManager = NTIQManger()
+        self.messageManager = NTMessageManager()
+        self.presenceManager = NTPresenceManager()
+    }
     
+    func sharedPresenceManager() -> NTPresenceManager {
+        return self.presenceManager
+    }
+    
+    func sharedIQManger() -> NTIQManger {
+        return self.iqManager
+    }
+    
+    func sharedMessageManager() -> NTMessageManager {
+        return self.messageManager
+    }
+    
+}
+
+//MARK:--------------- Connect and authenticate ---------------
+extension NTXMPPConnection{
     /**
      This method connects with xmppserver by initializing stream and authenticating with server
      
@@ -93,7 +123,26 @@ class NTXMPPConnection: NSObject {
             return false
         }
     }
+    
+    /**
+     Authenticate user with password from server.
+     - parameter stream: stream on which user wants to authenticate
+     */
+    
+    func authenticateWithServer(stream: XMPPStream) -> () {
+        if stream == xmppStream{
+            if let password = self.xmppAccount?.password{
+                do{
+                    try xmppStream.authenticate(withPassword: password)
+                }
+                catch{
+                    NTXMPPManager.sharedManager().connect()
+                }
+            }
+        }
+    }
 }
+
 
 //MARK:--------------- Send Elements ---------------
 extension NTXMPPConnection{
@@ -108,18 +157,17 @@ extension NTXMPPConnection{
 //MARK:-------------- Archive stanza ---------------
 extension NTXMPPConnection{
     
-    func sendArchiveRequest() -> () {
+    func sendArchiveRequest(utcDateTime: NSDate) -> () {
         
         let field = DDXMLElement.element(withName: Constants.field) as? DDXMLElement
-//        field
         field?.addAttribute(withName: Constants.varXMPP, stringValue: Constants.start)
-        
-        let value = DDXMLElement.element(withName: Constants.value, stringValue: String(describing: Date.init(timeIntervalSince1970: 0))) as? DDXMLElement
+        let xmppDateTime = NSDate.init(timeIntervalSince1970: 0).xmppDateTimeString
+        let value = DDXMLElement.element(withName: Constants.value, stringValue: xmppDateTime) as? DDXMLElement
         field?.addChild(value!)
         var formField = [DDXMLElement]()
         formField.append(field!)
         
-        let resultSet = XMPPResultSet.init(max: 1000)
+        let resultSet = XMPPResultSet.init(max: 1)
         
         xmppMessageArchiveManagement.retrieveMessageArchive(at: nil, withFields: formField, with: resultSet)
         
@@ -159,6 +207,7 @@ extension NTXMPPConnection {
         xmppMessageArchivingCoreDataStorage = XMPPMessageArchivingCoreDataStorage.sharedInstance()
         xmppMessageArchivingModule = XMPPMessageArchiving.init(messageArchivingStorage: xmppMessageArchivingCoreDataStorage, dispatchQueue: NTXMPPManager.sharedManager().getQueue())
         xmppMessageArchiveManagement = XMPPMessageArchiveManagement.init(dispatchQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppMessageArchiveManagement.resultAutomaticPagingPageSize = 100
         
         //initialize XMPPReconnect
         xmppReconnect = XMPPReconnect()
@@ -187,7 +236,8 @@ extension NTXMPPConnection {
         xmppReconnect.activate(xmppStream)
         xmppRoster.activate(xmppStream)
         xmppMessageArchivingModule.activate(xmppStream)
-//        xmppvCardTemp.activate(xmppStream)
+        xmppMessageArchiveManagement.activate(xmppStream)
+        xmppvCardTemp.activate(xmppStream)
         xmppStreamManagement.activate(xmppStream)
 //        xmppvCardAvatar.activate(xmppStream)
         xmppCapabilities.activate(xmppStream)
@@ -197,6 +247,7 @@ extension NTXMPPConnection {
         xmppRoster.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppReconnect.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppMessageArchiveManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         
         xmppRoomCoreDataStorage = XMPPRoomCoreDataStorage()
         xmppRoomCoreDataStorage.autoRecreateDatabaseFile = false
@@ -250,7 +301,10 @@ extension NTXMPPConnection {
             xmppMessageArchivingModule.removeDelegate(self)
             xmppMessageArchivingModule.deactivate()
         }
-        
+        if xmppMessageArchiveManagement != nil{
+            xmppMessageArchiveManagement.removeDelegate(self)
+            xmppMessageArchiveManagement.deactivate()
+        }
         //clear objects
         xmppReconnect = nil
         xmppRoster = nil
@@ -275,24 +329,6 @@ extension NTXMPPConnection {
         
         
         xmppStream.disconnect()
-    }
-    
-    /**
-     Authenticate user with password from server.
-     - parameter stream: stream on which user wants to authenticate
-     */
-    
-    func authenticateWithServer(stream: XMPPStream) -> () {
-        if stream == xmppStream{
-            if let password = self.xmppAccount?.password{
-                do{
-                    try xmppStream.authenticate(withPassword: password)
-                }
-                catch{
-                    NTXMPPManager.sharedManager().connect()
-                }
-            }
-        }
     }
     
 }
@@ -344,7 +380,7 @@ extension NTXMPPConnection: XMPPStreamDelegate {
     }
     
     func xmppStream(_ sender: XMPPStream, didFailToSend iq: XMPPIQ, error: Error) {
-        NTIQManger.callAndRemoveOutstandingBlock(success: false, iq: iq)
+        self.sharedIQManger().callAndRemoveOutstandingBlock(success: false, iq: iq)
     }
 
     func xmppStream(_ sender: XMPPStream, didFailToSend message: XMPPMessage, error: Error) {
@@ -356,12 +392,12 @@ extension NTXMPPConnection: XMPPStreamDelegate {
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
-        NTIQManger.callAndRemoveOutstandingBlock(success: true, iq: iq)
+        self.sharedIQManger().callAndRemoveOutstandingBlock(success: true, iq: iq)
         return true
     }
 
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        
+        self.sharedMessageManager().messageReceived(message: message)
     }
 
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
@@ -373,6 +409,10 @@ extension NTXMPPConnection: XMPPStreamDelegate {
     }
     
     func xmppStream(_ sender: XMPPStream, didSendCustomElement element: DDXMLElement) {
+        
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didSend iq: XMPPIQ) {
         
     }
     
@@ -401,7 +441,9 @@ extension NTXMPPConnection: XMPPStreamDelegate {
 
 extension NTXMPPConnection : XMPPMessageArchiveManagementDelegate{
     func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveMAMMessage message: XMPPMessage) {
-        
+        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body){
+            self.sharedMessageManager().messageReceived(message: XMPPMessage.init(from: msg))
+        }
     }
     
     func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFailToReceiveMessages error: XMPPIQ) {

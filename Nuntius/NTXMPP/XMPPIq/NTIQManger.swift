@@ -12,13 +12,13 @@ import XMPPFramework
 class NTIQManger: NSObject {
     
     //Dictionary of id and block function. When we receive the result of our query from server we perform the block corresponding to the id.
-    fileprivate static var outstandingXMPPStanzaResponseBlocks:[String: (Bool, XMPPIQ) -> Void] = [:]
+    fileprivate var outstandingXMPPStanzaResponseBlocks:[String: (Bool, XMPPIQ) -> Void] = [:]
     
     /**
      Fetches time of xmpp server in utc format and saves the difference with device's date and time
      */
     
-    class func getXMPPServerTime() -> DDXMLElement {
+    func getXMPPServerTime() -> DDXMLElement {
         
 //        <iq type='get'
 //        from='romeo@montague.net/orchard'
@@ -41,9 +41,6 @@ class NTIQManger: NSObject {
                     //Saving the difference
                     NTXMPPManager.sharedManager().xmppServerTimeDifference = difference
                 }
-                
-                
-                
             }
         }
         
@@ -60,7 +57,7 @@ class NTIQManger: NSObject {
         return serverTimeNode
     }
     
-    class func callAndRemoveOutstandingBlock(success: Bool,iq: XMPPIQ){
+    func callAndRemoveOutstandingBlock(success: Bool,iq: XMPPIQ){
         
         if let messageId = iq.elementID, let block = outstandingXMPPStanzaResponseBlocks[messageId]{
             block(success,iq)

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import XMPPFramework
 //protocol MessageEvents: Class {
 ////    fun
 //}
@@ -71,8 +71,9 @@ class NTXMPPManager: NSObject {
 //MARK:-------------- Send Messages -------------------
 extension NTXMPPManager{
     func sendMessage(messageText: String, userId: String){
-        let message = NTMessageManager.createMessage(messageText: messageText, userId: userId)
-        NTXMPPManager.xmppConnection?.sendElement(element: message)
+        if let message = NTXMPPManager.xmppConnection?.sharedMessageManager().createMessage(messageText: messageText, userId: userId){
+            NTXMPPManager.xmppConnection?.sendElement(element: message)
+        }
     }
     
 }
@@ -80,8 +81,10 @@ extension NTXMPPManager{
 //MARK:--------------- Send presence ---------------------
 extension NTXMPPManager{
     func sendPresence(myPresence : MyPresence) -> () {
-        let presence = NTPresenceManager.sendMyPresence(myPresence: myPresence)
-        NTXMPPManager.xmppConnection?.sendElement(element: presence)
+        if let presence = NTXMPPManager.xmppConnection?.sharedPresenceManager().sendMyPresence(myPresence: myPresence){
+            NTXMPPManager.xmppConnection?.sendElement(element: presence)
+        }
+        
     }
 }
 
@@ -96,7 +99,7 @@ extension NTXMPPManager {
     func userAuthenticated() -> () {
         self.sendPresence(myPresence: .online)
         self.synchronizeXMPPServerTime()
-        NTXMPPManager.xmppConnection?.sendArchiveRequest()
+//        NTXMPPManager.xmppConnection?.sendArchiveRequest(utcDateTime: NSDate())
     }
     
 }
@@ -113,8 +116,10 @@ extension NTXMPPManager {
 //MARK:------------- Utility functions ------------
 extension NTXMPPManager{
     func synchronizeXMPPServerTime() {
-        let element = NTIQManger.getXMPPServerTime()
-        NTXMPPManager.xmppConnection?.sendElement(element: element)
+        if let element = NTXMPPManager.xmppConnection?.sharedIQManger().getXMPPServerTime(){
+            NTXMPPManager.xmppConnection?.sendElement(element: element)
+        }
+        
     }
     
     

@@ -16,7 +16,7 @@ class NTPresenceManager: NSObject {
      - parameter myPresence: MyPresence enum value for required presence
      - Returns: XML stanza of presence for xmpp server
      */
-    class func sendMyPresence(myPresence: MyPresence) -> DDXMLElement {
+    func sendMyPresence(myPresence: MyPresence) -> DDXMLElement {
         var xmppPresence: XMPPPresence!
         var statusText: String?
         var showText: String?
