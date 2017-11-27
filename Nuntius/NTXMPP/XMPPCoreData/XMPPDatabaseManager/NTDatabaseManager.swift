@@ -53,20 +53,19 @@ class NTDatabaseManager: NSObject {
         return coordinator
     }()
     
-//    lazy var managedObjectContext: NSManagedObjectContext = {
-//        // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
-//        let coordinator = self.persistentStoreCoordinator
-//        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-//        managedObjectContext.persistentStoreCoordinator = coordinator
-//        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//        return managedObjectContext
-//    }()
+    lazy var writerManagedObjectContext: NSManagedObjectContext = {
+        // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
+        let coordinator = self.persistentStoreCoordinator
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = coordinator
+        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return managedObjectContext
+    }()
     
     func mainManagedObjectContext() -> NSManagedObjectContext{
         if managedObjectContext == nil{
-            let coordinator = self.persistentStoreCoordinator
             managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-            managedObjectContext?.persistentStoreCoordinator = coordinator
+            managedObjectContext?.parent = writerManagedObjectContext
             managedObjectContext?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             return managedObjectContext!
         }
@@ -87,6 +86,40 @@ class NTDatabaseManager: NSObject {
                 abort()
             }
         }
+    }
+    
+    func getChildContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+        return context
+    }
+    
+    func saveToPersistentStore(){
+        if(self.managedObjectContext?.hasChanges)!{
+            self.managedObjectContext?.performAndWait({
+                do{
+                    try self.managedObjectContext?.save()
+                    if(self.writerManagedObjectContext.hasChanges){
+                        self.writerManagedObjectContext.performAndWait({
+                            do{
+                                try self.writerManagedObjectContext.save()
+                            }
+                            catch{
+                                let nserror = error as NSError
+                                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+                                abort()
+                            }
+                        })
+                    }
+                }
+                catch{
+                    let nserror = error as NSError
+                    NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+                    abort()
+                }
+            })
+        }
+        
     }
     
     class func sharedManager() -> NTDatabaseManager{

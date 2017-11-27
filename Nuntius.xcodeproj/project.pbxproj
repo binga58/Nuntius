@@ -23,6 +23,9 @@
 		423F36B41FC6E0D400AE9987 /* NTPresenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F36B31FC6E0D400AE9987 /* NTPresenceManager.swift */; };
 		423F36B81FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 423F36B61FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld */; };
 		423F36C41FC6FE3700AE9987 /* NTDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F36C31FC6FE3700AE9987 /* NTDatabaseManager.swift */; };
+		425F67FC1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F67FA1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift */; };
+		425F67FD1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F67FB1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift */; };
+		425F68021FCC369F00A5D578 /* NTUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F68011FCC369F00A5D578 /* NTUser.swift */; };
 		42745DC21FC7F38D00D3DBEF /* NTIQManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42745DC11FC7F38D00D3DBEF /* NTIQManger.swift */; };
 		42745DC41FC7F6A200D3DBEF /* NTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42745DC31FC7F6A200D3DBEF /* NTConstants.swift */; };
 		4283ADC41FC576CD00F95560 /* NTUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4283ADC31FC576CD00F95560 /* NTUtility.swift */; };
@@ -36,11 +39,7 @@
 		D8D8FCACDF0D78128DF7AEB2 /* Pods_Nuntius.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C4B3B9EB1FF636E644E5B08 /* Pods_Nuntius.framework */; };
 		FC09BC011FC9873200B49643 /* NTMessageData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BBFF1FC9873200B49643 /* NTMessageData+CoreDataClass.swift */; };
 		FC09BC021FC9873200B49643 /* NTMessageData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC001FC9873200B49643 /* NTMessageData+CoreDataProperties.swift */; };
-		FC09BC0A1FC987F300B49643 /* NTUserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC081FC987F300B49643 /* NTUserData+CoreDataClass.swift */; };
-		FC09BC0B1FC987F300B49643 /* NTUserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC091FC987F300B49643 /* NTUserData+CoreDataProperties.swift */; };
 		FC09BC101FC988CE00B49643 /* NTMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC0F1FC988CE00B49643 /* NTMessage.swift */; };
-		FC09BC181FC9C3AB00B49643 /* NTGroupData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC161FC9C3AB00B49643 /* NTGroupData+CoreDataClass.swift */; };
-		FC09BC191FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC171FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +86,9 @@
 		423F36B31FC6E0D400AE9987 /* NTPresenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPresenceManager.swift; sourceTree = "<group>"; };
 		423F36B71FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NTXMPPDataModel.xcdatamodel; sourceTree = "<group>"; };
 		423F36C31FC6FE3700AE9987 /* NTDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTDatabaseManager.swift; sourceTree = "<group>"; };
+		425F67FA1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		425F67FB1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		425F68011FCC369F00A5D578 /* NTUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUser.swift; sourceTree = "<group>"; };
 		42745DC11FC7F38D00D3DBEF /* NTIQManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTIQManger.swift; sourceTree = "<group>"; };
 		42745DC31FC7F6A200D3DBEF /* NTConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTConstants.swift; sourceTree = "<group>"; };
 		4283ADC31FC576CD00F95560 /* NTUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUtility.swift; sourceTree = "<group>"; };
@@ -102,11 +104,7 @@
 		DCD8FB6CEFAD1C678E1AC889 /* Pods-Nuntius.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nuntius.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius.release.xcconfig"; sourceTree = "<group>"; };
 		FC09BBFF1FC9873200B49643 /* NTMessageData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTMessageData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		FC09BC001FC9873200B49643 /* NTMessageData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTMessageData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		FC09BC081FC987F300B49643 /* NTUserData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		FC09BC091FC987F300B49643 /* NTUserData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC09BC0F1FC988CE00B49643 /* NTMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTMessage.swift; sourceTree = "<group>"; };
-		FC09BC161FC9C3AB00B49643 /* NTGroupData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTGroupData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		FC09BC171FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTGroupData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +265,23 @@
 			path = XMPPDatabaseManager;
 			sourceTree = "<group>";
 		};
+		425F67F51FCBEF3200A5D578 /* NTUserData */ = {
+			isa = PBXGroup;
+			children = (
+				425F67FA1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift */,
+				425F67FB1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift */,
+			);
+			path = NTUserData;
+			sourceTree = "<group>";
+		};
+		425F68001FCC368E00A5D578 /* NTUser */ = {
+			isa = PBXGroup;
+			children = (
+				425F68011FCC369F00A5D578 /* NTUser.swift */,
+			);
+			path = NTUser;
+			sourceTree = "<group>";
+		};
 		42745DBF1FC7F30400D3DBEF /* NTXMPP */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,8 +355,7 @@
 		FC09BBF91FC985C800B49643 /* CoreDataEntities */ = {
 			isa = PBXGroup;
 			children = (
-				FC09BC111FC9B9BF00B49643 /* NTGroupData */,
-				FC09BC031FC9878D00B49643 /* NTUserData */,
+				425F67F51FCBEF3200A5D578 /* NTUserData */,
 				423F36B91FC6F96F00AE9987 /* NTMessageData */,
 			);
 			path = CoreDataEntities;
@@ -350,20 +364,10 @@
 		FC09BBFA1FC985F400B49643 /* XMPPModels */ = {
 			isa = PBXGroup;
 			children = (
-				FCEF16CF1FCB20FB0067E2E4 /* NTUser */,
-				FCEF16CD1FCB20C60067E2E4 /* NTGroup */,
+				425F68001FCC368E00A5D578 /* NTUser */,
 				FC09BC0E1FC988CE00B49643 /* NTMessage */,
 			);
 			path = XMPPModels;
-			sourceTree = "<group>";
-		};
-		FC09BC031FC9878D00B49643 /* NTUserData */ = {
-			isa = PBXGroup;
-			children = (
-				FC09BC081FC987F300B49643 /* NTUserData+CoreDataClass.swift */,
-				FC09BC091FC987F300B49643 /* NTUserData+CoreDataProperties.swift */,
-			);
-			path = NTUserData;
 			sourceTree = "<group>";
 		};
 		FC09BC0E1FC988CE00B49643 /* NTMessage */ = {
@@ -372,29 +376,6 @@
 				FC09BC0F1FC988CE00B49643 /* NTMessage.swift */,
 			);
 			path = NTMessage;
-			sourceTree = "<group>";
-		};
-		FC09BC111FC9B9BF00B49643 /* NTGroupData */ = {
-			isa = PBXGroup;
-			children = (
-				FC09BC161FC9C3AB00B49643 /* NTGroupData+CoreDataClass.swift */,
-				FC09BC171FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift */,
-			);
-			path = NTGroupData;
-			sourceTree = "<group>";
-		};
-		FCEF16CD1FCB20C60067E2E4 /* NTGroup */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = NTGroup;
-			sourceTree = "<group>";
-		};
-		FCEF16CF1FCB20FB0067E2E4 /* NTUser */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = NTUser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -701,26 +682,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC09BC181FC9C3AB00B49643 /* NTGroupData+CoreDataClass.swift in Sources */,
 				423F36A81FC6A68400AE9987 /* ChatSentMessageTableViewCell.swift in Sources */,
 				423F36C41FC6FE3700AE9987 /* NTDatabaseManager.swift in Sources */,
-				FC09BC191FC9C3AB00B49643 /* NTGroupData+CoreDataProperties.swift in Sources */,
 				4283ADC41FC576CD00F95560 /* NTUtility.swift in Sources */,
 				42D4BE391FC44D0D00057D12 /* NTXMPPManager.swift in Sources */,
 				423F36AE1FC6A6C600AE9987 /* ChatReceiveMessageTableViewCell.swift in Sources */,
 				423F36B41FC6E0D400AE9987 /* NTPresenceManager.swift in Sources */,
+				425F67FD1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift in Sources */,
 				42D4BE321FC4405100057D12 /* NTXMPPConnection.swift in Sources */,
 				FC09BC011FC9873200B49643 /* NTMessageData+CoreDataClass.swift in Sources */,
+				425F68021FCC369F00A5D578 /* NTUser.swift in Sources */,
 				FC09BC021FC9873200B49643 /* NTMessageData+CoreDataProperties.swift in Sources */,
+				425F67FC1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift in Sources */,
 				423F36B81FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld in Sources */,
 				4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */,
-				FC09BC0B1FC987F300B49643 /* NTUserData+CoreDataProperties.swift in Sources */,
 				4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */,
 				42745DC21FC7F38D00D3DBEF /* NTIQManger.swift in Sources */,
 				4283ADC71FC59D5700F95560 /* NTStreamError.swift in Sources */,
 				4283ADCA1FC5AA4400F95560 /* NTMessageManager.swift in Sources */,
 				42D4BE341FC4496D00057D12 /* NTXMPPAccount.swift in Sources */,
-				FC09BC0A1FC987F300B49643 /* NTUserData+CoreDataClass.swift in Sources */,
 				42745DC41FC7F6A200D3DBEF /* NTConstants.swift in Sources */,
 				FC09BC101FC988CE00B49643 /* NTMessage.swift in Sources */,
 				423F36A41FC6A25800AE9987 /* ChatViewController.swift in Sources */,

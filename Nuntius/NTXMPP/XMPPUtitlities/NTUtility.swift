@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NTUtility: NSObject {
     
@@ -38,4 +39,28 @@ class NTUtility: NSObject {
         return UUID().uuidString
     }
     
+    class func getCurrentTime() -> NSNumber {
+        return NSNumber.init(value: Date().timeIntervalSince1970)
+    }
+    
+}
+
+extension NSManagedObjectContext {
+    func insertObject<A: NSManagedObject & ManagedObjectType>() -> A {
+        guard let obj = NSEntityDescription
+            .insertNewObject(forEntityName: A.entityName,
+                             into: self) as? A else {
+                                fatalError("Entity \(A.entityName) does not correspond to \(A.self)")
+        }
+        return obj
+    }
+}
+
+protocol ManagedObjectType {
+    static var entityName: String { get }
+    
+}
+
+protocol KeyCodable {
+    associatedtype Key: RawRepresentable
 }

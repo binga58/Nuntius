@@ -44,3 +44,53 @@ struct Constants {
         static let rsm = "http://jabber.org/protocol/rsm"
     }
 }
+
+//func insertObject<A: NSManagedObject>() -> A where A: ManagedObjectType {
+//    guard let obj = NSEntityDescription
+//        .insertNewObject(forEntityName: A.entityName,
+//                         into: self) as? A else {
+//                            fatalError("Entity \(A.entityName) does not correspond to \(A.self)")
+//    }
+//    return obj
+//}
+
+protocol EnumToNSNumber {
+    var nsNumber: NSNumber{get}
+}
+
+enum MessageStatus: Int,EnumToNSNumber {
+    
+    case waiting = 0
+    case sent
+    case delivered
+    case read
+    case failed
+    
+    var nsNumber: NSNumber{
+        return NSNumber.init(value: self.rawValue)
+    }
+    
+    static func numberToMessageState(number:NSNumber?) -> MessageStatus? {
+        if let messageStatus = number?.intValue{
+            return MessageStatus.init(rawValue: messageStatus)
+        }
+        return MessageStatus.failed
+    }
+    
+}
+
+enum MessageType: Int, EnumToNSNumber {
+    var nsNumber: NSNumber{
+        return NSNumber.init(value: self.rawValue)
+    }
+    
+    case text = 0
+    
+    static func numberToMessageType(number:NSNumber?) -> MessageType? {
+        if let messageStatus = number?.intValue{
+            return MessageType.init(rawValue: messageStatus)
+        }
+        return MessageType.text
+    }
+    
+}

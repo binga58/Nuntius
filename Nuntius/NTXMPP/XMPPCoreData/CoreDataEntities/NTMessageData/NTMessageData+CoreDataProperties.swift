@@ -2,7 +2,7 @@
 //  NTMessageData+CoreDataProperties.swift
 //  Nuntius
 //
-//  Created by Abhishek Sharma on 25/11/17.
+//  Created by Abhishek Sharma on 27/11/17.
 //  Copyright © 2017 Finoit Technologies. All rights reserved.
 //
 //
@@ -23,9 +23,9 @@ extension NTMessageData {
     @NSManaged public var messageId: String?
     @NSManaged public var messageStatus: NSNumber?
     @NSManaged public var messageText: String?
-    @NSManaged public var messageType: Double
+    @NSManaged public var messageType: NSNumber?
     @NSManaged public var readTimestamp: NSNumber?
     @NSManaged public var hasUser: NTUserData?
-    @NSManaged public var hasGroup: NTGroupData?
+    @NSManaged public var hasGroup: NTUserData?
 
 }

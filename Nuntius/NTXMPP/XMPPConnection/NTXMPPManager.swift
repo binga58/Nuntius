@@ -12,19 +12,26 @@ import XMPPFramework
 class NTXMPPManager: NSObject {
     
     static var xmppManager : NTXMPPManager!
-    static var xmppConnection : NTXMPPConnection?
+    var xmppConnection : NTXMPPConnection?
     var xmppServerTimeDifference : TimeInterval? = 0
     
     var xmppAccount : NTXMPPAccount!
     let xmppQueue = DispatchQueue(label: "queuename", attributes: .concurrent)
     var retriedCount = 0
+    
+    public override init() {
+        super.init()
+        self.xmppConnection = NTXMPPConnection()
+    }
+    
     class func sharedManager() -> NTXMPPManager {
         if xmppManager == nil{
             xmppManager = NTXMPPManager()
-            xmppConnection = NTXMPPConnection()
         }
         return xmppManager
     }
+    
+    
     
     func setxmppAccount(xmppAccount : NTXMPPAccount){
         self.xmppAccount = xmppAccount
@@ -40,13 +47,13 @@ class NTXMPPManager: NSObject {
     
     func connect(){
         if(retriedCount < self.xmppAccount.retryCount){
-            let isConnected = NTXMPPManager.xmppConnection?.connect(xmppAccount: xmppAccount)
+            let isConnected = NTXMPPManager.sharedManager().xmppConnection?.connect(xmppAccount: xmppAccount)
             if(!isConnected!){
                 retriedCount += 1
                 self.connect()
             }
         }else if retriedCount == self.xmppAccount.retryCount{
-            NTXMPPManager.xmppConnection?.clearXMPPStream()
+            NTXMPPManager.sharedManager().xmppConnection?.clearXMPPStream()
             retriedCount += 1
             if self.xmppAccount.retryInfiniteTimesOnDisconnection{
                 retriedCount = 0
@@ -58,7 +65,7 @@ class NTXMPPManager: NSObject {
     }
     
     func disconnect() -> () {
-        NTXMPPManager.xmppConnection?.disconnectXMPPStream()
+        NTXMPPManager.sharedManager().xmppConnection?.disconnectXMPPStream()
     }
     
 }
@@ -66,8 +73,12 @@ class NTXMPPManager: NSObject {
 //MARK:-------------- Send Messages -------------------
 extension NTXMPPManager{
     func sendMessage(messageText: String, userId: String){
-        if let message = NTXMPPManager.xmppConnection?.sharedMessageManager().createMessage(messageText: messageText, userId: userId){
-            NTXMPPManager.xmppConnection?.sendElement(element: message)
+        
+        
+        
+        
+        if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: messageText, userId: userId){
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
         }
     }
     
@@ -76,8 +87,8 @@ extension NTXMPPManager{
 //MARK:--------------- Send presence ---------------------
 extension NTXMPPManager{
     func sendPresence(myPresence : MyPresence) -> () {
-        if let presence = NTXMPPManager.xmppConnection?.sharedPresenceManager().sendMyPresence(myPresence: myPresence){
-            NTXMPPManager.xmppConnection?.sendElement(element: presence)
+        if let presence = NTXMPPManager.sharedManager().xmppConnection?.sharedPresenceManager().sendMyPresence(myPresence: myPresence){
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: presence)
         }
         
     }
@@ -111,8 +122,8 @@ extension NTXMPPManager {
 //MARK:------------- Utility functions ------------
 extension NTXMPPManager{
     func synchronizeXMPPServerTime() {
-        if let element = NTXMPPManager.xmppConnection?.sharedIQManger().getXMPPServerTime(){
-            NTXMPPManager.xmppConnection?.sendElement(element: element)
+        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedIQManger().getXMPPServerTime(){
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
     }
 }

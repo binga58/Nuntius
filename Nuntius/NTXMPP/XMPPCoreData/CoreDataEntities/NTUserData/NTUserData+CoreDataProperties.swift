@@ -2,7 +2,7 @@
 //  NTUserData+CoreDataProperties.swift
 //  Nuntius
 //
-//  Created by Abhishek Sharma on 25/11/17.
+//  Created by Abhishek Sharma on 27/11/17.
 //  Copyright © 2017 Finoit Technologies. All rights reserved.
 //
 //
@@ -18,11 +18,11 @@ extension NTUserData {
     }
 
     @NSManaged public var userId: String?
-    @NSManaged public var userName: String?
+    @NSManaged public var isGroup: NSNumber?
     @NSManaged public var presence: NSNumber?
-    @NSManaged public var status: NSNumber?
+    @NSManaged public var lastMessageId: String?
     @NSManaged public var hasMessages: NSSet?
-    @NSManaged public var hasGroup: NTGroupData?
+    @NSManaged public var hasGroupMessages: NSSet?
 
 }
 
@@ -40,5 +40,22 @@ extension NTUserData {
 
     @objc(removeHasMessages:)
     @NSManaged public func removeFromHasMessages(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hasGroupMessages
+extension NTUserData {
+
+    @objc(addHasGroupMessagesObject:)
+    @NSManaged public func addToHasGroupMessages(_ value: NTMessageData)
+
+    @objc(removeHasGroupMessagesObject:)
+    @NSManaged public func removeFromHasGroupMessages(_ value: NTMessageData)
+
+    @objc(addHasGroupMessages:)
+    @NSManaged public func addToHasGroupMessages(_ values: NSSet)
+
+    @objc(removeHasGroupMessages:)
+    @NSManaged public func removeFromHasGroupMessages(_ values: NSSet)
 
 }
