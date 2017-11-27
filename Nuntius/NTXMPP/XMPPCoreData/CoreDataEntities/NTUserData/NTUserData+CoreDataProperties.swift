@@ -17,29 +17,13 @@ extension NTUserData {
         return NSFetchRequest<NTUserData>(entityName: "NTUserData")
     }
 
-    @NSManaged public var userId: String?
     @NSManaged public var isGroup: NSNumber?
-    @NSManaged public var presence: NSNumber?
     @NSManaged public var lastMessageId: String?
-    @NSManaged public var hasMessages: NSSet?
+    @NSManaged public var presence: NSNumber?
+    @NSManaged public var userId: String?
+    @NSManaged public var lastActivityTime: NSNumber?
     @NSManaged public var hasGroupMessages: NSSet?
-
-}
-
-// MARK: Generated accessors for hasMessages
-extension NTUserData {
-
-    @objc(addHasMessagesObject:)
-    @NSManaged public func addToHasMessages(_ value: NTMessageData)
-
-    @objc(removeHasMessagesObject:)
-    @NSManaged public func removeFromHasMessages(_ value: NTMessageData)
-
-    @objc(addHasMessages:)
-    @NSManaged public func addToHasMessages(_ values: NSSet)
-
-    @objc(removeHasMessages:)
-    @NSManaged public func removeFromHasMessages(_ values: NSSet)
+    @NSManaged public var hasMessages: NSSet?
 
 }
 
@@ -57,5 +41,22 @@ extension NTUserData {
 
     @objc(removeHasGroupMessages:)
     @NSManaged public func removeFromHasGroupMessages(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hasMessages
+extension NTUserData {
+
+    @objc(addHasMessagesObject:)
+    @NSManaged public func addToHasMessages(_ value: NTMessageData)
+
+    @objc(removeHasMessagesObject:)
+    @NSManaged public func removeFromHasMessages(_ value: NTMessageData)
+
+    @objc(addHasMessages:)
+    @NSManaged public func addToHasMessages(_ values: NSSet)
+
+    @objc(removeHasMessages:)
+    @NSManaged public func removeFromHasMessages(_ values: NSSet)
 
 }

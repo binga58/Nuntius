@@ -33,6 +33,7 @@ class NTDatabaseManager: NSObject {
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let url = self.applicationDocumentsDirectory.appendingPathComponent("\(databaseName).sqlite")
+        print(url)
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
@@ -95,10 +96,10 @@ class NTDatabaseManager: NSObject {
     }
     
     func saveToPersistentStore(){
-        if(self.managedObjectContext?.hasChanges)!{
-            self.managedObjectContext?.performAndWait({
+        if(self.mainManagedObjectContext().hasChanges){
+            self.mainManagedObjectContext().performAndWait({
                 do{
-                    try self.managedObjectContext?.save()
+                    try self.mainManagedObjectContext().save()
                     if(self.writerManagedObjectContext.hasChanges){
                         self.writerManagedObjectContext.performAndWait({
                             do{

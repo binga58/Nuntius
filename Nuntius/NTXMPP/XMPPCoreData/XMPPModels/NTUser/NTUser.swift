@@ -14,6 +14,7 @@ class NTUser: NSObject {
     var presence: NSNumber?
     var lastMessage: NTMessage?
     var lastMessageId: String?
+    var lastActivity: NSNumber?
     
     public init(userData: NTUserData) {
         super.init()
@@ -21,6 +22,7 @@ class NTUser: NSObject {
         self.isGroup = userData.isGroup
         self.presence = userData.presence
         self.lastMessageId = userData.lastMessageId
+        self.lastActivity = userData.lastActivityTime
     }
     
     public init(userData: NTUserData, messageObj: NTMessage) {
@@ -29,6 +31,7 @@ class NTUser: NSObject {
         self.isGroup = userData.isGroup
         self.presence = userData.presence
         self.lastMessageId = userData.lastMessageId
+        self.lastActivity = userData.lastActivityTime
         self.lastMessage = messageObj
     }
     

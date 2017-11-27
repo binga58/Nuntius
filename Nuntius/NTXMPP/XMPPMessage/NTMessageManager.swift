@@ -18,7 +18,7 @@ class NTMessageManager: NSObject {
      - Returns: XML stanza of message for xmpp server
      */
     
-    func createMessage(messageText: String?, userId: String?) -> DDXMLElement {
+    func createMessage(messageText: String?, userId: String?, messageId: String) -> DDXMLElement {
         guard let _ = messageText, let user = userId, user.count > 0 else {
             return DDXMLElement()
         }
@@ -34,7 +34,7 @@ class NTMessageManager: NSObject {
             return DDXMLElement()
         }
         //Message Node
-        let messageId = NTUtility.getMessageId()
+//        let messageId = NTUtility.getMessageId()
         messageNode.addAttribute(withName: Constants.type, stringValue: Constants.chat)
         messageNode.addAttribute(withName: Constants.to, stringValue: NTUtility.getFullId(forFriendId: userId!))
         messageNode.addAttribute(withName: Constants.id, stringValue: messageId)

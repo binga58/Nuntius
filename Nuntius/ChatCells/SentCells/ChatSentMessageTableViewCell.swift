@@ -9,7 +9,8 @@
 import UIKit
 
 class ChatSentMessageTableViewCell: UITableViewCell {
-
+    @IBOutlet weak var txtView: UITextView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -19,6 +20,10 @@ class ChatSentMessageTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func configureCell(message: NTMessage) -> () {
+        txtView.text = message.messageText
     }
     
 }

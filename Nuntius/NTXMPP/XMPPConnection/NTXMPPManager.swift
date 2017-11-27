@@ -13,6 +13,10 @@ class NTXMPPManager: NSObject {
     
     static var xmppManager : NTXMPPManager!
     var xmppConnection : NTXMPPConnection?
+    var operationQueue: OperationQueue = {
+       var tempOperationQueue = OperationQueue.init()
+        return tempOperationQueue
+    }()
     var xmppServerTimeDifference : TimeInterval? = 0
     
     var xmppAccount : NTXMPPAccount!
@@ -73,12 +77,20 @@ class NTXMPPManager: NSObject {
 //MARK:-------------- Send Messages -------------------
 extension NTXMPPManager{
     func sendMessage(messageText: String, userId: String){
+        let messageId = NTUtility.getMessageId()
         
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        
-        
-        if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: messageText, userId: userId){
-            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
+        NTMessageData.messageForOneToOneChat(messageId: messageId, messageText: messageText, messageStatus: .waiting, messageType: .text, isMine: true, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NSNumber.init(value: 0), readTimestamp: NSNumber.init(value: 0), managedObjectContext: childMOC) { (messageObj) in
+            
+            if let msg = messageObj{
+                NTDatabaseManager.sharedManager().saveToPersistentStore()
+                self.operationQueue.addOperation {
+                    if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, messageId: messageId){
+                        NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
+                    }
+                }
+            }
         }
     }
     

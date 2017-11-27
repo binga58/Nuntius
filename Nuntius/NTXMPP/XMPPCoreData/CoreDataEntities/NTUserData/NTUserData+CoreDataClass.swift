@@ -13,38 +13,98 @@ import CoreData
 @objc(NTUserData)
 public class NTUserData: NSManagedObject {
     static let userDataUserId = "userId"
+    static let userDataIsGroup = "isGroup"
     static var userIdToObjectId: [String:NSManagedObjectID] = [:]
     
-    class func populateUserObjectDict(managedObjectContext: NSManagedObjectContext) {
+    class func populateUserObjectDict() {
         
-        let fetchRequest = NTUserData.userFetchRequest()
-        do{
-            let result:[NTUserData] = try managedObjectContext.fetch(fetchRequest)
-            for userData in result {
-                userIdToObjectId[userData.userId!] = userData.objectID
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        
+        childMOC.perform {
+            let fetchRequest = NTUserData.userFetchRequest()
+            do{
+                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
+                for userData in result {
+                    userIdToObjectId[userData.userId!] = userData.objectID
+                }
+                
             }
-            
+            catch{
+                print("Error - \(error)")
+            }
         }
-        catch{
-            print("Error - \(error)")
-        }
+        
+        
     }
     
-    class func user(For userId:String, managedObjectContext: NSManagedObjectContext) -> NTUserData?{
+    class func userData(For userId:String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData?{
         
         let fetchRequest = NTUserData.userFetchRequest()
-        fetchRequest.predicate = NSPredicate.init(format: "\(userDataUserId) == %@", argumentArray: [userId])
+        fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@ && \(userDataUserId) == %@", argumentArray: [NSNumber.init(value: isGroup),userId])
         fetchRequest.fetchLimit = 1
         do{
             let result: [NTUserData] = try managedObjectContext.fetch(fetchRequest)
-            return result[0]
+            if result.count > 0{
+                return result[0]
+            }
         }
         catch{
             print(error)
             return nil
         }
+        return nil
     }
-
+    
+    class func insertUserOnBackground(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext, completion: @escaping (NTUser?) -> ()) {
+        managedObjectContext.perform {
+            if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
+                completion(NTUser.init(userData: user))
+            }
+            
+            let userData: NTUserData = managedObjectContext.insertObject()
+            userData.userId = userId
+            userData.isGroup = NSNumber.init(value: isGroup)
+            
+            let user = NTUser.init(userData: userData)
+            
+            do{
+                try managedObjectContext.save()
+                completion(user)
+                self.populateUserObjectDict()
+            }
+            catch{
+                print(error)
+                completion(nil)
+            }
+        }
+    }
+    
+    class func insertUser(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData? {
+        if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
+            return user
+        }
+        
+        let userData: NTUserData = managedObjectContext.insertObject()
+        userData.userId = userId
+        userData.isGroup = NSNumber.init(value: isGroup)
+        
+        let userObjectId = userData.objectID
+        
+        do{
+            try managedObjectContext.save()
+            if let savedUserData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
+                self.populateUserObjectDict()
+                return savedUserData
+            }
+        }
+        catch{
+            print(error)
+            return nil
+        }
+        return nil
+    }
+    
+    
 }
 
 extension NTUserData{
