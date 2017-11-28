@@ -164,6 +164,8 @@ extension NTXMPPManager{
     
     @objc private func appInBackground(){
         NTDatabaseManager.sharedManager().saveToPersistentStore()
+        self.disconnect()
+        self.xmppConnection?.clearXMPPStream()
     }
     
 }

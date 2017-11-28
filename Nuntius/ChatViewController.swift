@@ -26,7 +26,8 @@ class ChatViewController: UIViewController {
         let messageFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
         messageFetchRequest.sortDescriptors = [primarySortDescriptor]
-        messageFetchRequest.fetchLimit = 100
+//        messageFetchRequest.fetchLimit = 100
+        messageFetchRequest.fetchBatchSize = 20
         
         let frc = NSFetchedResultsController(
             fetchRequest: messageFetchRequest,
