@@ -91,12 +91,17 @@ class NTDatabaseManager: NSObject {
 //    }
     
     func getChildContext() -> NSManagedObjectContext {
-        if privateManagedObjectContext == nil{
-            privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-            return privateManagedObjectContext!
-        }
-        return privateManagedObjectContext!
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+        return context
+        
+        
+//        if privateManagedObjectContext == nil{
+//            privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+//            return privateManagedObjectContext!
+//        }
+//        return privateManagedObjectContext!
     }
     
     func saveChildContext(){

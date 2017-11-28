@@ -96,9 +96,12 @@ public class NTMessageData: NSManagedObject {
                     
                     if let gId = groupId, let groupObjectId: NSManagedObjectID = NTUserData.groupIdToObjectId[gId], let groupData: NTUserData = managedObjectContext.object(with: groupObjectId) as? NTUserData{
                         messageData.hasGroup = groupData
+                        
                     }else{
+                        
                         if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
                             messageData.hasGroup = groupData
+                            
                         }else{
                             
                             if let gId = groupId, let groupData = NTUserData.insertUser(userId: gId, isGroup: true, managedObjectContext: managedObjectContext){
@@ -145,7 +148,7 @@ public class NTMessageData: NSManagedObject {
     }
     
     
-    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NTMessageData?) -> ()){
+    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NSManagedObjectID?) -> ()){
         
         managedObjectContext.perform {
             let fetchRequest = NTMessageData.messageFetchRequest()
@@ -155,7 +158,7 @@ public class NTMessageData: NSManagedObject {
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
                 
                 if let count = result?.count, count > 0{
-                    messageIdFetchCompletion(result?[0])
+                    messageIdFetchCompletion(result?[0].objectID)
                 }else{
                     messageIdFetchCompletion(nil)
                 }

@@ -14,20 +14,20 @@ import CoreData
 public class NTUserData: NSManagedObject {
     static var userIdToObjectId: [String:NSManagedObjectID] = [:]
     static var groupIdToObjectId: [String:NSManagedObjectID] = [:]
-    static var contactMOC: NSManagedObjectContext = {
-        let context = NTDatabaseManager.sharedManager().getChildContext()
-        return context
-    }()
+//    static var contactMOC: NSManagedObjectContext = {
+//        let context = NTDatabaseManager.sharedManager().getChildContext()
+//        return context
+//    }()
     
     class func populateUserObjectDict() {
         
-//        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        contactMOC.perform {
+        childMOC.perform {
             let fetchRequest = NTUserData.userFetchRequest()
             fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", NSNumber.init(value: false))
             do{
-                let result:[NTUserData] = try contactMOC.fetch(fetchRequest)
+                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
                 for userData in result {
                     userIdToObjectId[userData.userId!] = userData.objectID
                 }
@@ -38,11 +38,11 @@ public class NTUserData: NSManagedObject {
             }
         }
         
-        contactMOC.perform {
+        childMOC.perform {
             let fetchRequest = NTUserData.userFetchRequest()
             fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", argumentArray: [NSNumber.init(value: true)])
             do{
-                let result:[NTUserData] = try contactMOC.fetch(fetchRequest)
+                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
                 for userData in result {
                     groupIdToObjectId[userData.userId!] = userData.objectID
                 }
@@ -99,18 +99,18 @@ public class NTUserData: NSManagedObject {
     }
     
     class func insertUser(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData? {
-        if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: contactMOC){
+        if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
             return user
         }
         
-        let userData: NTUserData = contactMOC.insertObject()
+        let userData: NTUserData = managedObjectContext.insertObject()
         userData.userId = userId
         userData.isGroup = NSNumber.init(value: isGroup)
         
         let userObjectId = userData.objectID
         
         do{
-            if let savedUserData: NTUserData = contactMOC.object(with: userObjectId) as? NTUserData{
+            if let savedUserData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
                 self.populateUserObjectDict()
                 return userData
             }

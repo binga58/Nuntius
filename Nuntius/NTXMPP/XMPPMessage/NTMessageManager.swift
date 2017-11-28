@@ -110,14 +110,16 @@ class NTMessageManager: NSObject {
             }else{
                 
                 NTMessageData.message(messageId: messageId as String, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
-                    if let messageData = nTMessageData{
+                    if let messageDataObjectId = nTMessageData{
                         childMOC.perform {
-                            messageData.messageStatus = MessageStatus.sent.nsNumber
-                            do{
-                                try childMOC.save()
-                            }
-                            catch{
-                                print(error)
+                            if let messageData: NTMessageData = childMOC.object(with: messageDataObjectId) as? NTMessageData{
+                                messageData.messageStatus = MessageStatus.sent.nsNumber
+                                do{
+                                    try childMOC.save()
+                                }
+                                catch{
+                                    print(error)
+                                }
                             }
                         }
                     }
