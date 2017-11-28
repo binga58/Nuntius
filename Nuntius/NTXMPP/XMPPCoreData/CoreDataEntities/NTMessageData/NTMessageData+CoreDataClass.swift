@@ -13,6 +13,13 @@ import CoreData
 @objc(NTMessageData)
 public class NTMessageData: NSManagedObject {
     
+//    static var messageIdToObjectId = NSCache<NSString, NSManagedObjectID>()
+    static var messageIdToObjectId: NSCache<NSString, NSManagedObjectID> = {
+        let cache = NSCache<NSString, NSManagedObjectID>()
+        cache.countLimit = 1000
+        return cache
+    }()
+    
     class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessage?) -> ()) {
         
         self.messageForGroupChat(messageId: messageId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
@@ -87,7 +94,7 @@ public class NTMessageData: NSManagedObject {
                         
                     }
                     
-                    if let gId = groupId, let groupObjectId: NSManagedObjectID = NTUserData.userIdToObjectId[gId], let groupData: NTUserData = managedObjectContext.object(with: groupObjectId) as? NTUserData{
+                    if let gId = groupId, let groupObjectId: NSManagedObjectID = NTUserData.groupIdToObjectId[gId], let groupData: NTUserData = managedObjectContext.object(with: groupObjectId) as? NTUserData{
                         messageData.hasGroup = groupData
                     }else{
                         if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
@@ -121,6 +128,8 @@ public class NTMessageData: NSManagedObject {
                         msg = NTMessage.init(messageData: messageData)
                     }
                     
+                    NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId as NSString)
+                    
                     do{
                         try managedObjectContext.save()
                         completion(msg)
@@ -136,17 +145,17 @@ public class NTMessageData: NSManagedObject {
     }
     
     
-    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NSManagedObjectID?) -> ()){
+    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NTMessageData?) -> ()){
         
         managedObjectContext.perform {
             let fetchRequest = NTMessageData.messageFetchRequest()
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", [messageId])
+            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", messageId)
             do{
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
                 
                 if let count = result?.count, count > 0{
-                    messageIdFetchCompletion(result?[0].objectID)
+                    messageIdFetchCompletion(result?[0])
                 }else{
                     messageIdFetchCompletion(nil)
                 }
@@ -158,6 +167,31 @@ public class NTMessageData: NSManagedObject {
             }
         }
     }
+    
+    class func message(messageId: String, managedObjectContext: NSManagedObjectContext) -> NTMessage?{
+        
+            let fetchRequest = NTMessageData.messageFetchRequest()
+            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", messageId)
+            fetchRequest.fetchLimit = 1
+        let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
+        fetchRequest.sortDescriptors = [primarySortDescriptor]
+            do{
+                let result:[Any]? = try managedObjectContext.fetch(fetchRequest)
+                
+                if let count = result?.count, count > 0{
+                    return NTMessage.init(messageData: result![0] as! NTMessageData)
+                }else{
+                    return nil
+                }
+                
+            }
+            catch{
+                print("Error - \(error)")
+                return nil
+            }
+    }
+    
+    
 
     
     

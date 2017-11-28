@@ -13,6 +13,7 @@ class NTDatabaseManager: NSObject {
     let databaseName = "NTXMPPDataModel"
     var managedObjectContext: NSManagedObjectContext?
     static var databaseManager: NTDatabaseManager!
+    var privateManagedObjectContext: NSManagedObjectContext?
     
     // MARK: - CoreData Stack
     
@@ -75,24 +76,40 @@ class NTDatabaseManager: NSObject {
     
     // MARK: - Core Data Saving support
     
-    func saveContext () {
-        if (managedObjectContext?.hasChanges)! {
-            do {
-                try managedObjectContext?.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
-                abort()
-            }
-        }
-    }
+//    func saveContext () {
+//        if (managedObjectContext?.hasChanges)! {
+//            do {
+//                try managedObjectContext?.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nserror = error as NSError
+//                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+//                abort()
+//            }
+//        }
+//    }
     
     func getChildContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-        return context
+        if privateManagedObjectContext == nil{
+            privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+            return privateManagedObjectContext!
+        }
+        return privateManagedObjectContext!
+    }
+    
+    func saveChildContext(){
+        privateManagedObjectContext?.performAndWait {
+            if (privateManagedObjectContext?.hasChanges)!{
+                do{
+                    try privateManagedObjectContext?.save()
+                }
+                catch{
+                    print("\(error)")
+                }
+            }
+        }
     }
     
     func saveToPersistentStore(){

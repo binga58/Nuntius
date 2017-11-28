@@ -28,6 +28,8 @@
 		425F68021FCC369F00A5D578 /* NTUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F68011FCC369F00A5D578 /* NTUser.swift */; };
 		42745DC21FC7F38D00D3DBEF /* NTIQManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42745DC11FC7F38D00D3DBEF /* NTIQManger.swift */; };
 		42745DC41FC7F6A200D3DBEF /* NTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42745DC31FC7F6A200D3DBEF /* NTConstants.swift */; };
+		428122161FCD47F600E83707 /* UserInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428122141FCD47F600E83707 /* UserInfoTableViewCell.swift */; };
+		428122171FCD47F600E83707 /* UserInfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428122151FCD47F600E83707 /* UserInfoTableViewCell.xib */; };
 		4283ADC41FC576CD00F95560 /* NTUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4283ADC31FC576CD00F95560 /* NTUtility.swift */; };
 		4283ADC71FC59D5700F95560 /* NTStreamError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4283ADC61FC59D5700F95560 /* NTStreamError.swift */; };
 		4283ADCA1FC5AA4400F95560 /* NTMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4283ADC91FC5AA4400F95560 /* NTMessageManager.swift */; };
@@ -91,6 +93,8 @@
 		425F68011FCC369F00A5D578 /* NTUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUser.swift; sourceTree = "<group>"; };
 		42745DC11FC7F38D00D3DBEF /* NTIQManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTIQManger.swift; sourceTree = "<group>"; };
 		42745DC31FC7F6A200D3DBEF /* NTConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTConstants.swift; sourceTree = "<group>"; };
+		428122141FCD47F600E83707 /* UserInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoTableViewCell.swift; sourceTree = "<group>"; };
+		428122151FCD47F600E83707 /* UserInfoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInfoTableViewCell.xib; sourceTree = "<group>"; };
 		4283ADC31FC576CD00F95560 /* NTUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUtility.swift; sourceTree = "<group>"; };
 		4283ADC61FC59D5700F95560 /* NTStreamError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTStreamError.swift; sourceTree = "<group>"; };
 		4283ADC91FC5AA4400F95560 /* NTMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTMessageManager.swift; sourceTree = "<group>"; };
@@ -172,6 +176,7 @@
 			children = (
 				4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */,
 				4227F2441FC3EBCB00EC8818 /* ViewController.swift */,
+				428122131FCD47A900E83707 /* UsersCell */,
 				423F36A31FC6A25800AE9987 /* ChatViewController.swift */,
 				423F36A51FC6A65700AE9987 /* ChatCells */,
 				42745DBF1FC7F30400D3DBEF /* NTXMPP */,
@@ -302,6 +307,15 @@
 				42745DC11FC7F38D00D3DBEF /* NTIQManger.swift */,
 			);
 			path = XMPPIq;
+			sourceTree = "<group>";
+		};
+		428122131FCD47A900E83707 /* UsersCell */ = {
+			isa = PBXGroup;
+			children = (
+				428122141FCD47F600E83707 /* UserInfoTableViewCell.swift */,
+				428122151FCD47F600E83707 /* UserInfoTableViewCell.xib */,
+			);
+			path = UsersCell;
 			sourceTree = "<group>";
 		};
 		4283ADC21FC5768200F95560 /* XMPPUtitlities */ = {
@@ -499,6 +513,7 @@
 				4227F24D1FC3EBCB00EC8818 /* Assets.xcassets in Resources */,
 				423F36AF1FC6A6C600AE9987 /* ChatReceiveMessageTableViewCell.xib in Resources */,
 				423F36A91FC6A68400AE9987 /* ChatSentMessageTableViewCell.xib in Resources */,
+				428122171FCD47F600E83707 /* UserInfoTableViewCell.xib in Resources */,
 				4227F2481FC3EBCB00EC8818 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -694,6 +709,7 @@
 				425F68021FCC369F00A5D578 /* NTUser.swift in Sources */,
 				FC09BC021FC9873200B49643 /* NTMessageData+CoreDataProperties.swift in Sources */,
 				425F67FC1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift in Sources */,
+				428122161FCD47F600E83707 /* UserInfoTableViewCell.swift in Sources */,
 				423F36B81FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld in Sources */,
 				4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */,
 				4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */,

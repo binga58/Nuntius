@@ -26,6 +26,11 @@ class NTXMPPManager: NSObject {
     public override init() {
         super.init()
         self.xmppConnection = NTXMPPConnection()
+        addObservers()
+    }
+    
+    deinit {
+        removeObserves()
     }
     
     class func sharedManager() -> NTXMPPManager {
@@ -138,4 +143,27 @@ extension NTXMPPManager{
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
     }
+}
+
+
+//MARK:------------- App Background/Termination notification -------------
+extension NTXMPPManager{
+    private func addObservers() {
+        do{
+            NotificationCenter.default.addObserver(self, selector: #selector(appInBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(appInBackground), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        }
+    }
+    
+    private func removeObserves() {
+        do{
+            NotificationCenter.default.removeObserver(self)
+            NotificationCenter.default.removeObserver(self)
+        }
+    }
+    
+    @objc private func appInBackground(){
+        NTDatabaseManager.sharedManager().saveToPersistentStore()
+    }
+    
 }

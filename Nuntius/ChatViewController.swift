@@ -12,21 +12,23 @@ import CoreData
 class ChatViewController: UIViewController {
     @IBOutlet weak var textVIew: UITextView!
     
+    var user: NTUserData?
+    
     var fetchCount = 100
     
     lazy var fetchedResultsController: NSFetchedResultsController<NTMessageData> = {
-        let animalsFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
+        let messageFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
-        animalsFetchRequest.sortDescriptors = [primarySortDescriptor]
-        animalsFetchRequest.fetchLimit = 100
+        messageFetchRequest.sortDescriptors = [primarySortDescriptor]
+        messageFetchRequest.fetchLimit = 100
         
         let frc = NSFetchedResultsController(
-            fetchRequest: animalsFetchRequest,
+            fetchRequest: messageFetchRequest,
             managedObjectContext: NTDatabaseManager.sharedManager().mainManagedObjectContext(),
             sectionNameKeyPath: nil,
             cacheName: nil)
         
-        frc.delegate = self as? NSFetchedResultsControllerDelegate
+        frc.delegate = self
         
         return frc as! NSFetchedResultsController<NTMessageData>
     }()
@@ -54,7 +56,7 @@ class ChatViewController: UIViewController {
     @IBAction func sendTaped(_ sender: Any) {
         let messageText = textVIew.text
         textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: NTXMPPManager.sharedManager().xmppAccount.userName == "612" ? "610" : "612" )
+        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (user?.userId!)! )
 //        chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
 //        self.goToBottom()
 //        NTXMPPManager.xmppConnection?.loadarchivemsg()
@@ -144,7 +146,7 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
             
         case .insert:
             if let newIndexPath = newIndexPath {
-                chatTableView.insertRows(at: [newIndexPath as IndexPath], with: .automatic)
+                chatTableView.insertRows(at: [newIndexPath as IndexPath], with: .bottom)
             }
             
         case .delete:
@@ -154,6 +156,18 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
             
         case .update:
             if let indexPath = indexPath {
+                
+                let messageData: NTMessageData = fetchedResultsController.object(at: indexPath)
+                if (messageData.isMine?.boolValue)!{
+                    if let cell = chatTableView.cellForRow(at: indexPath) as? ChatSentMessageTableViewCell{
+                        cell.configureCell(message: NTMessage.init(messageData: messageData))
+                    }else{
+                        if let cell = chatTableView.cellForRow(at: indexPath) as? ChatReceiveMessageTableViewCell{
+                            cell.configureCell(message: NTMessage.init(messageData: messageData))
+                        }
+                    }
+                }
+                
 //                if let cell = chatTableView.cellForRowAtIndexPath(indexPath) as? UITableViewCell {
 //                    configureCell(cell, withObject: object)
 //                }
@@ -202,10 +216,6 @@ extension UITableView{
     func indexPathForLastRow() -> IndexPath {
         return IndexPath(row: numberOfRows(inSection: numberOfSections - 1) - 1, section: numberOfSections - 1)
     }
-    
-//    -(NSIndexPath*)indexPathForLastRow(){
-//    return [NSIndexPath indexPathForRow:[self numberOfRowsInSection:self.numberOfSections - 1] - 1 inSection:self.numberOfSections - 1];
-//    }
 }
 
 

@@ -12,20 +12,39 @@ import CoreData
 
 @objc(NTUserData)
 public class NTUserData: NSManagedObject {
-    static let userDataUserId = "userId"
-    static let userDataIsGroup = "isGroup"
     static var userIdToObjectId: [String:NSManagedObjectID] = [:]
+    static var groupIdToObjectId: [String:NSManagedObjectID] = [:]
+    static var contactMOC: NSManagedObjectContext = {
+        let context = NTDatabaseManager.sharedManager().getChildContext()
+        return context
+    }()
     
     class func populateUserObjectDict() {
         
-        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+//        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        childMOC.perform {
+        contactMOC.perform {
             let fetchRequest = NTUserData.userFetchRequest()
+            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", NSNumber.init(value: false))
             do{
-                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
+                let result:[NTUserData] = try contactMOC.fetch(fetchRequest)
                 for userData in result {
                     userIdToObjectId[userData.userId!] = userData.objectID
+                }
+                
+            }
+            catch{
+                print("Error - \(error)")
+            }
+        }
+        
+        contactMOC.perform {
+            let fetchRequest = NTUserData.userFetchRequest()
+            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", argumentArray: [NSNumber.init(value: true)])
+            do{
+                let result:[NTUserData] = try contactMOC.fetch(fetchRequest)
+                for userData in result {
+                    groupIdToObjectId[userData.userId!] = userData.objectID
                 }
                 
             }
@@ -40,7 +59,7 @@ public class NTUserData: NSManagedObject {
     class func userData(For userId:String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData?{
         
         let fetchRequest = NTUserData.userFetchRequest()
-        fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@ && \(userDataUserId) == %@", argumentArray: [NSNumber.init(value: isGroup),userId])
+        fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@ && \(userDataUserId) == %@", NSNumber.init(value: isGroup),userId)
         fetchRequest.fetchLimit = 1
         do{
             let result: [NTUserData] = try managedObjectContext.fetch(fetchRequest)
@@ -80,21 +99,20 @@ public class NTUserData: NSManagedObject {
     }
     
     class func insertUser(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData? {
-        if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
+        if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: contactMOC){
             return user
         }
         
-        let userData: NTUserData = managedObjectContext.insertObject()
+        let userData: NTUserData = contactMOC.insertObject()
         userData.userId = userId
         userData.isGroup = NSNumber.init(value: isGroup)
         
         let userObjectId = userData.objectID
         
         do{
-            try managedObjectContext.save()
-            if let savedUserData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
+            if let savedUserData: NTUserData = contactMOC.object(with: userObjectId) as? NTUserData{
                 self.populateUserObjectDict()
-                return savedUserData
+                return userData
             }
         }
         catch{
@@ -111,6 +129,14 @@ extension NTUserData{
     public class func userFetchRequest() -> NSFetchRequest<NTUserData> {
         return NSFetchRequest<NTUserData>(entityName: "NTUserData")
     }
+    
+    static let userDataLastMessageId = "lastMessageId"
+    static let userDataPresence = "presence"
+    static let userDataLastActivityTime = "lastActivityTime"
+    static let userDataHasGroupMessages = "hasGroupMessages"
+    static let userDataHasMessages = "hasMessages"
+    static let userDataUserId = "userId"
+    static let userDataIsGroup = "isGroup"
 }
 
 extension NTUserData: ManagedObjectType{

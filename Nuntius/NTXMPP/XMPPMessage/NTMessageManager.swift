@@ -70,6 +70,65 @@ class NTMessageManager: NSObject {
     
     func messageReceived(message: XMPPMessage){
         
+        if let messageId = message.elementID as NSString?, let _ = message.element(forName: Constants.body), let userId = message.from?.user{
+            
+            var text: String
+            if let messageText = message.element(forName: Constants.body)?.stringValue{
+                text = messageText
+            }else{
+                text = ""
+            }
+            
+            let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+            
+            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), managedObjectContext: childMOC, completion: { (savedMessage) in
+                
+                NTDatabaseManager.sharedManager().saveToPersistentStore()
+                
+            })
+            
+            
+        }
+        
+    }
+    
+    func messageSent(message: XMPPMessage) {
+        if let messageId = message.elementID as NSString?{
+            
+            let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+            
+            if let messageObjectId = NTMessageData.messageIdToObjectId.object(forKey: messageId), let messageData: NTMessageData = childMOC.object(with: messageObjectId) as? NTMessageData{
+                childMOC.perform {
+                    messageData.messageStatus = MessageStatus.sent.nsNumber
+                    do{
+                        try childMOC.save()
+                    }
+                    catch{
+                        print(error)
+                    }
+                }
+            }else{
+                
+                NTMessageData.message(messageId: messageId as String, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
+                    if let messageData = nTMessageData{
+                        childMOC.perform {
+                            messageData.messageStatus = MessageStatus.sent.nsNumber
+                            do{
+                                try childMOC.save()
+                            }
+                            catch{
+                                print(error)
+                            }
+                        }
+                    }
+                })
+            }
+            
+            NTDatabaseManager.sharedManager().saveToPersistentStore()
+            
+        }
+        
+        
     }
     
     
@@ -78,7 +137,7 @@ class NTMessageManager: NSObject {
 //MARK:------------------ XMPPStream Message delegate -------------
 extension NTMessageManager: XMPPStreamDelegate{
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
-        
+        messageSent(message: message)
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {

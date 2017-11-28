@@ -2,7 +2,7 @@
 //  NTUserData+CoreDataProperties.swift
 //  Nuntius
 //
-//  Created by Abhishek Sharma on 27/11/17.
+//  Created by Abhishek Sharma on 28/11/17.
 //  Copyright © 2017 Finoit Technologies. All rights reserved.
 //
 //
@@ -18,10 +18,10 @@ extension NTUserData {
     }
 
     @NSManaged public var isGroup: NSNumber?
+    @NSManaged public var lastActivityTime: NSNumber?
     @NSManaged public var lastMessageId: String?
     @NSManaged public var presence: NSNumber?
     @NSManaged public var userId: String?
-    @NSManaged public var lastActivityTime: NSNumber?
     @NSManaged public var hasGroupMessages: NSSet?
     @NSManaged public var hasMessages: NSSet?
 

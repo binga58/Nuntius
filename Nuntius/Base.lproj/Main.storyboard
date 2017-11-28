@@ -35,39 +35,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t4e-Po-jBP">
-                                <rect key="frame" x="158" y="185" width="59" height="30"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="d4S-Nn-5fE">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="yPx-B5-Ubn"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="afz-IT-5DJ"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d4S-Nn-5fE" secondAttribute="bottom" id="4zG-bH-YVo"/>
+                            <constraint firstItem="d4S-Nn-5fE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fMK-5c-mbH"/>
+                            <constraint firstItem="d4S-Nn-5fE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iWy-HN-HSh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="d4S-Nn-5fE" secondAttribute="trailing" id="qBo-2Y-uEt"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="AvT-aJ-ct2">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="DtN-KR-wTY">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="t4e-Po-jBP">
+                                <rect key="frame" x="16" y="7" width="59" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Connect"/>
                                 <connections>
                                     <action selector="connectTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ygK-al-md5"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hE4-bN-UvW">
-                                <rect key="frame" x="164.5" y="452" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="S2i-3Z-jfZ">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hE4-bN-UvW">
+                                <rect key="frame" x="281" y="7" width="78" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Disconnect"/>
                                 <connections>
                                     <action selector="disconnectTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iyz-a5-8bg"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N78-Dj-XA0">
-                                <rect key="frame" x="164" y="325" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Chat"/>
-                                <connections>
-                                    <action selector="chatTaped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iCa-31-MGB"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="t4e-Po-jBP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.6" id="O1t-KF-UMN"/>
-                            <constraint firstItem="t4e-Po-jBP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YKd-Yt-EI9"/>
-                            <constraint firstItem="hE4-bN-UvW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.4" id="f3z-Uh-Vuf"/>
-                            <constraint firstItem="hE4-bN-UvW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xGq-oA-l3g"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="AvT-aJ-ct2"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="userThreadTableView" destination="d4S-Nn-5fE" id="QhM-kK-fSc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
