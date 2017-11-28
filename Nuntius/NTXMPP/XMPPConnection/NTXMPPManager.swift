@@ -20,7 +20,7 @@ class NTXMPPManager: NSObject {
     var xmppServerTimeDifference : TimeInterval? = 0
     
     var xmppAccount : NTXMPPAccount!
-    let xmppQueue = DispatchQueue(label: "queuename", attributes: .concurrent)
+    let xmppQueue = DispatchQueue(label: "xmppQueue", attributes: .concurrent)
     var retriedCount = 0
     
     public override init() {

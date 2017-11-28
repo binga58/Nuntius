@@ -48,9 +48,13 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func chatTaped(_ sender: Any) {
+        NTXMPPManager.sharedManager().sendMessage(messageText: "Test message", userId: "612" )
+        
+    }
     @IBAction func connectTap(_ sender: Any) {
         let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
-        //        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "610", password:  "dacd0e23-01dc-486d-8a8a-02665c0d4941", groupChatServiceName: "groupChat")
+//                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "610", password:  "dacd0e23-01dc-486d-8a8a-02665c0d4941", groupChatServiceName: "groupChat")
         //        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "103", password:  "07ff5446-df43-478c-9077-14ac4a12c90f", groupChatServiceName: "groupChat")
         NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
         NTXMPPManager.sharedManager().connect()
@@ -59,14 +63,14 @@ class ViewController: UIViewController {
     @IBAction func disconnectTap(_ sender: Any) {
         NTXMPPManager.sharedManager().disconnect()
     }
-    @IBAction func chatTaped(_ sender: Any) {
-
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let chatViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ChatViewController.self))
-        self.navigationController?.pushViewController(chatViewController, animated: true)
-        
-    }
+//    @IBAction func chatTaped(_ sender: Any) {
+//
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let chatViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ChatViewController.self))
+//        self.navigationController?.pushViewController(chatViewController, animated: true)
+//
+//    }
     
     func setUpTableView() -> () {
         let userInfoCell = String(describing: UserInfoTableViewCell.self)

@@ -73,7 +73,7 @@ public class NTMessageData: NSManagedObject {
                             }
                             
                             user = NTUser.init(userData: userData)
-                            
+                            NTUserData.userIdToObjectId[userId] = messageData.hasUser?.objectID
                             
                         }else{
                             
@@ -101,6 +101,7 @@ public class NTMessageData: NSManagedObject {
                         
                         if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
                             messageData.hasGroup = groupData
+                            NTUserData.groupIdToObjectId[groupData.userId!] = groupData.objectID
                             
                         }else{
                             

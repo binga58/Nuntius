@@ -114,6 +114,7 @@ class NTMessageManager: NSObject {
                         childMOC.perform {
                             if let messageData: NTMessageData = childMOC.object(with: messageDataObjectId) as? NTMessageData{
                                 messageData.messageStatus = MessageStatus.sent.nsNumber
+                                NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId)
                                 do{
                                     try childMOC.save()
                                 }

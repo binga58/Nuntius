@@ -110,7 +110,7 @@ public class NTUserData: NSManagedObject {
         let userObjectId = userData.objectID
         
         do{
-            if let savedUserData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
+            if let _: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
                 self.populateUserObjectDict()
                 return userData
             }

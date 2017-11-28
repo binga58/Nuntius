@@ -12,6 +12,12 @@ import CoreData
 class ChatViewController: UIViewController {
     @IBOutlet weak var textVIew: UITextView!
     
+    var messageHeight: NSCache<NSString, NSNumber> = {
+        let cache = NSCache<NSString, NSNumber>()
+        cache.countLimit = 1000
+        return cache
+    }()
+    
     var user: NTUserData?
     
     var fetchCount = 100
@@ -56,7 +62,7 @@ class ChatViewController: UIViewController {
     @IBAction func sendTaped(_ sender: Any) {
         let messageText = textVIew.text
         textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (user?.userId!)! )
+        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: "610" )
 //        chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
 //        self.goToBottom()
 //        NTXMPPManager.xmppConnection?.loadarchivemsg()
@@ -130,8 +136,28 @@ extension ChatViewController : UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        
+        let messageData = fetchedResultsController.object(at: indexPath)
+        if let messageId = messageData.messageId, let msgHeight: NSNumber = self.messageHeight.object(forKey: messageId as NSString){
+            return CGFloat(msgHeight.floatValue)
+        }
+        
+        return UITableViewAutomaticDimension
+        
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let messageData = fetchedResultsController.object(at: indexPath)
+        let cellRect = tableView.rectForRow(at: indexPath)
+        messageHeight.setObject(NSNumber.init(value: Float(cellRect.height)), forKey: messageData.messageId! as NSString)
+        
+    }
+    
+    
 }
 
 //MARK:--------------- Fetchresult controller delegate -------------
