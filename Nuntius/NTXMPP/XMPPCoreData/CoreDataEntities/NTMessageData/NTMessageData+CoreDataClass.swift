@@ -199,11 +199,40 @@ public class NTMessageData: NSManagedObject {
             }
     }
     
-    
-
-    
-    
 }
+
+
+extension NTMessageData{
+    class func getLastDeliveredMessage(managedObjectContext: NSManagedObjectContext, completion:@escaping (NTMessageData?) -> ()) {
+        managedObjectContext.perform {
+            
+            let fetchRequest = NTMessageData.messageFetchRequest()
+            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageStatus) > %@", MessageStatus.sent.nsNumber)
+            fetchRequest.fetchLimit = 1
+            let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
+            fetchRequest.sortDescriptors = [primarySortDescriptor]
+            do{
+                let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
+                
+                if let count = result?.count, count > 0{
+                    completion(result![0])
+                }else{
+                    completion(nil)
+                }
+                
+            }
+            catch{
+                print("Error - \(error)")
+                completion(nil)
+            }
+            
+            
+        }
+        
+        
+    }
+}
+
 
 extension NTMessageData{
     static let messageDataMessageId = "messageId"

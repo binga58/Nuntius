@@ -130,6 +130,11 @@ class NTMessageManager: NSObject {
     }
     
     
+    func archiveMessage(message: XMPPMessage, delay: XMLElement){
+        
+    }
+    
+    
 }
 
 //MARK:------------------ XMPPStream Message delegate -------------
@@ -150,8 +155,8 @@ extension NTMessageManager: XMPPStreamDelegate{
 //MARK:------------------ Archive message delegate -------------
 extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
     func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveMAMMessage message: XMPPMessage) {
-        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body){
-            self.messageReceived(message: XMPPMessage.init(from: msg))
+        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body), let delay = forwarded.element(forName: Constants.delay){
+            self.archiveMessage(message: XMPPMessage.init(from: msg), delay: delay)
         }
     }
     

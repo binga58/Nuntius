@@ -36,6 +36,7 @@ struct Constants {
     static let set = "set"
     static let result = "result"
     static let forwarded = "forwarded"
+    static let delay = "delay"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"
@@ -60,11 +61,11 @@ protocol EnumToNSNumber {
 
 enum MessageStatus: Int,EnumToNSNumber {
     
+    case failed = -1
     case waiting = 0
     case sent
     case delivered
     case read
-    case failed
     
     var nsNumber: NSNumber{
         return NSNumber.init(value: self.rawValue)

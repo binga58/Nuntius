@@ -14,10 +14,10 @@ class NTXMPPManager: NSObject {
     static var xmppManager : NTXMPPManager!
     var xmppConnection : NTXMPPConnection?
     var operationQueue: OperationQueue = {
-       var tempOperationQueue = OperationQueue.init()
+        var tempOperationQueue = OperationQueue.init()
         return tempOperationQueue
     }()
-    var xmppServerTimeDifference : TimeInterval? = 0
+    var xmppServerTimeDifference : TimeInterval = 0
     
     var xmppAccount : NTXMPPAccount!
     let xmppQueue = DispatchQueue(label: "xmppQueue", attributes: .concurrent)
@@ -121,8 +121,24 @@ extension NTXMPPManager {
     
     func userAuthenticated() -> () {
         self.sendPresence(myPresence: .online)
-        self.synchronizeXMPPServerTime()
-        NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: NSDate())
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
+            if let messageData = nTMessageData{
+                self.synchronizeXMPPServerTime { (success) in
+                    if success{
+                        
+                        if let timeInterval = messageData.deliveredTimestamp?.doubleValue{
+                             let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
+                            NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
+                            
+                        }
+                    }
+                }
+            }else{
+                
+            }
+        }
+        
     }
     
 }
@@ -138,8 +154,8 @@ extension NTXMPPManager {
 
 //MARK:------------- Utility functions ------------
 extension NTXMPPManager{
-    func synchronizeXMPPServerTime() {
-        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedIQManger().getXMPPServerTime(){
+    func synchronizeXMPPServerTime(completion:@escaping (Bool) -> ()) {
+        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedIQManger().getXMPPServerTime(completion: completion){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
     }
@@ -169,3 +185,4 @@ extension NTXMPPManager{
     }
     
 }
+

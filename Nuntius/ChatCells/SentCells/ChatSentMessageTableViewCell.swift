@@ -28,9 +28,9 @@ class ChatSentMessageTableViewCell: UITableViewCell {
         if let status: MessageStatus = message.messageStatus{
             switch status {
             case .waiting:
-                statusLBL.text = "Waiting To Sent - \(String(describing: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!)))"
+                statusLBL.text = "Waiting To Sent - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!))))"
             case .sent:
-                statusLBL.text = "Sent At - \(String(describing: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!)))"
+                statusLBL.text = "Sent At - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!))))"
             case .delivered:
                 statusLBL.text = "Delivered At - \(String(describing: Date.init(timeIntervalSince1970: (message.deliveredTimestamp?.doubleValue)!)))"
             case .read:

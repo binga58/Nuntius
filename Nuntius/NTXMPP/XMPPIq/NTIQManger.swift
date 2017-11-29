@@ -18,7 +18,7 @@ class NTIQManger: NSObject {
      Fetches time of xmpp server in utc format and saves the difference with device's date and time
      */
     
-    func getXMPPServerTime() -> DDXMLElement {
+    func getXMPPServerTime(completion:@escaping (Bool) -> ()) -> DDXMLElement {
         
 //        <iq type='get'
 //        from='romeo@montague.net/orchard'
@@ -42,6 +42,7 @@ class NTIQManger: NSObject {
                     NTXMPPManager.sharedManager().xmppServerTimeDifference = difference
                 }
             }
+            completion(success)
         }
         
         //Creates stanza for requesting server time

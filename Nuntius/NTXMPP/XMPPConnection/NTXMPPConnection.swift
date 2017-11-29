@@ -161,7 +161,7 @@ extension NTXMPPConnection{
         
         let field = DDXMLElement.element(withName: Constants.field) as? DDXMLElement
         field?.addAttribute(withName: Constants.varXMPP, stringValue: Constants.start)
-        let xmppDateTime = NSDate.init(timeIntervalSince1970: 0).xmppDateTimeString
+        let xmppDateTime = utcDateTime.xmppDateTimeString
         let value = DDXMLElement.element(withName: Constants.value, stringValue: xmppDateTime) as? DDXMLElement
         field?.addChild(value!)
         var formField = [DDXMLElement]()

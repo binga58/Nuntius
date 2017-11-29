@@ -11,6 +11,7 @@ import CoreData
 
 class NTUtility: NSObject {
     
+    
     static var account: NTXMPPAccount{
         get{
             return NTXMPPManager.sharedManager().xmppAccount
@@ -41,6 +42,20 @@ class NTUtility: NSObject {
     
     class func getCurrentTime() -> NSNumber {
         return NSNumber.init(value: Date().timeIntervalSince1970)
+    }
+    
+    class func getLocalDateFormatter() -> DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.timeStyle = DateFormatter.Style.medium //Set time style
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        return dateFormatter
+    }
+    
+    class func getLocalTimeFromUTC(date:Date) -> String {
+        let dateFormatter = self.getLocalDateFormatter()
+        let timeStamp = dateFormatter.string(from: date)
+        return timeStamp
     }
     
 }
