@@ -37,6 +37,7 @@ struct Constants {
     static let result = "result"
     static let forwarded = "forwarded"
     static let delay = "delay"
+    static let stamp = "stamp"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"

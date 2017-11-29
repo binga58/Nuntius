@@ -28,13 +28,13 @@ class ChatSentMessageTableViewCell: UITableViewCell {
         if let status: MessageStatus = message.messageStatus{
             switch status {
             case .waiting:
-                statusLBL.text = "Waiting To Sent - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!))))"
+                statusLBL.text = "Waiting To Sent - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)! - NTXMPPManager.sharedManager().xmppServerTimeDifference))))"
             case .sent:
-                statusLBL.text = "Sent At - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)!))))"
+                statusLBL.text = "Sent At - \(String(describing: NTUtility.getLocalTimeFromUTC(date: Date.init(timeIntervalSince1970: (message.createdTimestamp?.doubleValue)! - NTXMPPManager.sharedManager().xmppServerTimeDifference))))"
             case .delivered:
-                statusLBL.text = "Delivered At - \(String(describing: Date.init(timeIntervalSince1970: (message.deliveredTimestamp?.doubleValue)!)))"
+                statusLBL.text = "Delivered At - \(String(describing: Date.init(timeIntervalSince1970: (message.deliveredTimestamp?.doubleValue)! - NTXMPPManager.sharedManager().xmppServerTimeDifference)))"
             case .read:
-                statusLBL.text = "Read At - \(String(describing: Date.init(timeIntervalSince1970: (message.readTimestamp?.doubleValue)!)))"
+                statusLBL.text = "Read At - \(String(describing: Date.init(timeIntervalSince1970: (message.readTimestamp?.doubleValue)! - NTXMPPManager.sharedManager().xmppServerTimeDifference)))"
             default:
                 statusLBL.text = "Failed"
             }

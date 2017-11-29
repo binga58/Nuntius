@@ -121,26 +121,23 @@ extension NTXMPPManager {
     
     func userAuthenticated() -> () {
         self.sendPresence(myPresence: .online)
-        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
-        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
-            if let messageData = nTMessageData{
+//        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+//        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
+//
                 self.synchronizeXMPPServerTime { (success) in
                     if success{
-                        
-                        if let timeInterval = messageData.deliveredTimestamp?.doubleValue{
-                             let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
+//                        if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
+                             let time = Date.init(timeIntervalSince1970: /*timeInterval - self.xmppServerTimeDifference*/0)
                             NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
                             
-                        }
-                    }
-                }
-            }else{
-                
+//                        }
+//                    }
+        
             }
         }
-        
+
     }
-    
+
 }
 
 

@@ -41,14 +41,14 @@ class NTUtility: NSObject {
     }
     
     class func getCurrentTime() -> NSNumber {
-        return NSNumber.init(value: Date().timeIntervalSince1970)
+        return NSNumber.init(value: Date().timeIntervalSince1970 + NTXMPPManager.sharedManager().xmppServerTimeDifference)
     }
     
     class func getLocalDateFormatter() -> DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone.current
-        dateFormatter.timeStyle = DateFormatter.Style.medium //Set time style
-        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter
     }
     

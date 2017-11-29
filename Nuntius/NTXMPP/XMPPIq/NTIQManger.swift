@@ -37,9 +37,10 @@ class NTIQManger: NSObject {
                     //Current UTC time
                     let currentDateTime = NSDate()
                     //Differnce between server and current time
+//                    let difference = serverDateTime.timeIntervalSince(currentDateTime as Date)
                     let difference = currentDateTime.timeIntervalSince(serverDateTime as Date)
                     //Saving the difference
-                    NTXMPPManager.sharedManager().xmppServerTimeDifference = difference
+                    NTXMPPManager.sharedManager().xmppServerTimeDifference = abs(difference)
                 }
             }
             completion(success)
