@@ -14,11 +14,11 @@ import CoreData
 public class NTMessageData: NSManagedObject {
     
 //    static var messageIdToObjectId = NSCache<NSString, NSManagedObjectID>()
-    static var messageIdToObjectId: NSCache<NSString, NSManagedObjectID> = {
-        let cache = NSCache<NSString, NSManagedObjectID>()
-        cache.countLimit = 1000
-        return cache
-    }()
+//    static var messageIdToObjectId: NSCache<NSString, NSManagedObjectID> = {
+//        let cache = NSCache<NSString, NSManagedObjectID>()
+//        cache.countLimit = 1000
+//        return cache
+//    }()
     
     class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessage?) -> ()) {
         
@@ -31,9 +31,15 @@ public class NTMessageData: NSManagedObject {
         
         self.message(messageId: messageId, managedObjectContext: managedObjectContext) { (objectId) in
             
-            if let _ = objectId{
-                completion(nil)
-            }else{
+//            if let _ = objectId{
+//                completion(nil)
+//            }else{
+            
+                
+                
+                
+                
+                
                 managedObjectContext.perform {
                     let messageData: NTMessageData = managedObjectContext.insertObject()
                     
@@ -49,34 +55,33 @@ public class NTMessageData: NSManagedObject {
                     var user: NTUser?
                     var group: NTUser?
                     
-                    if let userObjectId: NSManagedObjectID = NTUserData.userIdToObjectId[userId], let userData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
-                        messageData.hasUser = userData
-                        
-                        if let _ = groupId{
-                            
-                        }else{
-                            userData.lastMessageId = messageData.messageId
-                            userData.lastActivityTime = createdTimestamp
-                        }
-                        
-                        user = NTUser.init(userData: userData)
-                    }else{
-                        
-                        
+//                    if let userObjectId: NSManagedObjectID = NTUserData.userIdToObjectId[userId], let userData: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
+//                        messageData.hasUser = userData
+//
+//                        if let _ = groupId{
+//
+//                        }else{
+//                            userData.lastMessageId = messageData.messageId
+//                            userData.lastActivityTime = createdTimestamp
+//                        }
+//
+//                        user = NTUser.init(userData: userData)
+//                    }else{
+//
+//
                         if let userData = NTUserData.userData(For: userId,isGroup: false, managedObjectContext: managedObjectContext){
                             messageData.hasUser = userData
                             if let _ = groupId{
-                                
+
                             }else{
                                 userData.lastMessageId = messageData.messageId
                                 userData.lastActivityTime = createdTimestamp
                             }
-                            
+
                             user = NTUser.init(userData: userData)
-                            NTUserData.userIdToObjectId[userId] = messageData.hasUser?.objectID
-                            
+
                         }else{
-                            
+                    
                             if let userData = NTUserData.insertUser(userId: userId, isGroup: false, managedObjectContext: managedObjectContext){
                                 messageData.hasUser = userData
                                 if let _ = groupId{
@@ -89,28 +94,28 @@ public class NTMessageData: NSManagedObject {
                                 user = NTUser.init(userData: userData)
                                 
                             }
-                            
+//
                         }
-                        
-                    }
+//
+//                    }
                     
-                    if let gId = groupId, let groupObjectId: NSManagedObjectID = NTUserData.groupIdToObjectId[gId], let groupData: NTUserData = managedObjectContext.object(with: groupObjectId) as? NTUserData{
-                        messageData.hasGroup = groupData
-                        
-                    }else{
-                        
-                        if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
-                            messageData.hasGroup = groupData
-                            NTUserData.groupIdToObjectId[groupData.userId!] = groupData.objectID
-                            
-                        }else{
-                            
+//                    if let gId = groupId, let groupObjectId: NSManagedObjectID = NTUserData.groupIdToObjectId[gId], let groupData: NTUserData = managedObjectContext.object(with: groupObjectId) as? NTUserData{
+//                        messageData.hasGroup = groupData
+//
+//                    }else{
+//
+//                        if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
+//                            messageData.hasGroup = groupData
+////                            NTUserData.groupIdToObjectId[groupData.userId!] = groupData.objectID
+//
+//                        }else{
+                    
                             if let gId = groupId, let groupData = NTUserData.insertUser(userId: gId, isGroup: true, managedObjectContext: managedObjectContext){
                                 messageData.hasGroup = groupData
                             }
-                            
-                        }
-                    }
+//
+//                        }
+//                    }
                     
                     
                     if let groupData = messageData.hasGroup{
@@ -132,24 +137,23 @@ public class NTMessageData: NSManagedObject {
                         msg = NTMessage.init(messageData: messageData)
                     }
                     
-                    NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId as NSString)
+//                    NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId as NSString)
                     
-                    do{
-                        try managedObjectContext.save()
-                        completion(msg)
-                    }
-                    catch{
-                        print(error)
-                        completion(nil)
-                    }
+                    NTDatabaseManager.sharedManager().saveChildContext(context: managedObjectContext, completion: { (success) in
+                        if success{
+                            completion(msg)
+                        }else{
+                            completion(nil)
+                        }
+                    })
                     
-                }
+//                }
             }
         }
     }
     
     
-    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NSManagedObjectID?) -> ()){
+    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NTMessageData?) -> ()){
         
         managedObjectContext.perform {
             let fetchRequest = NTMessageData.messageFetchRequest()
@@ -159,7 +163,7 @@ public class NTMessageData: NSManagedObject {
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
                 
                 if let count = result?.count, count > 0{
-                    messageIdFetchCompletion(result?[0].objectID)
+                    messageIdFetchCompletion(result?[0])
                 }else{
                     messageIdFetchCompletion(nil)
                 }

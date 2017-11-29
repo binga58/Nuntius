@@ -33,7 +33,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="NTMessageData" positionX="-504" positionY="-252" width="128" height="193"/>
+        <element name="NTMessageData" positionX="-504" positionY="-252" width="128" height="195"/>
         <element name="NTUserData" positionX="-200" positionY="-180" width="128" height="150"/>
     </elements>
 </model>

@@ -12,8 +12,8 @@ import CoreData
 
 @objc(NTUserData)
 public class NTUserData: NSManagedObject {
-    static var userIdToObjectId: [String:NSManagedObjectID] = [:]
-    static var groupIdToObjectId: [String:NSManagedObjectID] = [:]
+//    static var userIdToObjectId: [String:NSManagedObjectID] = [:]
+//    static var groupIdToObjectId: [String:NSManagedObjectID] = [:]
 //    static var contactMOC: NSManagedObjectContext = {
 //        let context = NTDatabaseManager.sharedManager().getChildContext()
 //        return context
@@ -21,37 +21,37 @@ public class NTUserData: NSManagedObject {
     
     class func populateUserObjectDict() {
         
-        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
-        
-        childMOC.perform {
-            let fetchRequest = NTUserData.userFetchRequest()
-            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", NSNumber.init(value: false))
-            do{
-                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
-                for userData in result {
-                    userIdToObjectId[userData.userId!] = userData.objectID
-                }
-                
-            }
-            catch{
-                print("Error - \(error)")
-            }
-        }
-        
-        childMOC.perform {
-            let fetchRequest = NTUserData.userFetchRequest()
-            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", argumentArray: [NSNumber.init(value: true)])
-            do{
-                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
-                for userData in result {
-                    groupIdToObjectId[userData.userId!] = userData.objectID
-                }
-                
-            }
-            catch{
-                print("Error - \(error)")
-            }
-        }
+//        let childMOC = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+//
+//        childMOC.perform {
+//            let fetchRequest = NTUserData.userFetchRequest()
+//            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", NSNumber.init(value: false))
+//            do{
+//                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
+//                for userData in result {
+//                    userIdToObjectId[userData.userId!] = userData.objectID
+//                }
+//
+//            }
+//            catch{
+//                print("Error - \(error)")
+//            }
+//        }
+//
+//        childMOC.perform {
+//            let fetchRequest = NTUserData.userFetchRequest()
+//            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", argumentArray: [NSNumber.init(value: true)])
+//            do{
+//                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
+//                for userData in result {
+//                    groupIdToObjectId[userData.userId!] = userData.objectID
+//                }
+//
+//            }
+//            catch{
+//                print("Error - \(error)")
+//            }
+//        }
         
         
     }
@@ -85,16 +85,22 @@ public class NTUserData: NSManagedObject {
             userData.isGroup = NSNumber.init(value: isGroup)
             
             let user = NTUser.init(userData: userData)
-            
-            do{
-                try managedObjectContext.save()
-                completion(user)
-                self.populateUserObjectDict()
-            }
-            catch{
-                print(error)
-                completion(nil)
-            }
+            NTDatabaseManager.sharedManager().saveChildContext(context: managedObjectContext, completion: { (success) in
+                if success{
+                    completion(user)
+                    self.populateUserObjectDict()
+                    NTDatabaseManager.sharedManager().saveToPersistentStore()
+                }
+            })
+//            do{
+//                try managedObjectContext.save()
+//                completion(user)
+//                self.populateUserObjectDict()
+//            }
+//            catch{
+//                print(error)
+//                completion(nil)
+//            }
         }
     }
     
@@ -114,10 +120,6 @@ public class NTUserData: NSManagedObject {
                 self.populateUserObjectDict()
                 return userData
             }
-        }
-        catch{
-            print(error)
-            return nil
         }
         return nil
     }

@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         let userFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTUserData.entityName)
         userFetchRequest.predicate = NSPredicate.init(format: "\(NTUserData.userDataLastActivityTime) > 0", [])
         
-        let primarySortDescriptor = NSSortDescriptor(key: "\(NTUserData.userDataLastActivityTime)", ascending: true)
+        let primarySortDescriptor = NSSortDescriptor(key: "\(NTUserData.userDataLastActivityTime)", ascending: false)
         userFetchRequest.sortDescriptors = [primarySortDescriptor]
         userFetchRequest.fetchLimit = 100
         
@@ -34,28 +34,35 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("An error occurred")
-        }
+        
         
         setUpTableView()
+        connectTap(UIButton())
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        do {
+            try fetchedResultsController.performFetch()
+            userThreadTableView.reloadData()
+        } catch {
+            print("An error occurred")
+        }
+    }
 
     @IBAction func chatTaped(_ sender: Any) {
-        NTXMPPManager.sharedManager().sendMessage(messageText: "Test message", userId: "612" )
+        NTXMPPManager.sharedManager().sendMessage(messageText: "Test message", userId: "610" )
         
     }
     @IBAction func connectTap(_ sender: Any) {
-        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
+//        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
 //                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "610", password:  "dacd0e23-01dc-486d-8a8a-02665c0d4941", groupChatServiceName: "groupChat")
-        //        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "103", password:  "07ff5446-df43-478c-9077-14ac4a12c90f", groupChatServiceName: "groupChat")
+                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "103", password:  "07ff5446-df43-478c-9077-14ac4a12c90f", groupChatServiceName: "groupChat")
         NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
         NTXMPPManager.sharedManager().connect()
     }
@@ -110,6 +117,8 @@ extension ViewController: UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        tableView.deselectRow(at: indexPath, animated: false)
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let chatViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ChatViewController.self)) as? ChatViewController{
             let userData = fetchedResultsController.object(at: indexPath)
@@ -144,12 +153,12 @@ extension ViewController : NSFetchedResultsControllerDelegate{
         case .update:
             if let indexPath = indexPath {
                 
-                let userData = fetchedResultsController.object(at: indexPath)
+//                let userData = fetchedResultsController.object(at: indexPath)
                 
-                if let cell: UserInfoTableViewCell = userThreadTableView.dequeueReusableCell(withIdentifier: String(describing: UserInfoTableViewCell.self)) as? UserInfoTableViewCell{
-                    cell.configureCell(userData: userData)
+//                if let cell: UserInfoTableViewCell = userThreadTableView.dequeueReusableCell(withIdentifier: String(describing: UserInfoTableViewCell.self)) as? UserInfoTableViewCell{
+//                    cell.configureCell(userData: userData)
                     userThreadTableView.reloadRows(at: [indexPath], with: .none)
-                }
+//                }
                 
             }
             

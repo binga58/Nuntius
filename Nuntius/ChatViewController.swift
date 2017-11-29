@@ -24,9 +24,9 @@ class ChatViewController: UIViewController {
     
     lazy var fetchedResultsController: NSFetchedResultsController<NTMessageData> = {
         let messageFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
+        messageFetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataHasUser).\(NTUserData.userDataUserId) == %@ && \(NTMessageData.messageDataHasUser).\(NTUserData.userDataIsGroup) == %@",(user?.userId)!,(user?.isGroup)!)
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
         messageFetchRequest.sortDescriptors = [primarySortDescriptor]
-//        messageFetchRequest.fetchLimit = 100
         messageFetchRequest.fetchBatchSize = 20
         
         let frc = NSFetchedResultsController(
@@ -48,7 +48,7 @@ class ChatViewController: UIViewController {
         do {
             try fetchedResultsController.performFetch()
         } catch {
-            print("An error occurred")
+            print(error)
         }
         // Do any additional setup after loading the view.
     }
@@ -58,12 +58,16 @@ class ChatViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: false)
+    }
     
     
     @IBAction func sendTaped(_ sender: Any) {
         let messageText = textVIew.text
         textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: "610" )
+        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (user?.userId)! )
 //        chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
 //        self.goToBottom()
 //        NTXMPPManager.xmppConnection?.loadarchivemsg()
@@ -201,6 +205,7 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
             }
             
         case .move:
+
             if let indexPath = indexPath {
 //                if let newIndexPath = newIndexPath {
 //                    chatTableView.deleteRowsAtIndexPaths([indexPath],

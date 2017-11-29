@@ -122,7 +122,7 @@ extension NTXMPPManager {
     func userAuthenticated() -> () {
         self.sendPresence(myPresence: .online)
         self.synchronizeXMPPServerTime()
-//        NTXMPPManager.xmppConnection?.sendArchiveRequest(utcDateTime: NSDate())
+        NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: NSDate())
     }
     
 }

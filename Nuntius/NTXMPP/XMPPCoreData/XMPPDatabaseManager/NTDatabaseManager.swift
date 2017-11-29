@@ -91,17 +91,37 @@ class NTDatabaseManager: NSObject {
 //    }
     
     func getChildContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-        return context
+//        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+//        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//        return context
+//        return NTDatabaseManager.sharedManager().mainManagedObjectContext()
         
-        
-//        if privateManagedObjectContext == nil{
-//            privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//        privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-//            return privateManagedObjectContext!
-//        }
-//        return privateManagedObjectContext!
+        if privateManagedObjectContext == nil{
+            privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+            privateManagedObjectContext?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            return privateManagedObjectContext!
+        }
+        return privateManagedObjectContext!
+    }
+    
+    func saveChildContext(context: NSManagedObjectContext?, completion:(Bool) -> ()){
+//        completion(true)
+        context?.performAndWait {
+            if (context?.hasChanges)!{
+                do{
+                    try context?.save()
+                    completion(true)
+                }
+                catch{
+                    let nserror = error as NSError
+                    NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+                    completion(false)
+                    abort()
+                }
+            }
+        }
     }
     
     func saveChildContext(){

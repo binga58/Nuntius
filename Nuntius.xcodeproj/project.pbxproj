@@ -98,6 +98,7 @@
 		4283ADC31FC576CD00F95560 /* NTUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUtility.swift; sourceTree = "<group>"; };
 		4283ADC61FC59D5700F95560 /* NTStreamError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTStreamError.swift; sourceTree = "<group>"; };
 		4283ADC91FC5AA4400F95560 /* NTMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTMessageManager.swift; sourceTree = "<group>"; };
+		42C57E761FCE9DDD000455DE /* XMPPFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XMPPFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42D4BE311FC4405100057D12 /* NTXMPPConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPConnection.swift; sourceTree = "<group>"; };
 		42D4BE331FC4496C00057D12 /* NTXMPPAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPAccount.swift; sourceTree = "<group>"; };
 		42D4BE381FC44D0D00057D12 /* NTXMPPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTXMPPManager.swift; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 		354B7D75101A122B038B91D2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42C57E761FCE9DDD000455DE /* XMPPFramework.framework */,
 				5C4B3B9EB1FF636E644E5B08 /* Pods_Nuntius.framework */,
 				01E5100F8DD622455232EB05 /* Pods_NuntiusTests.framework */,
 				523D1D164D5F165A9ED7E0AB /* Pods_NuntiusUITests.framework */,

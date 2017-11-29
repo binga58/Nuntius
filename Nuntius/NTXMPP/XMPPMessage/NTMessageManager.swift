@@ -97,38 +97,33 @@ class NTMessageManager: NSObject {
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-            if let messageObjectId = NTMessageData.messageIdToObjectId.object(forKey: messageId), let messageData: NTMessageData = childMOC.object(with: messageObjectId) as? NTMessageData{
-                childMOC.perform {
-                    messageData.messageStatus = MessageStatus.sent.nsNumber
-                    do{
-                        try childMOC.save()
-                    }
-                    catch{
-                        print(error)
-                    }
-                }
-            }else{
-                
+//            if let messageObjectId = NTMessageData.messageIdToObjectId.object(forKey: messageId), let messageData: NTMessageData = childMOC.object(with: messageObjectId) as? NTMessageData{
+//                childMOC.perform {
+//                    messageData.messageStatus = MessageStatus.sent.nsNumber
+//                    NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+//                        if success{
+//                            NTDatabaseManager.sharedManager().saveToPersistentStore()
+//                        }
+//                    })
+//                }
+//            }else{
+            
                 NTMessageData.message(messageId: messageId as String, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
-                    if let messageDataObjectId = nTMessageData{
+                    if let messageData = nTMessageData{
                         childMOC.perform {
-                            if let messageData: NTMessageData = childMOC.object(with: messageDataObjectId) as? NTMessageData{
+//                            if let messageData: NTMessageData = childMOC.object(with: messageDataObjectId) as? NTMessageData{
                                 messageData.messageStatus = MessageStatus.sent.nsNumber
-                                NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId)
-                                do{
-                                    try childMOC.save()
-                                }
-                                catch{
-                                    print(error)
-                                }
-                            }
+//                                NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId)
+                                NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                                    if success{
+                                        NTDatabaseManager.sharedManager().saveToPersistentStore()
+                                    }
+                                })
+//                            }
                         }
                     }
                 })
-            }
-            
-            NTDatabaseManager.sharedManager().saveToPersistentStore()
-            
+//            }
         }
         
         
