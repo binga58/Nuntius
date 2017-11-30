@@ -99,6 +99,8 @@ extension NTXMPPManager{
         }
     }
     
+    
+    
 }
 
 //MARK:--------------- Send presence ---------------------
@@ -123,16 +125,17 @@ extension NTXMPPManager {
         self.sendPresence(myPresence: .online)
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
-//
+
                 self.synchronizeXMPPServerTime { (success) in
                     if success{
                         if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
                              let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
+                    
+//                        let time = Date.init(timeIntervalSince1970: 0)
                             NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
-                            
+//
                         }
                     }
-//
             }
         }
 

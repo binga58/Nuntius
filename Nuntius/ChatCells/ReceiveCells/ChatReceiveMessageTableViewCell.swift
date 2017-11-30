@@ -14,6 +14,7 @@ class ChatReceiveMessageTableViewCell: UITableViewCell {
     @IBOutlet weak var dateTimeLBL: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+//        self.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
         // Initialization code
     }
 
@@ -32,7 +33,7 @@ class ChatReceiveMessageTableViewCell: UITableViewCell {
             case .sent:
                 dateTimeLBL.text = "Sent At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             case .delivered:
-                dateTimeLBL.text = "Delivered At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.deliveredTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+                dateTimeLBL.text = "Delivered At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             case .read:
                 dateTimeLBL.text = "Read At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.readTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             default:

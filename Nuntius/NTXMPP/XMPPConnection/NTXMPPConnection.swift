@@ -159,10 +159,10 @@ extension NTXMPPConnection{
     
     func sendArchiveRequest(utcDateTime: NSDate) -> () {
         
-        let field = DDXMLElement.element(withName: Constants.field) as? DDXMLElement
-        field?.addAttribute(withName: Constants.varXMPP, stringValue: Constants.start)
+        let field = DDXMLElement.element(withName: NTConstants.field) as? DDXMLElement
+        field?.addAttribute(withName: NTConstants.varXMPP, stringValue: NTConstants.start)
         let xmppDateTime = utcDateTime.xmppDateTimeString
-        let value = DDXMLElement.element(withName: Constants.value, stringValue: xmppDateTime) as? DDXMLElement
+        let value = DDXMLElement.element(withName: NTConstants.value, stringValue: xmppDateTime) as? DDXMLElement
         field?.addChild(value!)
         var formField = [DDXMLElement]()
         formField.append(field!)

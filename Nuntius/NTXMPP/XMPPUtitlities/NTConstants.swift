@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Constants {
+struct NTConstants {
     static let time = "time"
     static let message = "message"
     static let type = "type"

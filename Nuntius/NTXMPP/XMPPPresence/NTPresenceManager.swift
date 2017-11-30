@@ -43,12 +43,12 @@ class NTPresenceManager: NSObject {
             showText = "dnd"
         }
         
-        if let _ = statusText, let statusNode = DDXMLElement.element(withName: Constants.status) as? DDXMLElement{
+        if let _ = statusText, let statusNode = DDXMLElement.element(withName: NTConstants.status) as? DDXMLElement{
             statusNode.stringValue = statusText
             xmppPresence.addChild(statusNode)
         }
         
-        if let _ = showText, let showNode = DDXMLElement.element(withName: Constants.show) as? DDXMLElement{
+        if let _ = showText, let showNode = DDXMLElement.element(withName: NTConstants.show) as? DDXMLElement{
             showNode.stringValue = showText
             xmppPresence.addChild(showNode)
         }

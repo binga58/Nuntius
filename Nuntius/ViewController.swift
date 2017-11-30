@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         
         let frc = NSFetchedResultsController(
             fetchRequest: userFetchRequest,
-            managedObjectContext: NTDatabaseManager.sharedManager().mainManagedObjectContext(),
+            managedObjectContext: NTDatabaseManager.sharedManager().getMainManagedObjectContext(),
             sectionNameKeyPath: nil,
             cacheName: nil)
         
@@ -60,9 +60,9 @@ class ViewController: UIViewController {
         
     }
     @IBAction func connectTap(_ sender: Any) {
-        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
+//        let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "612", password:  "bb580825-4bca-4111-9f28-85a61f17cb33", groupChatServiceName: "groupChat")
 //                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "610", password:  "dacd0e23-01dc-486d-8a8a-02665c0d4941", groupChatServiceName: "groupChat")
-//                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "103", password:  "07ff5446-df43-478c-9077-14ac4a12c90f", groupChatServiceName: "groupChat")
+                let account = NTXMPPAccount.init(serverDomain: "xmpp2.livecare.ca", userName: "103", password:  "07ff5446-df43-478c-9077-14ac4a12c90f", groupChatServiceName: "groupChat")
         NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
         NTXMPPManager.sharedManager().connect()
     }

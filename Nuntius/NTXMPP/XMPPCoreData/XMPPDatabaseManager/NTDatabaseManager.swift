@@ -11,9 +11,25 @@ import CoreData
 class NTDatabaseManager: NSObject {
     
     let databaseName = "NTXMPPDataModel"
-    var managedObjectContext: NSManagedObjectContext?
+    var mainManagedObjectContext: NSManagedObjectContext?
     static var databaseManager: NTDatabaseManager!
     var privateManagedObjectContext: NSManagedObjectContext?
+    
+    public override init() {
+        super.init()
+    }
+    
+    /**
+     Shared instance for database manager to handle database related functions.
+     - Returns: Shared instance of database manager
+     */
+    class func sharedManager() -> NTDatabaseManager{
+        if databaseManager == nil{
+            databaseManager = NTDatabaseManager()
+        }
+        return databaseManager
+    }
+    
     
     // MARK: - CoreData Stack
     
@@ -55,6 +71,7 @@ class NTDatabaseManager: NSObject {
         return coordinator
     }()
     
+    //Context for writing data to persistent store
     lazy var writerManagedObjectContext: NSManagedObjectContext = {
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
         let coordinator = self.persistentStoreCoordinator
@@ -64,50 +81,43 @@ class NTDatabaseManager: NSObject {
         return managedObjectContext
     }()
     
-    func mainManagedObjectContext() -> NSManagedObjectContext{
-        if managedObjectContext == nil{
-            managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-            managedObjectContext?.parent = writerManagedObjectContext
-            managedObjectContext?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            return managedObjectContext!
+    /**
+     Returns the context related to the main thread. Use this context for UI related tasks. DO NOT USE THIS THREAD FOR SAVING DATA.
+     - Returns: managedObjectContext for main thread
+     */
+    func getMainManagedObjectContext() -> NSManagedObjectContext{
+        if mainManagedObjectContext == nil{
+            mainManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            mainManagedObjectContext?.parent = writerManagedObjectContext
+            mainManagedObjectContext?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            return mainManagedObjectContext!
         }
-        return managedObjectContext!
+        return mainManagedObjectContext!
     }
     
-    // MARK: - Core Data Saving support
-    
-//    func saveContext () {
-//        if (managedObjectContext?.hasChanges)! {
-//            do {
-//                try managedObjectContext?.save()
-//            } catch {
-//                // Replace this implementation with code to handle the error appropriately.
-//                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//                let nserror = error as NSError
-//                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
-//                abort()
-//            }
-//        }
-//    }
-    
+    /**
+     Returns the context as a child of main context. Use this context for all operations. USE THIS THREAD FOR SAVING DATA
+     - Returns: managedObjectContext
+     */
     func getChildContext() -> NSManagedObjectContext {
-//        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//        context.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-//        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//        return context
-//        return NTDatabaseManager.sharedManager().mainManagedObjectContext()
         
         if privateManagedObjectContext == nil{
             privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().mainManagedObjectContext()
+            privateManagedObjectContext!.parent = NTDatabaseManager.sharedManager().getMainManagedObjectContext()
             privateManagedObjectContext?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             return privateManagedObjectContext!
         }
         return privateManagedObjectContext!
     }
     
+    // MARK: - Core Data Saving support
+    /**
+     Save the changes of context and passes to parent context.
+     - parameter context: Context for which data need to be saved.
+     - parameter completion: Completion block called on saving the data
+     
+     */
     func saveChildContext(context: NSManagedObjectContext?, completion:(Bool) -> ()){
-//        completion(true)
         context?.performAndWait {
             if (context?.hasChanges)!{
                 do{
@@ -124,6 +134,9 @@ class NTDatabaseManager: NSObject {
         }
     }
     
+    /**
+     Saves the changes of child thread and passes to parent context.
+     */
     func saveChildContext(){
         privateManagedObjectContext?.performAndWait {
             if (privateManagedObjectContext?.hasChanges)!{
@@ -137,11 +150,15 @@ class NTDatabaseManager: NSObject {
         }
     }
     
+    
+    /**
+     Saves data in maincontext which passes it to writer context. Writer context writes the data in persistent store.
+     */
     func saveToPersistentStore(){
-        if(self.mainManagedObjectContext().hasChanges){
-            self.mainManagedObjectContext().performAndWait({
+        if(self.getMainManagedObjectContext().hasChanges){
+            self.getMainManagedObjectContext().performAndWait({
                 do{
-                    try self.mainManagedObjectContext().save()
+                    try self.getMainManagedObjectContext().save()
                     if(self.writerManagedObjectContext.hasChanges){
                         self.writerManagedObjectContext.performAndWait({
                             do{
@@ -163,17 +180,6 @@ class NTDatabaseManager: NSObject {
             })
         }
         
-    }
-    
-    class func sharedManager() -> NTDatabaseManager{
-        if databaseManager == nil{
-            databaseManager = NTDatabaseManager()
-        }
-        return databaseManager
-    }
-    
-    public override init() {
-        super.init()
     }
     
 }

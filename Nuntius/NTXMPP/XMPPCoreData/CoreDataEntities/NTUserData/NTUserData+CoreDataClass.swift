@@ -12,50 +12,14 @@ import CoreData
 
 @objc(NTUserData)
 public class NTUserData: NSManagedObject {
-//    static var userIdToObjectId: [String:NSManagedObjectID] = [:]
-//    static var groupIdToObjectId: [String:NSManagedObjectID] = [:]
-//    static var contactMOC: NSManagedObjectContext = {
-//        let context = NTDatabaseManager.sharedManager().getChildContext()
-//        return context
-//    }()
     
-    class func populateUserObjectDict() {
-        
-//        let childMOC = NTDatabaseManager.sharedManager().mainManagedObjectContext()
-//
-//        childMOC.perform {
-//            let fetchRequest = NTUserData.userFetchRequest()
-//            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", NSNumber.init(value: false))
-//            do{
-//                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
-//                for userData in result {
-//                    userIdToObjectId[userData.userId!] = userData.objectID
-//                }
-//
-//            }
-//            catch{
-//                print("Error - \(error)")
-//            }
-//        }
-//
-//        childMOC.perform {
-//            let fetchRequest = NTUserData.userFetchRequest()
-//            fetchRequest.predicate = NSPredicate.init(format: "\(userDataIsGroup) == %@", argumentArray: [NSNumber.init(value: true)])
-//            do{
-//                let result:[NTUserData] = try childMOC.fetch(fetchRequest)
-//                for userData in result {
-//                    groupIdToObjectId[userData.userId!] = userData.objectID
-//                }
-//
-//            }
-//            catch{
-//                print("Error - \(error)")
-//            }
-//        }
-        
-        
-    }
-    
+    /**
+     Checks if user enters in database
+     - parameter userId: user id for userdata to search.
+     - parameter isGroup: single user or group user.
+     - parameter managedObjectContext: context in which to search.
+     - Returns: If found returns userdata else returns nil.
+     */
     class func userData(For userId:String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData?{
         
         let fetchRequest = NTUserData.userFetchRequest()
@@ -74,6 +38,13 @@ public class NTUserData: NSManagedObject {
         return nil
     }
     
+    /**
+     Find or create user in context.
+     - parameter userId: user id for userdata.
+     - parameter isGroup: single user or group user.
+     - parameter managedObjectContext: context in which to inisert.
+     - parameter completion: completion block to call when user data stores in context
+     */
     class func insertUserOnBackground(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext, completion: @escaping (NTUser?) -> ()) {
         managedObjectContext.perform {
             if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
@@ -88,29 +59,23 @@ public class NTUserData: NSManagedObject {
             NTDatabaseManager.sharedManager().saveChildContext(context: managedObjectContext, completion: { (success) in
                 if success{
                     completion(user)
-                    self.populateUserObjectDict()
                     NTDatabaseManager.sharedManager().saveToPersistentStore()
                 }
             })
-//            do{
-//                try managedObjectContext.save()
-//                completion(user)
-//                self.populateUserObjectDict()
-//            }
-//            catch{
-//                print(error)
-//                completion(nil)
-//            }
         }
     }
     
-    class func insertUser(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData? {
+    
+    /**
+     Find or create user in context.
+     - parameter userId: user id for userdata.
+     - parameter isGroup: single user or group user.
+     - parameter managedObjectContext: context in which to inisert.
+     - Returns: user data created in context. USER IS NOT SAVED HERE.
+     */
+    class func findOrCreate(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext) -> NTUserData? {
         if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
             return user
-        }
-        
-        if userId == NTXMPPManager.sharedManager().xmppAccount.userName{
-            
         }
         
         let userData: NTUserData = managedObjectContext.insertObject()
@@ -121,12 +86,15 @@ public class NTUserData: NSManagedObject {
         
         do{
             if let _: NTUserData = managedObjectContext.object(with: userObjectId) as? NTUserData{
-                self.populateUserObjectDict()
                 return userData
             }
         }
         return nil
     }
+    
+    
+    
+    
     
     
 }

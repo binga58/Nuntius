@@ -32,7 +32,7 @@ class NTIQManger: NSObject {
         outstandingXMPPStanzaResponseBlocks[messageId] = { (success: Bool,iq: XMPPIQ) in
             if(success){
                 
-                if let timeElement = iq.element(forName: Constants.time), let utcTimeStanza = timeElement.element(forName: Constants.utc), let utcTime = utcTimeStanza.stringValue, let serverDateTime = NSDate.init(xmppDateTime: utcTime){
+                if let timeElement = iq.element(forName: NTConstants.time), let utcTimeStanza = timeElement.element(forName: NTConstants.utc), let utcTime = utcTimeStanza.stringValue, let serverDateTime = NSDate.init(xmppDateTime: utcTime){
                     
                     //Current UTC time
                     let currentDateTime = NSDate()
@@ -48,11 +48,11 @@ class NTIQManger: NSObject {
         
         //Creates stanza for requesting server time
         let serverTimeNode = XMPPIQ.init(iqType: .get)
-        serverTimeNode.addAttribute(withName: Constants.from, stringValue: NTUtility.getCurrentUserFullId())
-        serverTimeNode.addAttribute(withName: Constants.id, stringValue: messageId)
-        serverTimeNode.addAttribute(withName: Constants.to, stringValue: NTXMPPManager.sharedManager().xmppAccount.serverDomain!)
+        serverTimeNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
+        serverTimeNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        serverTimeNode.addAttribute(withName: NTConstants.to, stringValue: NTXMPPManager.sharedManager().xmppAccount.serverDomain!)
         
-        let timenode = DDXMLElement.init(name: Constants.time, xmlns: Constants.xmlnsType.time)
+        let timenode = DDXMLElement.init(name: NTConstants.time, xmlns: NTConstants.xmlnsType.time)
         serverTimeNode.addChild(timenode)
         
         

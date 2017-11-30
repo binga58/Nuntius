@@ -36,19 +36,23 @@ class NTUtility: NSObject {
         
     }
     
+    //MARK:------------ Generate Message Id ---------------
     class func getMessageId() -> String {
         return UUID().uuidString
     }
     
+    
+    //MARK:------------ Time related helper methods -------
     class func getLocalTimeToDisplayOnChatCell(timeInterval: TimeInterval) -> String{
         let date = Date.init(timeIntervalSince1970: timeInterval)
         let dateFormatter = self.getLocalDateFormatter()
-        
-        
         return dateFormatter.string(from: date)
     }
     
-    
+    /**
+     Current time synced with server time.
+     - Returns: Timestamp of cuurent time
+     */
     class func getCurrentTime() -> NSNumber{
         return NSNumber.init(value: (Date().timeIntervalSince1970 + NTXMPPManager.sharedManager().xmppServerTimeDifference))
     }

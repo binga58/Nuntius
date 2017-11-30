@@ -12,6 +12,7 @@ import CoreData
 class ChatViewController: UIViewController {
     @IBOutlet weak var textVIew: UITextView!
     
+    @IBOutlet weak var navTitle: UINavigationItem!
     var messageHeight: NSCache<NSString, NSNumber> = {
         let cache = NSCache<NSString, NSNumber>()
         cache.countLimit = 1000
@@ -31,7 +32,7 @@ class ChatViewController: UIViewController {
         
         let frc = NSFetchedResultsController(
             fetchRequest: messageFetchRequest,
-            managedObjectContext: NTDatabaseManager.sharedManager().mainManagedObjectContext(),
+            managedObjectContext: NTDatabaseManager.sharedManager().getMainManagedObjectContext(),
             sectionNameKeyPath: nil,
             cacheName: nil)
         
@@ -88,7 +89,7 @@ extension ChatViewController{
         chatTableView.register(nib, forCellReuseIdentifier: sentMessageCell)
         chatTableView.register(UINib.init(nibName: receiveMessageCell, bundle: nil), forCellReuseIdentifier: receiveMessageCell)
         
-        
+        navTitle.title = user?.userId
     }
 }
 

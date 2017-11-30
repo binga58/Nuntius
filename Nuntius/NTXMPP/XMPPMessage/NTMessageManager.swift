@@ -32,30 +32,30 @@ class NTMessageManager: NSObject {
          <request xmlns="urn:xmpp:receipts"/>
          </message>
          */
-        guard let messageNode: DDXMLElement = DDXMLElement.element(withName: Constants.message) as? DDXMLElement else{
+        guard let messageNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.message) as? DDXMLElement else{
             return DDXMLElement()
         }
         //Message Node
 //        let messageId = NTUtility.getMessageId()
-        messageNode.addAttribute(withName: Constants.type, stringValue: Constants.chat)
-        messageNode.addAttribute(withName: Constants.to, stringValue: NTUtility.getFullId(forFriendId: userId!))
-        messageNode.addAttribute(withName: Constants.id, stringValue: messageId)
-        messageNode.addAttribute(withName: Constants.from, stringValue: NTUtility.getCurrentUserFullId())
+        messageNode.addAttribute(withName: NTConstants.type, stringValue: NTConstants.chat)
+        messageNode.addAttribute(withName: NTConstants.to, stringValue: NTUtility.getFullId(forFriendId: userId!))
+        messageNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        messageNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
         
         //Body node
-        guard let bodyNode: DDXMLElement = DDXMLElement.element(withName: Constants.body) as? DDXMLElement else {
+        guard let bodyNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.body) as? DDXMLElement else {
             return DDXMLElement()
         }
         
         bodyNode.stringValue = messageText
         
         //Request node for receipt
-        guard let receiptNode: DDXMLElement = DDXMLElement.element(withName: Constants.request) as? DDXMLElement else{
+        guard let receiptNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.request) as? DDXMLElement else{
             return DDXMLElement()
         }
         
-        receiptNode.addAttribute(withName: Constants.xmlns, stringValue: Constants.xmlnsType.receipt)
-        receiptNode.addAttribute(withName: Constants.id, stringValue: messageId)
+        receiptNode.addAttribute(withName: NTConstants.xmlns, stringValue: NTConstants.xmlnsType.receipt)
+        receiptNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
         
         //Add body and receipt to message node
         messageNode.addChild(bodyNode)
@@ -65,17 +65,13 @@ class NTMessageManager: NSObject {
         
     }
     
-//    class func sendMessage(messageText: String, groupId: String, privateUserId: String) -> DDXMLElement{
-//
-//
-//    }
     
     func messageReceived(message: XMPPMessage){
         
-        if let messageId = message.elementID as NSString?, let _ = message.element(forName: Constants.body), let userId = message.from?.user{
+        if let messageId = message.elementID as NSString?, let _ = message.element(forName: NTConstants.body), let userId = message.from?.user{
             
             var text: String
-            if let messageText = message.element(forName: Constants.body)?.stringValue{
+            if let messageText = message.element(forName: NTConstants.body)?.stringValue{
                 text = messageText
             }else{
                 text = ""
@@ -119,7 +115,7 @@ class NTMessageManager: NSObject {
     
     
     func archiveMessage(message: XMPPMessage, delay: XMLElement){
-        if let messageId = message.elementID as NSString?, let _ = message.element(forName: Constants.body), let userId = message.from?.user, let dateString = delay.attribute(forName: Constants.stamp)?.stringValue, let date: NSDate = NSDate.init(xmppDateTime: dateString){
+        if let messageId = message.elementID as NSString?, let _ = message.element(forName: NTConstants.body), let fromUserId = message.from?.user, let toUserId = message.to?.user,  let dateString = delay.attribute(forName: NTConstants.stamp)?.stringValue, let date: NSDate = NSDate.init(xmppDateTime: dateString){
             
             let createdTime = NTUtility.getLocalTimeFromUTC(date: date as Date)
             let receivedTime = NTUtility.getCurrentTime()
@@ -129,9 +125,10 @@ class NTMessageManager: NSObject {
             let createdTimestamp = NSNumber.init(value: date.timeIntervalSince1970)
             let receivedTimestamp = NTUtility.getCurrentTime()
             
+            let userId = fromUserId == NTXMPPManager.sharedManager().xmppAccount.userName ? toUserId : fromUserId
                 
                 var text: String
-                if let messageText = message.element(forName: Constants.body)?.stringValue{
+                if let messageText = message.element(forName: NTConstants.body)?.stringValue{
                     text = messageText
                 }else{
                     text = ""
@@ -139,10 +136,8 @@ class NTMessageManager: NSObject {
                 
                 let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-            let isMine: Bool = userId == NTXMPPManager.sharedManager().xmppAccount.userName! ? true : false
-            if isMine{
-                return
-            }
+            let isMine: Bool = fromUserId == NTXMPPManager.sharedManager().xmppAccount.userName! ? true : false
+            
                 
                 NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: receivedTimestamp, managedObjectContext: childMOC, completion: { (savedMessage) in
                     
@@ -178,7 +173,7 @@ extension NTMessageManager: XMPPStreamDelegate{
 //MARK:------------------ Archive message delegate -------------
 extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
     func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didReceiveMAMMessage message: XMPPMessage) {
-        if let result = message.element(forName: Constants.result), let forwarded = result.element(forName: Constants.forwarded), let msg = forwarded.element(forName: Constants.message), let _ = msg.element(forName: Constants.body), let delay = forwarded.element(forName: Constants.delay){
+        if let result = message.element(forName: NTConstants.result), let forwarded = result.element(forName: NTConstants.forwarded), let msg = forwarded.element(forName: NTConstants.message), let _ = msg.element(forName: NTConstants.body), let delay = forwarded.element(forName: NTConstants.delay){
             self.archiveMessage(message: XMPPMessage.init(from: msg), delay: delay)
 //            self.messageReceived(message: XMPPMessage.init(from: msg))
         }
