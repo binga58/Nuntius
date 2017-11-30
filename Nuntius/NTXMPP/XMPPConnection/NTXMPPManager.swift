@@ -86,7 +86,7 @@ extension NTXMPPManager{
         
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        NTMessageData.messageForOneToOneChat(messageId: messageId, messageText: messageText, messageStatus: .waiting, messageType: .text, isMine: true, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NSNumber.init(value: 0), readTimestamp: NSNumber.init(value: 0), managedObjectContext: childMOC) { (messageObj) in
+        NTMessageData.messageForOneToOneChat(messageId: messageId, messageText: messageText, messageStatus: .waiting, messageType: .text, isMine: true, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NSNumber.init(value: 0), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC) { (messageObj) in
             
             if let msg = messageObj{
                 NTDatabaseManager.sharedManager().saveToPersistentStore()
@@ -121,18 +121,18 @@ extension NTXMPPManager {
     
     func userAuthenticated() -> () {
         self.sendPresence(myPresence: .online)
-//        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
-//        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
 //
                 self.synchronizeXMPPServerTime { (success) in
                     if success{
-//                        if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
-                             let time = Date.init(timeIntervalSince1970: /*timeInterval - self.xmppServerTimeDifference*/0)
+                        if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
+                             let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
                             NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
                             
-//                        }
-//                    }
-        
+                        }
+                    }
+//
             }
         }
 

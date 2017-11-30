@@ -40,8 +40,17 @@ class NTUtility: NSObject {
         return UUID().uuidString
     }
     
-    class func getCurrentTime() -> NSNumber {
-        return NSNumber.init(value: Date().timeIntervalSince1970 + NTXMPPManager.sharedManager().xmppServerTimeDifference)
+    class func getLocalTimeToDisplayOnChatCell(timeInterval: TimeInterval) -> String{
+        let date = Date.init(timeIntervalSince1970: timeInterval)
+        let dateFormatter = self.getLocalDateFormatter()
+        
+        
+        return dateFormatter.string(from: date)
+    }
+    
+    
+    class func getCurrentTime() -> NSNumber{
+        return NSNumber.init(value: (Date().timeIntervalSince1970 + NTXMPPManager.sharedManager().xmppServerTimeDifference))
     }
     
     class func getLocalDateFormatter() -> DateFormatter {

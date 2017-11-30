@@ -20,20 +20,20 @@ public class NTMessageData: NSManagedObject {
 //        return cache
 //    }()
     
-    class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessage?) -> ()) {
+    class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber,receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessage?) -> ()) {
         
-        self.messageForGroupChat(messageId: messageId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
+        self.messageForGroupChat(messageId: messageId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, receivedTimestamp: receivedTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
         
     }
     
     
-    class func messageForGroupChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessage?) -> ()) {
+    class func messageForGroupChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessage?) -> ()) {
         
-        self.message(messageId: messageId, managedObjectContext: managedObjectContext) { (objectId) in
+        NTMessageData.message(messageId: messageId, managedObjectContext: managedObjectContext) { (objectId) in
             
-//            if let _ = objectId{
-//                completion(nil)
-//            }else{
+            if let _ = objectId{
+                completion(nil)
+            }else{
             
                 
                 
@@ -104,17 +104,17 @@ public class NTMessageData: NSManagedObject {
 //
 //                    }else{
 //
-//                        if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
-//                            messageData.hasGroup = groupData
-////                            NTUserData.groupIdToObjectId[groupData.userId!] = groupData.objectID
-//
-//                        }else{
+                        if let gId = groupId, let groupData = NTUserData.userData(For: gId, isGroup: true, managedObjectContext: managedObjectContext){
+                            messageData.hasGroup = groupData
+//                            NTUserData.groupIdToObjectId[groupData.userId!] = groupData.objectID
+
+                        }else{
                     
                             if let gId = groupId, let groupData = NTUserData.insertUser(userId: gId, isGroup: true, managedObjectContext: managedObjectContext){
                                 messageData.hasGroup = groupData
                             }
 //
-//                        }
+                        }
 //                    }
                     
                     
@@ -147,7 +147,7 @@ public class NTMessageData: NSManagedObject {
                         }
                     })
                     
-//                }
+                }
             }
         }
     }
@@ -245,6 +245,7 @@ extension NTMessageData{
     static let messageDataReadTimestamp = "readTimestamp"
     static let messageDataHasUser = "hasUser"
     static let messageDataHasGroup = "hasGroup"
+    static let messageDataReceivedTimestamp = "receivedTimestamp"
 
 }
 

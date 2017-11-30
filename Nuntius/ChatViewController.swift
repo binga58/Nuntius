@@ -25,9 +25,9 @@ class ChatViewController: UIViewController {
     lazy var fetchedResultsController: NSFetchedResultsController<NTMessageData> = {
         let messageFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
         messageFetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataHasUser).\(NTUserData.userDataUserId) == %@ && \(NTMessageData.messageDataHasUser).\(NTUserData.userDataIsGroup) == %@",(user?.userId)!,(user?.isGroup)!)
-        let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
+        let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataReceivedTimestamp)", ascending: true)
         messageFetchRequest.sortDescriptors = [primarySortDescriptor]
-        messageFetchRequest.fetchBatchSize = 20
+//        messageFetchRequest.fetchBatchSize = 20
         
         let frc = NSFetchedResultsController(
             fetchRequest: messageFetchRequest,
@@ -241,6 +241,7 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.chatTableView.endUpdates()
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: true)
+//        chatTableView.reloadData()
     }
     
 }

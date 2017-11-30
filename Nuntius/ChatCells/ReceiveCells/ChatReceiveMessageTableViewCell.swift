@@ -11,6 +11,7 @@ import UIKit
 class ChatReceiveMessageTableViewCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
     
+    @IBOutlet weak var dateTimeLBL: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,6 +25,20 @@ class ChatReceiveMessageTableViewCell: UITableViewCell {
     
     func configureCell(message: NTMessage) -> () {
         textView.text = message.messageText
+        if let status: MessageStatus = message.messageStatus{
+            switch status {
+            case .waiting:
+                dateTimeLBL.text = "Waiting To Sent - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+            case .sent:
+                dateTimeLBL.text = "Sent At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+            case .delivered:
+                dateTimeLBL.text = "Delivered At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.deliveredTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+            case .read:
+                dateTimeLBL.text = "Read At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.readTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+            default:
+                dateTimeLBL.text = "Failed"
+            }
+        }
     }
     
 }

@@ -11,6 +11,8 @@ import XMPPFramework
 
 class NTMessageManager: NSObject {
     
+    fileprivate static var globalMAMCount = 0
+    
     /**
      Creates message node with body and deleivery recipt request
      - parameter messageText: text message which is to be sent
@@ -81,7 +83,7 @@ class NTMessageManager: NSObject {
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), managedObjectContext: childMOC, completion: { (savedMessage) in
+            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC, completion: { (savedMessage) in
                 
                 NTDatabaseManager.sharedManager().saveToPersistentStore()
                 
@@ -97,33 +99,19 @@ class NTMessageManager: NSObject {
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-//            if let messageObjectId = NTMessageData.messageIdToObjectId.object(forKey: messageId), let messageData: NTMessageData = childMOC.object(with: messageObjectId) as? NTMessageData{
-//                childMOC.perform {
-//                    messageData.messageStatus = MessageStatus.sent.nsNumber
-//                    NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
-//                        if success{
-//                            NTDatabaseManager.sharedManager().saveToPersistentStore()
-//                        }
-//                    })
-//                }
-//            }else{
             
                 NTMessageData.message(messageId: messageId as String, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
                     if let messageData = nTMessageData{
                         childMOC.perform {
-//                            if let messageData: NTMessageData = childMOC.object(with: messageDataObjectId) as? NTMessageData{
                                 messageData.messageStatus = MessageStatus.sent.nsNumber
-//                                NTMessageData.messageIdToObjectId.setObject(messageData.objectID, forKey: messageId)
                                 NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
                                     if success{
                                         NTDatabaseManager.sharedManager().saveToPersistentStore()
                                     }
                                 })
-//                            }
                         }
                     }
                 })
-//            }
         }
         
         
@@ -131,14 +119,41 @@ class NTMessageManager: NSObject {
     
     
     func archiveMessage(message: XMPPMessage, delay: XMLElement){
-        if let dateString = delay.attribute(forName: Constants.stamp)?.stringValue{
-            let date: NSDate = NSDate.init(xmppDateTime: dateString)!
-            let tempDate = date.addingTimeInterval(NTXMPPManager.sharedManager().xmppServerTimeDifference)
+        if let messageId = message.elementID as NSString?, let _ = message.element(forName: Constants.body), let userId = message.from?.user, let dateString = delay.attribute(forName: Constants.stamp)?.stringValue, let date: NSDate = NSDate.init(xmppDateTime: dateString){
             
-            let timeInterval = NTUtility.getLocalTimeFromUTC(date: tempDate as Date)
-            print(timeInterval)
+            let createdTime = NTUtility.getLocalTimeFromUTC(date: date as Date)
+            let receivedTime = NTUtility.getCurrentTime()
+            print(createdTime)
+            print(receivedTime)
             
+            let createdTimestamp = NSNumber.init(value: date.timeIntervalSince1970)
+            let receivedTimestamp = NTUtility.getCurrentTime()
             
+                
+                var text: String
+                if let messageText = message.element(forName: Constants.body)?.stringValue{
+                    text = messageText
+                }else{
+                    text = ""
+                }
+                
+                let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+            
+            let isMine: Bool = userId == NTXMPPManager.sharedManager().xmppAccount.userName! ? true : false
+            if isMine{
+                return
+            }
+                
+                NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: receivedTimestamp, managedObjectContext: childMOC, completion: { (savedMessage) in
+                    
+                    if NTMessageManager.globalMAMCount == NTXMPPManager.sharedManager().xmppAccount.mamPaginationCount{
+                        NTDatabaseManager.sharedManager().saveToPersistentStore()
+                        NTMessageManager.globalMAMCount = 0
+                    }else{
+                        NTMessageManager.globalMAMCount += 1
+                    }
+                    
+                })
         }
     }
     

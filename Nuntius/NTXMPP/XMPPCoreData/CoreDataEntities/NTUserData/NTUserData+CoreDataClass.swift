@@ -109,6 +109,10 @@ public class NTUserData: NSManagedObject {
             return user
         }
         
+        if userId == NTXMPPManager.sharedManager().xmppAccount.userName{
+            
+        }
+        
         let userData: NTUserData = managedObjectContext.insertObject()
         userData.userId = userId
         userData.isGroup = NSNumber.init(value: isGroup)

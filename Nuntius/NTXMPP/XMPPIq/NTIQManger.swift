@@ -40,7 +40,7 @@ class NTIQManger: NSObject {
 //                    let difference = serverDateTime.timeIntervalSince(currentDateTime as Date)
                     let difference = currentDateTime.timeIntervalSince(serverDateTime as Date)
                     //Saving the difference
-                    NTXMPPManager.sharedManager().xmppServerTimeDifference = abs(difference)
+                    NTXMPPManager.sharedManager().xmppServerTimeDifference = difference
                 }
             }
             completion(success)

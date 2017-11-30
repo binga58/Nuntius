@@ -9,6 +9,7 @@
         <attribute name="messageText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageType" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="readTimestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="receivedTimestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="hasGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NTUserData" inverseName="hasGroupMessages" inverseEntity="NTUserData" syncable="YES"/>
         <relationship name="hasUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NTUserData" inverseName="hasMessages" inverseEntity="NTUserData" syncable="YES"/>
         <uniquenessConstraints>
@@ -33,7 +34,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="NTMessageData" positionX="-504" positionY="-252" width="128" height="195"/>
+        <element name="NTMessageData" positionX="-504" positionY="-252" width="128" height="210"/>
         <element name="NTUserData" positionX="-200" positionY="-180" width="128" height="150"/>
     </elements>
 </model>
