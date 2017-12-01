@@ -39,6 +39,7 @@ struct NTConstants {
     static let delay = "delay"
     static let stamp = "stamp"
     static let received = "received"
+    static let archived = "archived"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"
@@ -96,4 +97,13 @@ enum MessageType: Int, EnumToNSNumber {
         return MessageType.text
     }
     
+}
+
+
+enum ChatState: Int{
+    case active = 0
+    case composing
+    case paused
+    case inactive
+    case gone
 }

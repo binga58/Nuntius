@@ -239,9 +239,35 @@ extension NTMessageData{
             
             
         }
-        
-        
     }
+    
+    class func getAllUnsentMessages(managedObjectContext: NSManagedObjectContext, completion:@escaping ([NTMessageData]?) -> ()) {
+        
+        managedObjectContext.perform {
+            
+            let fetchRequest = NTMessageData.messageFetchRequest()
+            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageStatus) == %@", MessageStatus.waiting.nsNumber)
+            let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: false)
+            fetchRequest.sortDescriptors = [primarySortDescriptor]
+            do{
+                let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
+                
+                if let count = result?.count, count > 0{
+                    completion(result)
+                }else{
+                    completion(nil)
+                }
+                
+            }
+            catch{
+                print("Error - \(error)")
+                completion(nil)
+            }
+            
+        }
+    }
+    
+    
 }
 
 

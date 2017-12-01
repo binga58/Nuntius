@@ -262,6 +262,7 @@ extension NTXMPPConnection {
         xmppRoster.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppReconnect.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppStreamManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppMessageArchiveManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         
         xmppRoomCoreDataStorage = XMPPRoomCoreDataStorage()
@@ -278,7 +279,9 @@ extension NTXMPPConnection {
      Disconnects from xmpp server after sending all pending elements
      */
     func disconnectXMPPStream() -> () {
-        xmppStream.disconnectAfterSending()
+        if xmppStream != nil{
+            xmppStream.disconnectAfterSending()
+        }
     }
     
     /**
@@ -313,6 +316,7 @@ extension NTXMPPConnection {
         }
         if xmppStreamManagement != nil{
             xmppStreamManagement.removeDelegate(self)
+            xmppStreamManagement.removeDelegate(self.sharedMessageManager())
             xmppStreamManagement.deactivate()
         }
         if xmppMessageArchivingModule != nil{

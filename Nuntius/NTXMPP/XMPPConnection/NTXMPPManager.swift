@@ -100,13 +100,33 @@ extension NTXMPPManager{
     }
     
     
+    func sendAllUnsentMessages() {
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        NTMessageData.getAllUnsentMessages(managedObjectContext: childMOC) { (messageDataList) in
+            if let list = messageDataList{
+                for msg in list{
+                    self.operationQueue.addOperation {
+                        if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, messageId: msg.messageId!){
+                            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
+                        }
+                    }
+                    
+                }
+                
+                
+            }
+        }
+        
+    }
+    
+    
     
 }
 
 //MARK:--------------- Send Chat state to user -----------
 extension NTXMPPManager{
     func sendChatStateToUser(userId: String){
-        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId){
+        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId, chatState: .active){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
         
@@ -134,25 +154,28 @@ extension NTXMPPManager {
     }
     
     func userAuthenticated() -> () {
-        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        
         self.synchronizeXMPPServerTime { (success) in
             if success{
-                NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC){ (nTMessageData) in
-                    self.checkForMAM(nTMessageData: nTMessageData)
+                
+                if NTXMPPManager.sharedManager().xmppAccount.checkMAM {
+                    
+                    NTXMPPManager.sharedManager().checkForMAM()
+                    
+                }else{
+                    
+                    self.sendPresence(myPresence: .online)
                     
                 }
                 
+                self.afterAuthenticationProcesses()
                 
             }
             
-            
-            
-//            self.sendChatStateToUser(userId: "232")
         }
-        self.sendPresence(myPresence: .online)
-
+        
     }
-
+    
 }
 
 
@@ -172,17 +195,23 @@ extension NTXMPPManager{
         }
     }
     
-    func checkForMAM(nTMessageData: NTMessageData?) {
-        
-        
+    func checkForMAM() {
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC){ (nTMessageData) in
             if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
                 let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
                 
                 //                        let time = Date.init(timeIntervalSince1970: 0)
                 NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
-                //
             }
+            
+            self.sendPresence(myPresence: .online)
+        }
         
+    }
+    
+    func afterAuthenticationProcesses() {
+        self.sendAllUnsentMessages()
     }
 }
 
@@ -205,8 +234,8 @@ extension NTXMPPManager{
     
     @objc private func appInBackground(){
         NTDatabaseManager.sharedManager().saveToPersistentStore()
-        self.disconnect()
-        self.xmppConnection?.clearXMPPStream()
+//        self.disconnect()
+//        self.xmppConnection?.clearXMPPStream()
     }
     
 }

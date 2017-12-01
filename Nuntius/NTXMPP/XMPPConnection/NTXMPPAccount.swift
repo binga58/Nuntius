@@ -27,6 +27,7 @@ class NTXMPPAccount: NSObject {
     var allowSelfSignedCertificates : Bool! = false
     var allowSSLHostNameMismatch: Bool! = false
     var mamPaginationCount: Int = 10000
+    var checkMAM: Bool = false
     
     /**
      Creates account object consisting of basic xmpp details

@@ -11,8 +11,12 @@ import XMPPFramework
 
 class NTMessageManager: NSObject {
     
+    fileprivate static var requestingArrayCount = [String]()
+    
     fileprivate static var globalMAMCount = 0
     
+    
+    //MARK:-------------- Create message related stanzas -------
     /**
      Creates message node with body and deleivery recipt request
      - parameter messageText: text message which is to be sent
@@ -65,12 +69,10 @@ class NTMessageManager: NSObject {
         
     }
     
-    func createChatStateStanza(userId: String) -> DDXMLElement {
+    func createChatStateStanza(userId: String, chatState: ChatState) -> DDXMLElement {
         guard let messageNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.message) as? DDXMLElement else{
             return DDXMLElement()
         }
-        //Message Node
-        //        let messageId = NTUtility.getMessageId()
         messageNode.addAttribute(withName: NTConstants.type, stringValue: NTConstants.chat)
         messageNode.addAttribute(withName: NTConstants.to, stringValue: NTUtility.getFullId(forFriendId: userId))
         messageNode.addAttribute(withName: NTConstants.id, stringValue: NTUtility.getMessageId())
@@ -78,8 +80,18 @@ class NTMessageManager: NSObject {
         
         
         let xmppMessage = XMPPMessage.init(from: messageNode)
-        xmppMessage.addActiveChatState()
-//        messageNode.addActiveChatState()
+        switch chatState {
+        case .active:
+            xmppMessage.addActiveChatState()
+        case .composing:
+            xmppMessage.addComposingChatState()
+        case .gone:
+            xmppMessage.addGoneChatState()
+        case .inactive:
+            xmppMessage.addInactiveChatState()
+        case .paused:
+            xmppMessage.addPausedChatState()
+        }
         
         return messageNode
     }
@@ -95,10 +107,17 @@ class NTMessageManager: NSObject {
             }else{
                 text = ""
             }
+            var createdTimestamp: NSNumber!
+            if let archived = message.element(forName: NTConstants.archived), let time = archived.attribute(forName: NTConstants.id)?.stringValue{
+                
+                createdTimestamp = NSNumber.init(value: (Double(time)! / 1000000))
+            }else{
+                createdTimestamp = NTUtility.getCurrentTime()
+            }
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC, completion: { (savedMessage) in
+            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC, completion: { (savedMessage) in
                 
                 if let _ = savedMessage{
                     NTDatabaseManager.sharedManager().saveToPersistentStore()
@@ -154,8 +173,8 @@ class NTMessageManager: NSObject {
     }
     
     //MARK:-------------------- Mark message sent -----------------
-    func markMmessageSent(message: XMPPMessage) {
-        if let messageId = message.elementID as NSString?{
+    func markMmessageSent(message: String?) {
+        if let messageId: String = message{
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
@@ -213,8 +232,9 @@ class NTMessageManager: NSObject {
 //MARK:------------------ XMPPStream Message delegate -------------
 extension NTMessageManager: XMPPStreamDelegate{
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
-        markMmessageSent(message: message)
-//        NTXMPPManager.sharedManager().xmppConnection?.xmppStreamManagement.requestAck()
+        
+        NTMessageManager.requestingArrayCount.append(message.elementID!)
+        
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
@@ -254,4 +274,23 @@ extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
         
     }
 }
+
+//MARK:---------------- Stream management delegate ----------
+extension NTMessageManager: XMPPStreamManagementDelegate{
+    func xmppStreamManagement(_ sender: XMPPStreamManagement, didReceiveAckForStanzaIds stanzaIds: [Any]) {
+        for stanzaId in stanzaIds{
+            if let messageId: String = stanzaId as? String, NTMessageManager.requestingArrayCount.contains(messageId){
+                markMmessageSent(message: messageId)
+                _ = NTMessageManager.requestingArrayCount.index(of: messageId).map { NTMessageManager.requestingArrayCount.remove(at: $0) }
+            }
+        }
+    }
+    
+    func xmppStreamManagement(_ sender: XMPPStreamManagement, getIsHandled isHandledPtr: UnsafeMutablePointer<ObjCBool>?, stanzaId stanzaIdPtr: AutoreleasingUnsafeMutablePointer<AnyObject?>?, forReceivedElement element: XMPPElement) {
+        
+    }
+}
+
+
+
 
