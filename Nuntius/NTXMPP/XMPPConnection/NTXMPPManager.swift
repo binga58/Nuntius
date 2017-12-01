@@ -103,6 +103,18 @@ extension NTXMPPManager{
     
 }
 
+//MARK:--------------- Send Chat state to user -----------
+extension NTXMPPManager{
+    func sendChatStateToUser(userId: String){
+        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId){
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
+        }
+        
+    }
+    
+}
+
+
 //MARK:--------------- Send presence ---------------------
 extension NTXMPPManager{
     func sendPresence(myPresence : MyPresence) -> () {
@@ -122,22 +134,22 @@ extension NTXMPPManager {
     }
     
     func userAuthenticated() -> () {
-        self.sendPresence(myPresence: .online)
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
-        NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC) { (nTMessageData) in
-
-                self.synchronizeXMPPServerTime { (success) in
-                    if success{
-                        if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
-                             let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
+        self.synchronizeXMPPServerTime { (success) in
+            if success{
+                NTMessageData.getLastDeliveredMessage(managedObjectContext: childMOC){ (nTMessageData) in
+                    self.checkForMAM(nTMessageData: nTMessageData)
                     
-//                        let time = Date.init(timeIntervalSince1970: 0)
-                            NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
-//
-                        }
-                    }
+                }
+                
+                
             }
+            
+            
+            
+//            self.sendChatStateToUser(userId: "232")
         }
+        self.sendPresence(myPresence: .online)
 
     }
 
@@ -158,6 +170,19 @@ extension NTXMPPManager{
         if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedIQManger().getXMPPServerTime(completion: completion){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
+    }
+    
+    func checkForMAM(nTMessageData: NTMessageData?) {
+        
+        
+            if let messageData = nTMessageData, let timeInterval = messageData.deliveredTimestamp?.doubleValue{
+                let time = Date.init(timeIntervalSince1970: timeInterval - self.xmppServerTimeDifference)
+                
+                //                        let time = Date.init(timeIntervalSince1970: 0)
+                NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
+                //
+            }
+        
     }
 }
 

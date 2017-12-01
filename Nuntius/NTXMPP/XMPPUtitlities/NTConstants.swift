@@ -38,6 +38,7 @@ struct NTConstants {
     static let forwarded = "forwarded"
     static let delay = "delay"
     static let stamp = "stamp"
+    static let received = "received"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"

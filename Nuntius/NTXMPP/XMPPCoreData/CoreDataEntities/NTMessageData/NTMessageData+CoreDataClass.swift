@@ -185,6 +185,28 @@ public class NTMessageData: NSManagedObject {
     
 }
 
+extension NTMessageData{
+    
+    class func markMessageDeliverd(messageId: String, completion:@escaping (NTMessageData?) -> ()){
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        self.message(messageId: messageId, managedObjectContext: childMOC) { (nTMessageData) in
+            if let messageData = nTMessageData{
+                
+                if (messageData.messageStatus?.intValue)! < MessageStatus.delivered.nsNumber.intValue{
+                    messageData.messageStatus = MessageStatus.delivered.nsNumber
+                    messageData.deliveredTimestamp = NTUtility.getCurrentTime()
+                    NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                        if success{
+                            completion(messageData)
+                        }
+                    })
+                }
+                
+            }
+        }
+    }
+}
+
 
 extension NTMessageData{
     /**
@@ -198,7 +220,7 @@ extension NTMessageData{
             let fetchRequest = NTMessageData.messageFetchRequest()
             fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageStatus) > %@", MessageStatus.sent.nsNumber)
             fetchRequest.fetchLimit = 1
-            let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
+            let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: false)
             fetchRequest.sortDescriptors = [primarySortDescriptor]
             do{
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)

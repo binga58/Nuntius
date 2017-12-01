@@ -58,6 +58,36 @@ class NTIQManger: NSObject {
         
         return serverTimeNode
     }
+    
+    
+    func requestDiscoInfo(discoName: String) {
+//        <iq from='romeo@shakespeare.lit/orchard'
+//        id='disco1'
+//        to='juliet@capulet.com/balcony'
+//        type='get'>
+//        <query xmlns='http://jabber.org/protocol/disco#info'/>
+//        </iq>
+        
+        let messageId = NTUtility.getMessageId()
+        
+        //Closure which defines action taken after we get the result from server
+        outstandingXMPPStanzaResponseBlocks[messageId] = { (success: Bool,iq: XMPPIQ) in
+            if(success){
+                
+            }
+            
+        }
+        
+        
+        let iqNode = XMPPIQ.init(iqType: .get)
+        iqNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
+        iqNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        iqNode.addAttribute(withName: NTConstants.to, stringValue: NTXMPPManager.sharedManager().xmppAccount.serverDomain!)
+        
+//        let queryNode = XMLElement.init(name: NTConstants.query, xmlns: <#T##String#>)
+        
+        
+    }
 
 }
 

@@ -54,6 +54,9 @@ class NTXMPPConnection: NSObject {
     var xmppCapabilities: XMPPCapabilities!
     var xmppCapabilitiesCoreDataStorage: XMPPCapabilitiesCoreDataStorage!
     
+    //Delivery Recipt
+    var xmppMessageDeliveryReceipts: XMPPMessageDeliveryReceipts!
+    
     //XMPPRoom
     var xmppRoom: XMPPRoom!
     var xmppRoomMemoryStorage: XMPPRoomMemoryStorage!
@@ -191,9 +194,11 @@ extension NTXMPPConnection {
         //initialize XXMPPStreamManagement
         xmppStreamManagementMemoryStorage = XMPPStreamManagementMemoryStorage()
         xmppStreamManagement = XMPPStreamManagement.init(storage: xmppStreamManagementMemoryStorage, dispatchQueue: NTXMPPManager.sharedManager().getQueue())
-        xmppStreamManagement.automaticallyRequestAcks(afterStanzaCount: 1, orTimeout: 5)
-        xmppStreamManagement.automaticallySendAcks(afterStanzaCount: 30, orTimeout: 5)
+        xmppStreamManagement.automaticallyRequestAcks(afterStanzaCount: 1, orTimeout: 0)
+        xmppStreamManagement.automaticallySendAcks(afterStanzaCount: 1, orTimeout: 0)
         xmppStreamManagement.autoResume = true
+//        xmppStreamManagement.enable(withResumption: true, maxTimeout: 60)
+//        xmppStreamManagement.requestAck()
         
         //initialize xmppPing
         xmppPing = XMPPPing.init(dispatchQueue: NTXMPPManager.sharedManager().getQueue())
@@ -202,6 +207,11 @@ extension NTXMPPConnection {
         xmppAutoPing = XMPPAutoPing.init(dispatchQueue: NTXMPPManager.sharedManager().getQueue())
         xmppAutoPing.pingTimeout = TimeInterval(timeout)
         xmppAutoPing.pingInterval = 2*60
+        
+        //Delivery receipts
+        xmppMessageDeliveryReceipts = XMPPMessageDeliveryReceipts.init()
+        xmppMessageDeliveryReceipts.autoSendMessageDeliveryRequests = true
+        xmppMessageDeliveryReceipts.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         
         //initialize XMPPMessageArchive
         xmppMessageArchivingCoreDataStorage = XMPPMessageArchivingCoreDataStorage.sharedInstance()
@@ -239,6 +249,8 @@ extension NTXMPPConnection {
         xmppMessageArchiveManagement.activate(xmppStream)
         xmppvCardTemp.activate(xmppStream)
         xmppStreamManagement.activate(xmppStream)
+        xmppMessageDeliveryReceipts.activate(xmppStream)
+        xmppAutoPing.activate(xmppStream)
         //        xmppvCardAvatar.activate(xmppStream)
         xmppCapabilities.activate(xmppStream)
         
@@ -315,6 +327,10 @@ extension NTXMPPConnection {
             xmppvCardAvatar.removeDelegate(self)
             xmppvCardAvatar.deactivate()
         }
+        if xmppMessageDeliveryReceipts != nil{
+            xmppMessageDeliveryReceipts.removeDelegate(NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager() as Any)
+            xmppMessageDeliveryReceipts.deactivate()
+        }
         //clear objects
         xmppReconnect = nil
         xmppRoster = nil
@@ -342,6 +358,8 @@ extension NTXMPPConnection {
         xmppRoomMemoryStorage = nil
         xmppRoomCoreDataStorage = nil
         xmppMUC = nil
+        
+        xmppMessageDeliveryReceipts = nil
         
         
         xmppStream.disconnect()
@@ -389,6 +407,7 @@ extension NTXMPPConnection: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         print("-----------Authenticated-------------")
         NTXMPPManager.sharedManager().userAuthenticated()
+        xmppStreamManagement.enable(withResumption: true, maxTimeout: 60)
     }
     
     func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
@@ -425,5 +444,17 @@ extension NTXMPPConnection: XMPPStreamDelegate {
     
 }
 
+
+extension NTXMPPConnection: XMPPStreamManagementDelegate{
+    func xmppStreamManagement(_ sender: XMPPStreamManagement, didReceiveAckForStanzaIds stanzaIds: [Any]) {
+        
+    }
+    
+    func xmppStreamManagement(_ sender: XMPPStreamManagement, getIsHandled isHandledPtr: UnsafeMutablePointer<ObjCBool>?, stanzaId stanzaIdPtr: AutoreleasingUnsafeMutablePointer<AnyObject?>?, forReceivedElement element: XMPPElement) {
+        
+    }
+    
+   
+}
 
 

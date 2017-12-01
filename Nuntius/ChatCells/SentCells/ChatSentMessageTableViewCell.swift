@@ -33,7 +33,7 @@ class ChatSentMessageTableViewCell: UITableViewCell {
             case .sent:
                 statusLBL.text = "Sent At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             case .delivered:
-                statusLBL.text = "Delivered At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.createdTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
+                statusLBL.text = "Delivered At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.deliveredTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             case .read:
                 statusLBL.text = "Read At - \(NTUtility.getLocalTimeToDisplayOnChatCell(timeInterval: (message.readTimestamp?.doubleValue)! + NTXMPPManager.sharedManager().xmppServerTimeDifference))"
             default:
