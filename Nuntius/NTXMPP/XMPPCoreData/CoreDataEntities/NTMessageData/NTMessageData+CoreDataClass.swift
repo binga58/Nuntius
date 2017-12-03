@@ -267,6 +267,49 @@ extension NTMessageData{
         }
     }
     
+    class func getAllUnreadMessagesForOneToOneChat(context: NSManagedObjectContext, userData: NTUserData?, completion:@escaping ([NTMessageData]?) -> ()) {
+        if let user = userData{
+            context.perform {
+                let fetchRequest = NTMessageData.messageFetchRequest()
+                fetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataIsMine) == %@ && \(NTMessageData.messageDataReadTimestamp) == %@ && \(NTMessageData.messageDataMessageStatus) < %@ && \(NTMessageData.messageDataHasGroup) == nil && \(NTMessageData.messageDataHasUser) == %@", NSNumber.init(value: false), NSNumber.init(value: 0), MessageStatus.read.nsNumber, user)
+                do{
+                    let result:[NTMessageData]? = try context.fetch(fetchRequest)
+                    if let messages = result{
+                        completion(messages)
+                    }else{
+                        completion(nil)
+                    }
+                }
+                catch{
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    class func getMessagesWithUnsentReadReceiptsOneToOneChat(context:NSManagedObjectContext, userData:NTUserData?, completion:@escaping ([NTMessageData]?) -> Void) {
+        if let user = userData{
+            context.perform {
+                let fetchRequest = NTMessageData.messageFetchRequest()
+                fetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataIsMine) == %@ && \(NTMessageData.messageDataReadTimestamp) > %@ && \(NTMessageData.messageDataMessageStatus) < %@ && \(NTMessageData.messageDataHasGroup) == nil && \(NTMessageData.messageDataHasUser) == %@", NSNumber.init(value: false), NSNumber.init(value: 0), MessageStatus.read.nsNumber, user)
+                do{
+                    let result:[NTMessageData]? = try context.fetch(fetchRequest)
+                    if let messages = result{
+                        completion(messages)
+                    }else{
+                        completion(nil)
+                    }
+                }
+                catch{
+                    completion(nil)
+                }
+            }
+            
+        }
+        
+        
+    }
+    
     
 }
 

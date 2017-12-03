@@ -62,6 +62,19 @@ class ChatViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: false)
+        
+        NTXMPPManager.sharedManager().markMessagesRead(userData: user) { (success) in
+            
+            if success{
+                
+                NTXMPPManager.sharedManager().sendReadReceiptsToUser(user: self.user, completion: { (sucess) in
+                    
+                })
+                
+            }
+            
+        }
+        
     }
     
     

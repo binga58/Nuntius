@@ -40,12 +40,15 @@ struct NTConstants {
     static let stamp = "stamp"
     static let received = "received"
     static let archived = "archived"
+    static let readReceipt = "readReceipt"
+    static let readMessage = "readMessage"
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"
         static let mam = "urn:xmpp:mam:1"
         static let jabberXData = "jabber:x:data"
         static let rsm = "http://jabber.org/protocol/rsm"
+        static let read = "urn:xmpp:readReceipts"
     }
 }
 

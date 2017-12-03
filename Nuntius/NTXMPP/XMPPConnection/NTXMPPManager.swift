@@ -99,7 +99,9 @@ extension NTXMPPManager{
         }
     }
     
-    
+    /**
+     Fetches messages with message state .waiting and sent them.
+     */
     func sendAllUnsentMessages() {
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         NTMessageData.getAllUnsentMessages(managedObjectContext: childMOC) { (messageDataList) in
@@ -118,10 +120,39 @@ extension NTXMPPManager{
         }
         
     }
-    
-    
+
     
 }
+
+
+//MARK:--------------- Mark messages read ----------------
+extension NTXMPPManager{
+    func markMessagesRead(userData: NTUserData?, completion:@escaping (Bool) -> ()) {
+        if let user = userData{
+            let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+            NTMessageData.getAllUnreadMessagesForOneToOneChat(context: childMOC, userData: user) { (messageDataList) in
+                if let messages = messageDataList{
+                    for message in messages{
+                        message.readTimestamp = NTUtility.getCurrentTime()
+                    }
+                }
+                NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                    if success{
+                        completion(true)
+                    }
+                })
+            }
+            
+        }
+    }
+    
+    func sendReadReceiptsToUser(user: NTUserData?, completion:@escaping (Bool) -> ()) {
+        NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().sendReadReceiptToUserForOneToOneChat(user: user, completion: { (success) in
+            completion(success)
+        })
+    }
+}
+
 
 //MARK:--------------- Send Chat state to user -----------
 extension NTXMPPManager{

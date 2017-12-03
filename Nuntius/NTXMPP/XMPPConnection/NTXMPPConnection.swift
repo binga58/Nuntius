@@ -194,8 +194,8 @@ extension NTXMPPConnection {
         //initialize XXMPPStreamManagement
         xmppStreamManagementMemoryStorage = XMPPStreamManagementMemoryStorage()
         xmppStreamManagement = XMPPStreamManagement.init(storage: xmppStreamManagementMemoryStorage, dispatchQueue: NTXMPPManager.sharedManager().getQueue())
-        xmppStreamManagement.automaticallyRequestAcks(afterStanzaCount: 1, orTimeout: 0)
-        xmppStreamManagement.automaticallySendAcks(afterStanzaCount: 1, orTimeout: 0)
+        xmppStreamManagement.automaticallyRequestAcks(afterStanzaCount: 1, orTimeout: 2)
+        xmppStreamManagement.automaticallySendAcks(afterStanzaCount: 1, orTimeout: 2)
         xmppStreamManagement.autoResume = true
 //        xmppStreamManagement.enable(withResumption: true, maxTimeout: 60)
 //        xmppStreamManagement.requestAck()

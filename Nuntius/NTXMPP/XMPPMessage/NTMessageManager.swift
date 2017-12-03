@@ -15,6 +15,8 @@ class NTMessageManager: NSObject {
     
     fileprivate static var globalMAMCount = 0
     
+    fileprivate var outstandingXMPPStanzaResponseBlocks:[String: (String) -> ()] = [:]
+    
     
     //MARK:-------------- Create message related stanzas -------
     /**
@@ -24,8 +26,8 @@ class NTMessageManager: NSObject {
      - Returns: XML stanza of message for xmpp server
      */
     
-    func createMessage(messageText: String?, userId: String?, messageId: String) -> DDXMLElement {
-        guard let _ = messageText, let user = userId, user.count > 0 else {
+    func createMessage(messageText: String?, userId: String?, messageId: String?) -> DDXMLElement {
+        guard let _ = messageText, let user = userId, user.count > 0, let msgId = messageId else {
             return DDXMLElement()
         }
         /*
@@ -43,7 +45,7 @@ class NTMessageManager: NSObject {
 //        let messageId = NTUtility.getMessageId()
         messageNode.addAttribute(withName: NTConstants.type, stringValue: NTConstants.chat)
         messageNode.addAttribute(withName: NTConstants.to, stringValue: NTUtility.getFullId(forFriendId: userId!))
-        messageNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        messageNode.addAttribute(withName: NTConstants.id, stringValue: msgId)
         messageNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
         
         //Body node
@@ -59,7 +61,7 @@ class NTMessageManager: NSObject {
         }
         
         receiptNode.addAttribute(withName: NTConstants.xmlns, stringValue: NTConstants.xmlnsType.receipt)
-        receiptNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        receiptNode.addAttribute(withName: NTConstants.id, stringValue: msgId)
         
         //Add body and receipt to message node
         messageNode.addChild(bodyNode)
@@ -96,6 +98,93 @@ class NTMessageManager: NSObject {
         return messageNode
     }
     
+    
+    //MARK:-------------------- Read receipts send/receive -----------------
+    func sendReadReceiptToUserForOneToOneChat(user: NTUserData?, completion:@escaping (Bool) -> ()) {
+        guard let messageNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.message) as? DDXMLElement else{
+            return
+        }
+        
+        let messageId = NTUtility.getMessageId()
+        messageNode.addAttribute(withName: NTConstants.type, stringValue: NTConstants.chat)
+        messageNode.addAttribute(withName: NTConstants.to, stringValue: NTUtility.getFullId(forFriendId: (user?.userId)!))
+        messageNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        messageNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
+        
+        let readNode = DDXMLElement.init(name: NTConstants.readReceipt, xmlns: NTConstants.xmlnsType.read)
+        
+        let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+        NTMessageData.getMessagesWithUnsentReadReceiptsOneToOneChat(context: childMOC, userData: user) { (messageList) in
+            if let list = messageList{
+                
+                for message in list{
+                    if let readMessage: DDXMLElement = DDXMLElement.element(withName: NTConstants.readMessage) as? DDXMLElement{
+                        readMessage.addAttribute(withName: NTConstants.id, stringValue: message.messageId!)
+                        readMessage.addAttribute(withName: NTConstants.time, doubleValue: (message.readTimestamp?.doubleValue)!)
+                        readNode.addChild(readMessage)
+                    }
+                    
+                }
+                
+                
+                
+                self.outstandingXMPPStanzaResponseBlocks[messageId] = {(stanzaId: String) in
+                    
+                    if stanzaId == messageId{
+                        
+                        for message in list{
+                            message.messageStatus = MessageStatus.read.nsNumber
+                        }
+                        NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                            
+                        })
+                        completion(true)
+                    }
+                    
+                }
+                
+                messageNode.addChild(readNode)
+                
+                NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: messageNode)
+                
+                
+                
+            }
+        }
+        
+    }
+    
+    func receiveReadReceipts(message: XMPPMessage) -> () {
+        if let readRecipt = message.element(forName: NTConstants.readReceipt), let readMessaged = readRecipt.children{
+            for messageNode in readMessaged{
+                if let node: DDXMLElement = messageNode as? DDXMLElement, let messageId: String = node.attributeStringValue(forName: NTConstants.id), node.attributeDoubleValue(forName: NTConstants.time) > 0 {
+                    let time = node.attributeDoubleValue(forName: NTConstants.time)
+                    let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+                    NTMessageData.message(messageId: messageId, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
+                        if let messageData = nTMessageData, messageData.messageStatus?.intValue == MessageStatus.delivered.rawValue, messageData.readTimestamp?.doubleValue == 0{
+                            messageData.messageStatus = MessageStatus.read.nsNumber
+                            if time > NTUtility.getCurrentTime().doubleValue{
+                                messageData.readTimestamp = NTUtility.getCurrentTime()
+                            }else{
+                                messageData.readTimestamp = NSNumber.init(value: time)
+                            }
+                            NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                                
+                            })
+                            
+                        }
+                    })
+                    
+                }
+            }
+            
+            NTDatabaseManager.sharedManager().saveToPersistentStore()
+        }
+        
+        
+    }
+    
+    
     //MARK:------------------- Messages with body------------------
     func messageReceived(message: XMPPMessage){
         
@@ -129,6 +218,7 @@ class NTMessageManager: NSObject {
         }
         
     }
+    
     
     func archiveMessage(message: XMPPMessage, delay: XMLElement){
         if let messageId = message.elementID as NSString?, let _ = message.element(forName: NTConstants.body), let fromUserId = message.from?.user, let toUserId = message.to?.user,  let dateString = delay.attribute(forName: NTConstants.stamp)?.stringValue, let date: NSDate = NSDate.init(xmppDateTime: dateString){
@@ -233,12 +323,32 @@ class NTMessageManager: NSObject {
 extension NTMessageManager: XMPPStreamDelegate{
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         
-        NTMessageManager.requestingArrayCount.append(message.elementID!)
+        if let _ = message.element(forName: NTConstants.received){
+            return
+        }
+        
+        if let msgId = message.elementID, let _ = message.element(forName: NTConstants.body){
+            self.outstandingXMPPStanzaResponseBlocks[msgId] = {(stanzaId: String) in
+                
+                if stanzaId == msgId{
+                    
+                    self.markMmessageSent(message: msgId)
+                    
+                }
+                
+            }
+        }
+        
         
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        self.messageReceived(message: message)
+        if let _ = message.element(forName: NTConstants.body){
+            self.messageReceived(message: message)
+        }
+        if let _ = message.element(forName: NTConstants.readReceipt){
+            self.receiveReadReceipts(message: message)
+        }
     }
     
     func xmppStream(_ sender: XMPPStream, didFailToSend message: XMPPMessage, error: Error) {
@@ -250,6 +360,21 @@ extension NTMessageManager: XMPPStreamDelegate{
 extension NTMessageManager: XMPPMessageDeliveryReceiptsDelegate{
     func xmppMessageDeliveryReceipts(_ xmppMessageDeliveryReceipts: XMPPMessageDeliveryReceipts, didReceiveReceiptResponseMessage message: XMPPMessage) {
         self.markMessageDelivered(messageElement: message)
+    }
+}
+
+//MARK:----------------- IQ result completion --------------
+extension NTMessageManager{
+    /**
+     Perform completion block on completion of iq query
+     */
+    func callAndRemoveOutstandingBlock(messageId: String){
+        
+        if let block = outstandingXMPPStanzaResponseBlocks[messageId]{
+            block(messageId)
+            outstandingXMPPStanzaResponseBlocks.removeValue(forKey: messageId)
+        }
+        
     }
 }
 
@@ -279,9 +404,8 @@ extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
 extension NTMessageManager: XMPPStreamManagementDelegate{
     func xmppStreamManagement(_ sender: XMPPStreamManagement, didReceiveAckForStanzaIds stanzaIds: [Any]) {
         for stanzaId in stanzaIds{
-            if let messageId: String = stanzaId as? String, NTMessageManager.requestingArrayCount.contains(messageId){
-                markMmessageSent(message: messageId)
-                _ = NTMessageManager.requestingArrayCount.index(of: messageId).map { NTMessageManager.requestingArrayCount.remove(at: $0) }
+            if let messageId: String = stanzaId as? String{
+                self.callAndRemoveOutstandingBlock(messageId: messageId)
             }
         }
     }
