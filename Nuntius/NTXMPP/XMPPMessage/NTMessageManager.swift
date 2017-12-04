@@ -120,7 +120,7 @@ class NTMessageManager: NSObject {
                 for message in list{
                     if let readMessage: DDXMLElement = DDXMLElement.element(withName: NTConstants.readMessage) as? DDXMLElement{
                         readMessage.addAttribute(withName: NTConstants.id, stringValue: message.messageId!)
-                        readMessage.addAttribute(withName: NTConstants.time, doubleValue: ((message.readTimestamp?.doubleValue)! * 1000))
+                        readMessage.addAttribute(withName: NTConstants.time, doubleValue: floor(((message.readTimestamp?.doubleValue)! * 1000)))
                         readNode.addChild(readMessage)
                     }
                     
