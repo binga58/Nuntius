@@ -140,8 +140,8 @@ public class NTMessageData: NSManagedObject {
             do{
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
                 
-                if let count = result?.count, count > 0{
-                    messageIdFetchCompletion(result?[0])
+                if let count = result?.count, count > 0, let messageList = result, let messageData: NTMessageData = messageList[0] as NTMessageData{
+                    messageIdFetchCompletion(messageData)
                 }else{
                     messageIdFetchCompletion(nil)
                 }

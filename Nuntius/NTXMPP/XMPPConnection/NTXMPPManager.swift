@@ -30,7 +30,7 @@ class NTXMPPManager: NSObject {
     }
     
     deinit {
-        removeObserves()
+        removeObservers()
     }
     
     class func sharedManager() -> NTXMPPManager {
@@ -174,6 +174,14 @@ extension NTXMPPManager{
         }
         
     }
+    
+    func addInRoster(userId: String?) -> Void {
+        if let user: String = userId{
+            
+            self.xmppConnection?.addUserToRoster(userId: user)
+        }
+        
+    }
 }
 
 
@@ -243,6 +251,7 @@ extension NTXMPPManager{
     
     func afterAuthenticationProcesses() {
         self.sendAllUnsentMessages()
+        
     }
 }
 
@@ -252,21 +261,31 @@ extension NTXMPPManager{
     private func addObservers() {
         do{
             NotificationCenter.default.addObserver(self, selector: #selector(appInBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(appInBackground), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(appInTerminate), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(appInForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+            
         }
     }
     
-    private func removeObserves() {
+    private func removeObservers() {
         do{
             NotificationCenter.default.removeObserver(self)
-            NotificationCenter.default.removeObserver(self)
         }
+    }
+    
+    @objc func appInForeground() -> Void {
+        
     }
     
     @objc private func appInBackground(){
         NTDatabaseManager.sharedManager().saveToPersistentStore()
-//        self.disconnect()
-//        self.xmppConnection?.clearXMPPStream()
+        self.disconnect()
+    }
+    
+    @objc func appInTerminate() {
+        NTDatabaseManager.sharedManager().saveToPersistentStore()
+        self.disconnect()
+        self.xmppConnection?.clearXMPPStream()
     }
     
 }

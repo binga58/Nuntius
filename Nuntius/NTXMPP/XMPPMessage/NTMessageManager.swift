@@ -120,7 +120,7 @@ class NTMessageManager: NSObject {
                 for message in list{
                     if let readMessage: DDXMLElement = DDXMLElement.element(withName: NTConstants.readMessage) as? DDXMLElement{
                         readMessage.addAttribute(withName: NTConstants.id, stringValue: message.messageId!)
-                        readMessage.addAttribute(withName: NTConstants.time, doubleValue: (message.readTimestamp?.doubleValue)!)
+                        readMessage.addAttribute(withName: NTConstants.time, doubleValue: ((message.readTimestamp?.doubleValue)! * 1000))
                         readNode.addChild(readMessage)
                     }
                     
@@ -158,7 +158,7 @@ class NTMessageManager: NSObject {
         if let readRecipt = message.element(forName: NTConstants.readReceipt), let readMessaged = readRecipt.children{
             for messageNode in readMessaged{
                 if let node: DDXMLElement = messageNode as? DDXMLElement, let messageId: String = node.attributeStringValue(forName: NTConstants.id), node.attributeDoubleValue(forName: NTConstants.time) > 0 {
-                    let time = node.attributeDoubleValue(forName: NTConstants.time)
+                    let time = (node.attributeDoubleValue(forName: NTConstants.time) / 1000)
                     let childMOC = NTDatabaseManager.sharedManager().getChildContext()
                     NTMessageData.message(messageId: messageId, managedObjectContext: childMOC, messageIdFetchCompletion: { (nTMessageData) in
                         if let messageData = nTMessageData, messageData.messageStatus?.intValue == MessageStatus.delivered.rawValue, messageData.readTimestamp?.doubleValue == 0{
@@ -263,7 +263,7 @@ class NTMessageManager: NSObject {
     }
     
     //MARK:-------------------- Mark message sent -----------------
-    func markMmessageSent(message: String?) {
+    func markMessageSent(message: String?) {
         if let messageId: String = message{
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
@@ -332,7 +332,7 @@ extension NTMessageManager: XMPPStreamDelegate{
                 
                 if stanzaId == msgId{
                     
-                    self.markMmessageSent(message: msgId)
+                    self.markMessageSent(message: msgId)
                     
                 }
                 
@@ -345,9 +345,11 @@ extension NTMessageManager: XMPPStreamDelegate{
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         if let _ = message.element(forName: NTConstants.body){
             self.messageReceived(message: message)
+            return
         }
         if let _ = message.element(forName: NTConstants.readReceipt){
             self.receiveReadReceipts(message: message)
+            return
         }
     }
     

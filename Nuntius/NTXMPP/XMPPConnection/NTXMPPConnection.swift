@@ -178,6 +178,19 @@ extension NTXMPPConnection{
     
 }
 
+//MARK:-------------- Roster functions -------------------
+extension NTXMPPConnection{
+    func addUserToRoster(userId: String?) -> Void {
+        if let roster = xmppRoster, let user = userId{
+//            roster.fetch()
+            self.sharedPresenceManager().addUserToRoster(roster: roster, user: user, completion: { (success) in
+                
+            })
+        }
+    }
+    
+}
+
 
 //MARK:--------------Stream setup and clear ---------------
 extension NTXMPPConnection {
@@ -260,6 +273,7 @@ extension NTXMPPConnection {
         xmppStream.addDelegate(self.sharedIQManger(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStream.addDelegate(self.sharedPresenceManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppRoster.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppRoster.addDelegate(self.sharedPresenceManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppReconnect.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
@@ -296,6 +310,7 @@ extension NTXMPPConnection {
         }
         if xmppRoster != nil{
             xmppRoster.removeDelegate(self)
+            xmppRoster.removeDelegate(self.sharedPresenceManager())
             xmppRoster.deactivate()
         }
         if xmppCapabilities != nil{
@@ -412,6 +427,7 @@ extension NTXMPPConnection: XMPPStreamDelegate {
         print("-----------Authenticated-------------")
         NTXMPPManager.sharedManager().userAuthenticated()
         xmppStreamManagement.enable(withResumption: true, maxTimeout: 60)
+        xmppRoster.fetch()
     }
     
     func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
@@ -454,9 +470,9 @@ extension NTXMPPConnection: XMPPStreamManagementDelegate{
         
     }
     
-    func xmppStreamManagement(_ sender: XMPPStreamManagement, getIsHandled isHandledPtr: UnsafeMutablePointer<ObjCBool>?, stanzaId stanzaIdPtr: AutoreleasingUnsafeMutablePointer<AnyObject?>?, forReceivedElement element: XMPPElement) {
-        
-    }
+//    func xmppStreamManagement(_ sender: XMPPStreamManagement, getIsHandled isHandledPtr: UnsafeMutablePointer<ObjCBool>?, stanzaId stanzaIdPtr: AutoreleasingUnsafeMutablePointer<AnyObject?>?, forReceivedElement element: XMPPElement) {
+//
+//    }
     
    
 }

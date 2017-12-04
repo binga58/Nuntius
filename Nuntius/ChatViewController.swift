@@ -46,6 +46,7 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpTable()
+        self.title = user?.userId
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -62,6 +63,8 @@ class ChatViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: false)
+        
+        NTXMPPManager.sharedManager().addInRoster(userId: user?.userId)
         
         NTXMPPManager.sharedManager().markMessagesRead(userData: user) { (success) in
             
@@ -102,7 +105,8 @@ extension ChatViewController{
         chatTableView.register(nib, forCellReuseIdentifier: sentMessageCell)
         chatTableView.register(UINib.init(nibName: receiveMessageCell, bundle: nil), forCellReuseIdentifier: receiveMessageCell)
         
-        navTitle.title = user?.userId
+//        navTitle.title = user?.userId
+        
     }
 }
 

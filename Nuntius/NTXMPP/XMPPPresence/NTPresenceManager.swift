@@ -56,6 +56,12 @@ class NTPresenceManager: NSObject {
         return xmppPresence
     }
     
+    func addUserToRoster(roster: XMPPRoster, user: String, completion: (Bool) -> ()){
+//        roster.fetch()
+        roster.addUser(XMPPJID.init(string: NTUtility.getFullId(forFriendId: user))!, withNickname: NTUtility.getFullId(forFriendId: user))
+        
+    }
+    
     
 }
 
@@ -70,6 +76,12 @@ extension NTPresenceManager: XMPPStreamDelegate{
     }
     
     func xmppStream(_ sender: XMPPStream, didSend presence: XMPPPresence) {
+        
+    }
+}
+
+extension NTPresenceManager: XMPPRosterDelegate{
+    func xmppRoster(_ sender: XMPPRoster, didReceivePresenceSubscriptionRequest presence: XMPPPresence) {
         
     }
 }
