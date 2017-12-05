@@ -221,7 +221,7 @@ extension NTXMPPManager {
                     
                 }else{
                     
-                    self.sendPresence(myPresence: .online)
+                    self.sendPresence(myPresence: self.xmppAccount.presence)
                     
                 }
                 
@@ -262,7 +262,7 @@ extension NTXMPPManager{
                 NTXMPPManager.sharedManager().xmppConnection?.sendArchiveRequest(utcDateTime: time as NSDate)
             }
             
-            self.sendPresence(myPresence: .online)
+            self.sendPresence(myPresence: self.xmppAccount.presence)
         }
         
     }
