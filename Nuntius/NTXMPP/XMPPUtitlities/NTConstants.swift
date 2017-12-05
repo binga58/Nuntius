@@ -42,6 +42,12 @@ struct NTConstants {
     static let archived = "archived"
     static let readReceipt = "readReceipt"
     static let readMessage = "readMessage"
+    static let available = "available"
+    static let unavailable = "unavailable"
+    static let dnd = "dnd"
+    static let away = "away"
+    static let xa = "xa"
+    
     struct xmlnsType {
         static let time = "urn:xmpp:time"
         static let receipt = "urn:xmpp:receipts"
@@ -50,6 +56,10 @@ struct NTConstants {
         static let rsm = "http://jabber.org/protocol/rsm"
         static let read = "urn:xmpp:readReceipts"
     }
+    
+//    struct imageName {
+//
+//    }
 }
 
 //func insertObject<A: NSManagedObject>() -> A where A: ManagedObjectType {
@@ -110,3 +120,14 @@ enum ChatState: Int{
     case inactive
     case gone
 }
+
+enum Presence: Int {
+    case online = 1
+    case offline
+    case away, busy /*, unavailable*/
+    
+    var nsNumber: NSNumber{
+        return NSNumber.init(value: self.rawValue)
+    }
+}
+

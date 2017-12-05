@@ -11,12 +11,14 @@ import XMPPFramework
 
 class NTPresenceManager: NSObject {
     
+    fileprivate var userPresence: [String:Presence] = [:]
+    
     /**
      Creates presence node with given presence status
      - parameter myPresence: MyPresence enum value for required presence
      - Returns: XML stanza of presence for xmpp server
      */
-    func sendMyPresence(myPresence: MyPresence) -> DDXMLElement {
+    func sendMyPresence(myPresence: Presence) -> DDXMLElement {
         var xmppPresence: XMPPPresence!
         var statusText: String?
         var showText: String?
@@ -26,9 +28,9 @@ class NTPresenceManager: NSObject {
             xmppPresence = XMPPPresence()
             statusText = "Online"
             showText = ""
-        case .unavailable:
-            xmppPresence = XMPPPresence.init(type: "unavailable")
-            statusText = "Offline"
+//        case .unavailable:
+//            xmppPresence = XMPPPresence.init(type: "unavailable")
+//            statusText = "Offline"
         case .offline:
             xmppPresence = XMPPPresence()
             statusText = "Offline"
@@ -62,6 +64,18 @@ class NTPresenceManager: NSObject {
         
     }
     
+    func updateUserPresence(user: String, presence: Presence) {
+        userPresence[user] = presence
+        NTXMPPManager.sharedManager().presenceChanged(userId: user, presence: presence)
+    }
+    
+    func getPresence(user: String) -> Presence {
+        if let presence = userPresence[user]{
+            return presence
+        }
+        return Presence.offline
+    }
+    
     
 }
 
@@ -72,6 +86,30 @@ extension NTPresenceManager: XMPPStreamDelegate{
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        if let fromUser = presence.from?.user, fromUser != NTXMPPManager.sharedManager().xmppAccount.userName{
+            if presence.type == NTConstants.available{
+                var userPresence: Presence = .online
+                switch presence.showValue{
+                case .away:
+                    userPresence = .away
+                    
+                case .DND:
+                    userPresence = .busy
+                case .XA:
+                    userPresence = .offline
+                case .other:
+                    userPresence = .online
+                case .chat:
+                    userPresence = .online
+                }
+                
+                self.updateUserPresence(user: fromUser, presence: userPresence)
+                
+            }else{
+                self.updateUserPresence(user: fromUser, presence: .offline)
+            }
+        }
+        
         
     }
     

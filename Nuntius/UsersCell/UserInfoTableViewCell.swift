@@ -9,6 +9,7 @@
 import UIKit
 
 class UserInfoTableViewCell: UITableViewCell {
+    @IBOutlet weak var presenceImageView: UIImageView!
     @IBOutlet weak var userNameLBL: UILabel!
     
     @IBOutlet weak var unreadCountLBL: UILabel!
@@ -32,6 +33,14 @@ class UserInfoTableViewCell: UITableViewCell {
         
         if let messageId = userData.lastMessageId, let lastMessage: NTMessage = NTMessageData.message(messageId: messageId, managedObjectContext: childMOC){
             lastMessageLBL.text = lastMessage.messageText
+        }
+        let presence = Presence(rawValue: (userData.presence?.intValue)!)
+        
+        switch presence {
+        case .online?:
+            presenceImageView.image = #imageLiteral(resourceName: "status-available")
+        default:
+            presenceImageView.image = #imageLiteral(resourceName: "status-offline")
         }
         
         

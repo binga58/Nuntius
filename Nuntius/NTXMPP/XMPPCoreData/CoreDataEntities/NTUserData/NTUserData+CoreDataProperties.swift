@@ -20,10 +20,17 @@ extension NTUserData {
     @NSManaged public var isGroup: NSNumber?
     @NSManaged public var lastActivityTime: NSNumber?
     @NSManaged public var lastMessageId: String?
-    @NSManaged public var presence: NSNumber?
+    var presence: NSNumber? {
+        if let user = userId{
+            return NTXMPPManager.sharedManager().xmppConnection?.sharedPresenceManager().getPresence(user: user).nsNumber
+        }else{
+            return Presence.offline.nsNumber
+        }
+    }
     @NSManaged public var userId: String?
     @NSManaged public var hasGroupMessages: NSSet?
     @NSManaged public var hasMessages: NSSet?
+    
 
 }
 

@@ -8,13 +8,6 @@
 
 import UIKit
 
-enum MyPresence {
-    case online
-    case offline
-    case unavailable, away, busy
-}
-
-
 class NTXMPPAccount: NSObject {
     var serverDomain : String?
     var userName : String?

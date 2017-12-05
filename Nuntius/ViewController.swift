@@ -66,6 +66,7 @@ class ViewController: UIViewController {
 //        let account = NTXMPPAccount.init(serverDomain: "192.168.22.252", userName: "user1", password:  "123456", groupChatServiceName: "groupChat")
         NTXMPPManager.sharedManager().setxmppAccount(xmppAccount: account)
         NTXMPPManager.sharedManager().connect()
+        NTXMPPManager.sharedManager().addPresenceDelegate(viewController: self)
     }
     
     @IBAction func disconnectTap(_ sender: Any) {
@@ -183,6 +184,15 @@ extension ViewController : NSFetchedResultsControllerDelegate{
     
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>){
         userThreadTableView.endUpdates()
+    }
+}
+
+
+extension ViewController: PresenceChanged{
+    func presenceChanged(user: String, presence: Presence) {
+        DispatchQueue.main.async {
+            self.userThreadTableView.reloadData()
+        }
     }
 }
 

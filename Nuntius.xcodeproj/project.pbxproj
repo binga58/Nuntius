@@ -23,6 +23,7 @@
 		423F36B41FC6E0D400AE9987 /* NTPresenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F36B31FC6E0D400AE9987 /* NTPresenceManager.swift */; };
 		423F36B81FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 423F36B61FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodeld */; };
 		423F36C41FC6FE3700AE9987 /* NTDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F36C31FC6FE3700AE9987 /* NTDatabaseManager.swift */; };
+		425AFE711FD6AAFA00BBFEFA /* NTProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425AFE701FD6AAFA00BBFEFA /* NTProtocols.swift */; };
 		425F67FC1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F67FA1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift */; };
 		425F67FD1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F67FB1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift */; };
 		425F68021FCC369F00A5D578 /* NTUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F68011FCC369F00A5D578 /* NTUser.swift */; };
@@ -88,6 +89,7 @@
 		423F36B31FC6E0D400AE9987 /* NTPresenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPresenceManager.swift; sourceTree = "<group>"; };
 		423F36B71FC6F4E500AE9987 /* NTXMPPDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NTXMPPDataModel.xcdatamodel; sourceTree = "<group>"; };
 		423F36C31FC6FE3700AE9987 /* NTDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTDatabaseManager.swift; sourceTree = "<group>"; };
+		425AFE701FD6AAFA00BBFEFA /* NTProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTProtocols.swift; sourceTree = "<group>"; };
 		425F67FA1FCBF08700A5D578 /* NTUserData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		425F67FB1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTUserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		425F68011FCC369F00A5D578 /* NTUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUser.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 			children = (
 				4283ADC31FC576CD00F95560 /* NTUtility.swift */,
 				42745DC31FC7F6A200D3DBEF /* NTConstants.swift */,
+				425AFE701FD6AAFA00BBFEFA /* NTProtocols.swift */,
 			);
 			path = XMPPUtitlities;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				42D4BE341FC4496D00057D12 /* NTXMPPAccount.swift in Sources */,
 				42745DC41FC7F6A200D3DBEF /* NTConstants.swift in Sources */,
 				FC09BC101FC988CE00B49643 /* NTMessage.swift in Sources */,
+				425AFE711FD6AAFA00BBFEFA /* NTProtocols.swift in Sources */,
 				423F36A41FC6A25800AE9987 /* ChatViewController.swift in Sources */,
 				4227F24B1FC3EBCB00EC8818 /* Nuntius.xcdatamodeld in Sources */,
 			);

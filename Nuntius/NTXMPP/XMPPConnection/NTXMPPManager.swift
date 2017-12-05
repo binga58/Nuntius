@@ -19,6 +19,8 @@ class NTXMPPManager: NSObject {
     }()
     var xmppServerTimeDifference : TimeInterval = 0
     
+    weak var presenceDelegate: PresenceChanged?
+    
     var xmppAccount : NTXMPPAccount!
     let xmppQueue = DispatchQueue(label: "xmppQueue", attributes: .concurrent)
     var retriedCount = 0
@@ -78,6 +80,18 @@ class NTXMPPManager: NSObject {
     }
     
 }
+
+//MARK:-------------- Add delegate -------------------
+
+extension NTXMPPManager{
+    func addPresenceDelegate(viewController: PresenceChanged?) {
+        if let delegate = viewController{
+            self.presenceDelegate = delegate
+        }
+    }
+    
+}
+
 
 //MARK:-------------- Send Messages -------------------
 extension NTXMPPManager{
@@ -168,7 +182,7 @@ extension NTXMPPManager{
 
 //MARK:--------------- Send presence ---------------------
 extension NTXMPPManager{
-    func sendPresence(myPresence : MyPresence) -> () {
+    func sendPresence(myPresence : Presence) -> () {
         if let presence = NTXMPPManager.sharedManager().xmppConnection?.sharedPresenceManager().sendMyPresence(myPresence: myPresence){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: presence)
         }
@@ -181,6 +195,10 @@ extension NTXMPPManager{
             self.xmppConnection?.addUserToRoster(userId: user)
         }
         
+    }
+    
+    func presenceChanged(userId:String, presence: Presence) {
+        presenceDelegate?.presenceChanged(user: userId, presence: presence)
     }
 }
 
@@ -289,4 +307,7 @@ extension NTXMPPManager{
     }
     
 }
+
+
+
 
