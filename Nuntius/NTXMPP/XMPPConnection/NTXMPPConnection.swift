@@ -137,6 +137,7 @@ extension NTXMPPConnection{
             if let password = self.xmppAccount?.password{
                 do{
                     try xmppStream.authenticate(withPassword: password)
+//                    try stream.register(withPassword: password)
                 }
                 catch{
                     NTXMPPManager.sharedManager().connect()
@@ -150,10 +151,20 @@ extension NTXMPPConnection{
 //MARK:--------------- Send Elements ---------------
 extension NTXMPPConnection{
     
-    func sendElement(element: DDXMLElement) -> () {
-        xmppStream.send(element)
+    func sendElement(element: DDXMLElement?) -> () {
+        if let stream = xmppStream, let xmlElement = element{
+            stream.send(xmlElement)
+        }
     }
     
+}
+
+
+//MARK:-------------- Register user ----------------
+extension NTXMPPConnection{
+    func registerUser() -> Void {
+        
+    }
 }
 
 
@@ -202,7 +213,7 @@ extension NTXMPPConnection {
         xmppStream.hostName = self.xmppAccount?.serverDomain
         xmppStream.hostPort = (self.xmppAccount?.port)!
         xmppStream.tag = self.xmppAccount?.userName
-        xmppStream.startTLSPolicy = .preferred
+        xmppStream.startTLSPolicy = .required
         
         //initialize XXMPPStreamManagement
         xmppStreamManagementMemoryStorage = XMPPStreamManagementMemoryStorage()

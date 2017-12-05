@@ -59,7 +59,6 @@ class NTPresenceManager: NSObject {
     }
     
     func addUserToRoster(roster: XMPPRoster, user: String, completion: (Bool) -> ()){
-//        roster.fetch()
         roster.addUser(XMPPJID.init(string: NTUtility.getFullId(forFriendId: user))!, withNickname: NTUtility.getFullId(forFriendId: user))
         
     }
