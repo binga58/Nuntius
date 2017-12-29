@@ -154,6 +154,48 @@ class NTMessageManager: NSObject {
         
     }
     
+    func sendReadReciptForOneToOneChatForMessage(nTMessageData:NTMessageData?) -> Void {
+        
+        if let messageData = nTMessageData,let messageNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.message) as? DDXMLElement{
+            let messageId = NTUtility.getMessageId()
+            messageNode.addAttribute(withName: NTConstants.type, stringValue: NTConstants.chat)
+            messageNode.addAttribute(withName: NTConstants.to, stringValue: NTUtility.getFullId(forFriendId: (messageData.hasUser?.userId)!))
+            messageNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+            messageNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
+            
+            let readNode = DDXMLElement.init(name: NTConstants.readReceipt, xmlns: NTConstants.xmlnsType.read)
+            if let readMessage: DDXMLElement = DDXMLElement.element(withName: NTConstants.readMessage) as? DDXMLElement{
+                readMessage.addAttribute(withName: NTConstants.id, stringValue: messageData.messageId!)
+                readMessage.addAttribute(withName: NTConstants.time, doubleValue: floor(((messageData.readTimestamp?.doubleValue)! * 1000)))
+                readNode.addChild(readMessage)
+            }
+            
+            let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+            self.outstandingXMPPStanzaResponseBlocks[messageId] = {(stanzaId: String) in
+                
+                if stanzaId == messageId{
+                    
+                    
+                    messageData.messageStatus = MessageStatus.read.nsNumber
+                    
+                    NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in
+                        
+                    })
+//                    completion(true)
+                }
+                
+            }
+            
+            messageNode.addChild(readNode)
+            
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: messageNode)
+            
+            
+        }
+        
+        
+    }
+    
     func receiveReadReceipts(message: XMPPMessage) -> () {
         if let readRecipt = message.element(forName: NTConstants.readReceipt), let readMessaged = readRecipt.children{
             for messageNode in readMessaged{

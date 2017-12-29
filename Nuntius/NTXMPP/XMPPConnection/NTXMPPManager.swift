@@ -13,6 +13,7 @@ class NTXMPPManager: NSObject {
     
     static var xmppManager : NTXMPPManager!
     var xmppConnection : NTXMPPConnection?
+    var currentUser: NTUser?
     var operationQueue: OperationQueue = {
         var tempOperationQueue = OperationQueue.init()
         return tempOperationQueue
@@ -38,6 +39,8 @@ class NTXMPPManager: NSObject {
     class func sharedManager() -> NTXMPPManager {
         if xmppManager == nil{
             xmppManager = NTXMPPManager()
+            //Create and setup the core data stack
+            _ = NTDatabaseManager.sharedManager().getChildContext()
         }
         return xmppManager
     }
@@ -135,6 +138,21 @@ extension NTXMPPManager{
         
     }
 
+    
+}
+
+//MARK:--------------- Set and remove buddy with user is talking -------
+extension NTXMPPManager{
+    
+    func setCurrentBuddy(buddy: NTUser?) -> Void {
+        if let user = buddy{
+            currentUser = user
+        }
+    }
+    
+    func removeCurrentBuddy() -> Void {
+        currentUser = nil
+    }
     
 }
 

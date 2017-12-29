@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1rr-Ai-y1s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1rr-Ai-y1s">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -156,6 +156,82 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MrD-SM-74z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="852" y="132.68365817091455"/>
+        </scene>
+        <!--Send New Message View Controller-->
+        <scene sceneID="woy-Ko-2Xs">
+            <objects>
+                <viewController storyboardIdentifier="sendMessage" id="ot2-SP-bi5" customClass="SendNewMessageViewController" customModule="Nuntius" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aur-Qn-Cag">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7eE-AH-A6f">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <connections>
+                                    <action selector="dismissViewControllerTaped:" destination="ot2-SP-bi5" eventType="touchUpInside" id="bCM-3w-u8O"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rcl-et-huu">
+                                <rect key="frame" x="0.0" y="400" width="375" height="267"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eN5-2K-jm1">
+                                        <rect key="frame" x="56.5" y="65" width="262.5" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rQb-mx-uUK">
+                                        <rect key="frame" x="56.5" y="132" width="262.5" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lxk-lB-5d6">
+                                        <rect key="frame" x="56" y="198.5" width="262.5" height="30"/>
+                                        <color key="backgroundColor" red="0.0039215686269999999" green="0.71764705880000002" blue="0.41960784309999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Send Message">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="sendMessageTaped:" destination="ot2-SP-bi5" eventType="touchUpInside" id="i0g-Vp-jvY"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="rQb-mx-uUK" firstAttribute="width" secondItem="Rcl-et-huu" secondAttribute="width" multiplier="0.7" id="0j6-dC-9A5"/>
+                                    <constraint firstItem="eN5-2K-jm1" firstAttribute="centerX" secondItem="Rcl-et-huu" secondAttribute="centerX" id="0oD-re-z9a"/>
+                                    <constraint firstItem="eN5-2K-jm1" firstAttribute="centerY" secondItem="Rcl-et-huu" secondAttribute="centerY" multiplier="0.6" id="IgY-z7-Xpu"/>
+                                    <constraint firstItem="rQb-mx-uUK" firstAttribute="centerX" secondItem="Rcl-et-huu" secondAttribute="centerX" id="fsw-3s-KDZ"/>
+                                    <constraint firstItem="lxk-lB-5d6" firstAttribute="centerX" secondItem="Rcl-et-huu" secondAttribute="centerX" id="iYm-Cr-LfO"/>
+                                    <constraint firstItem="rQb-mx-uUK" firstAttribute="centerY" secondItem="Rcl-et-huu" secondAttribute="centerY" multiplier="1.1" id="j3g-S7-rBi"/>
+                                    <constraint firstItem="lxk-lB-5d6" firstAttribute="centerY" secondItem="Rcl-et-huu" secondAttribute="centerY" multiplier="1.6" id="nqc-ua-U1l"/>
+                                    <constraint firstItem="eN5-2K-jm1" firstAttribute="width" secondItem="Rcl-et-huu" secondAttribute="width" multiplier="0.7" id="vvP-QG-RcP"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="0.36354880136986301" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Rcl-et-huu" firstAttribute="bottom" secondItem="GEC-MN-Z7T" secondAttribute="bottom" id="3Yy-rX-UnF"/>
+                            <constraint firstItem="7eE-AH-A6f" firstAttribute="top" secondItem="GEC-MN-Z7T" secondAttribute="top" id="Dej-iL-1if"/>
+                            <constraint firstItem="Rcl-et-huu" firstAttribute="trailing" secondItem="GEC-MN-Z7T" secondAttribute="trailing" id="Fy7-CB-tjd"/>
+                            <constraint firstItem="lxk-lB-5d6" firstAttribute="width" secondItem="aur-Qn-Cag" secondAttribute="width" multiplier="0.7" id="P5Q-Vs-Hpr"/>
+                            <constraint firstItem="GEC-MN-Z7T" firstAttribute="bottom" secondItem="7eE-AH-A6f" secondAttribute="bottom" id="bFL-Gq-oCM"/>
+                            <constraint firstItem="Rcl-et-huu" firstAttribute="leading" secondItem="GEC-MN-Z7T" secondAttribute="leading" id="czS-SH-epV"/>
+                            <constraint firstItem="GEC-MN-Z7T" firstAttribute="trailing" secondItem="7eE-AH-A6f" secondAttribute="trailing" id="dqg-Nl-pKV"/>
+                            <constraint firstItem="7eE-AH-A6f" firstAttribute="leading" secondItem="GEC-MN-Z7T" secondAttribute="leading" id="kZO-Gd-NiA"/>
+                            <constraint firstItem="Rcl-et-huu" firstAttribute="height" secondItem="aur-Qn-Cag" secondAttribute="height" multiplier="0.4" id="s3Q-wA-7yH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="GEC-MN-Z7T"/>
+                    </view>
+                    <connections>
+                        <outlet property="firstMessageTF" destination="rQb-mx-uUK" id="Ebu-Qf-4WY"/>
+                        <outlet property="receiverIdTF" destination="eN5-2K-jm1" id="FjM-Fx-SDo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RQL-xq-nC1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1624.8" y="130.88455772113943"/>
         </scene>
     </scenes>
 </document>

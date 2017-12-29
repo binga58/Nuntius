@@ -19,13 +19,13 @@ class ChatViewController: UIViewController {
         return cache
     }()
     
-    var user: NTUserData?
+    var buddy: NTUserData?
     
     var fetchCount = 100
     
     lazy var fetchedResultsController: NSFetchedResultsController<NTMessageData> = {
         let messageFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: NTMessageData.entityName)
-        messageFetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataHasUser).\(NTUserData.userDataUserId) == %@ && \(NTMessageData.messageDataHasUser).\(NTUserData.userDataIsGroup) == %@",(user?.userId)!,(user?.isGroup)!)
+        messageFetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataHasUser).\(NTUserData.userDataUserId) == %@ && \(NTMessageData.messageDataHasUser).\(NTUserData.userDataIsGroup) == %@",(buddy?.userId)!,(buddy?.isGroup)!)
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataReceivedTimestamp)", ascending: true)
         messageFetchRequest.sortDescriptors = [primarySortDescriptor]
 //        messageFetchRequest.fetchBatchSize = 20
@@ -46,7 +46,7 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpTable()
-        self.title = user?.userId
+        self.title = buddy?.userId
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -64,13 +64,13 @@ class ChatViewController: UIViewController {
         super.viewDidAppear(animated)
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: false)
         
-        NTXMPPManager.sharedManager().addInRoster(userId: user?.userId)
-        
-        NTXMPPManager.sharedManager().markMessagesRead(userData: user) { (success) in
+        NTXMPPManager.sharedManager().addInRoster(userId: buddy?.userId)
+        NTXMPPManager.sharedManager().setCurrentBuddy(buddy: NTUser.init(ntUserData: buddy))
+        NTXMPPManager.sharedManager().markMessagesRead(userData: buddy) { (success) in
             
             if success{
                 
-                NTXMPPManager.sharedManager().sendReadReceiptsToUser(user: self.user, completion: { (sucess) in
+                NTXMPPManager.sharedManager().sendReadReceiptsToUser(user: self.buddy, completion: { (sucess) in
                     
                 })
                 
@@ -80,11 +80,16 @@ class ChatViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NTXMPPManager.sharedManager().removeCurrentBuddy()
+    }
+    
     
     @IBAction func sendTaped(_ sender: Any) {
         let messageText = textVIew.text
         textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (user?.userId)! )
+        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (buddy?.userId)! )
 //        chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
 //        self.goToBottom()
 //        NTXMPPManager.xmppConnection?.loadarchivemsg()

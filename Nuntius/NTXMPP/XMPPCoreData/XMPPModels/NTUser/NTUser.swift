@@ -16,13 +16,15 @@ class NTUser: NSObject {
     var lastMessageId: String?
     var lastActivity: NSNumber?
     
-    public init(userData: NTUserData) {
+    public init(ntUserData: NTUserData?) {
         super.init()
-        self.userId = userData.userId
-        self.isGroup = userData.isGroup
-        self.presence = userData.presence
-        self.lastMessageId = userData.lastMessageId
-        self.lastActivity = userData.lastActivityTime
+        if let userData = ntUserData{
+            self.userId = userData.userId
+            self.isGroup = userData.isGroup
+            self.presence = userData.presence
+            self.lastMessageId = userData.lastMessageId
+            self.lastActivity = userData.lastActivityTime
+        }
     }
     
     public init(userData: NTUserData, messageObj: NTMessage) {

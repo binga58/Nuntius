@@ -28,7 +28,7 @@ public class NTMessageData: NSManagedObject {
      - parameter managedObjectContext: context in which message to be stored.
      - parameter completion: completion block called with saved message
      */
-    class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber,receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessage?) -> ()) {
+    class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber,receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessageData?) -> ()) {
         
         self.messageForGroupChat(messageId: messageId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, receivedTimestamp: receivedTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
         
@@ -52,7 +52,7 @@ public class NTMessageData: NSManagedObject {
      - parameter completion: completion block called with saved message
      */
     
-    class func messageForGroupChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessage?) -> ()) {
+    class func messageForGroupChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessageData?) -> ()) {
         
         NTMessageData.message(messageId: messageId, managedObjectContext: managedObjectContext) { (objectId) in
             
@@ -83,7 +83,7 @@ public class NTMessageData: NSManagedObject {
                             userData.lastActivityTime = createdTimestamp
                         }
                         
-                        user = NTUser.init(userData: userData)
+                        user = NTUser.init(ntUserData: userData)
                         
                     }
                     
@@ -95,7 +95,7 @@ public class NTMessageData: NSManagedObject {
                     if let groupData = messageData.hasGroup{
                         groupData.lastMessageId = messageData.messageId
                         groupData.lastActivityTime = createdTimestamp
-                        group = NTUser.init(userData: groupData)
+                        group = NTUser.init(ntUserData: groupData)
                     }
                     
                     var msg: NTMessage?
@@ -113,7 +113,7 @@ public class NTMessageData: NSManagedObject {
                     
                     NTDatabaseManager.sharedManager().saveChildContext(context: managedObjectContext, completion: { (success) in
                         if success{
-                            completion(msg)
+                            completion(messageData)
                         }else{
                             completion(nil)
                         }

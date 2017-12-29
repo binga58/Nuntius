@@ -48,14 +48,14 @@ public class NTUserData: NSManagedObject {
     class func insertUserOnBackground(userId: String, isGroup: Bool, managedObjectContext: NSManagedObjectContext, completion: @escaping (NTUser?) -> ()) {
         managedObjectContext.perform {
             if let user = self.userData(For: userId, isGroup: isGroup, managedObjectContext: managedObjectContext){
-                completion(NTUser.init(userData: user))
+                completion(NTUser.init(ntUserData: user))
             }
             
             let userData: NTUserData = managedObjectContext.insertObject()
             userData.userId = userId
             userData.isGroup = NSNumber.init(value: isGroup)
             
-            let user = NTUser.init(userData: userData)
+            let user = NTUser.init(ntUserData: userData)
             NTDatabaseManager.sharedManager().saveChildContext(context: managedObjectContext, completion: { (success) in
                 if success{
                     completion(user)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4204D3811FF61F9400F9BD81 /* SendNewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4204D3801FF61F9400F9BD81 /* SendNewMessageViewController.swift */; };
 		4227F2431FC3EBCB00EC8818 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */; };
 		4227F2451FC3EBCB00EC8818 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4227F2441FC3EBCB00EC8818 /* ViewController.swift */; };
 		4227F2481FC3EBCB00EC8818 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4227F2461FC3EBCB00EC8818 /* Main.storyboard */; };
@@ -67,6 +68,7 @@
 		1B1720DABBD894B1E0AC1439 /* Pods-NuntiusTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests.debug.xcconfig"; sourceTree = "<group>"; };
 		39AD6A6ECE78050E3944667D /* Pods-Nuntius.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nuntius.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius.debug.xcconfig"; sourceTree = "<group>"; };
 		3AAEE02467CEA2DC9D02BE65 /* Pods-NuntiusTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuntiusTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests.release.xcconfig"; sourceTree = "<group>"; };
+		4204D3801FF61F9400F9BD81 /* SendNewMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendNewMessageViewController.swift; sourceTree = "<group>"; };
 		4227F23F1FC3EBCB00EC8818 /* Nuntius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nuntius.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4227F2441FC3EBCB00EC8818 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +155,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4204D37F1FF61F4500F9BD81 /* SendNewMessage */ = {
+			isa = PBXGroup;
+			children = (
+				4204D3801FF61F9400F9BD81 /* SendNewMessageViewController.swift */,
+			);
+			path = SendNewMessage;
+			sourceTree = "<group>";
+		};
 		4227F2361FC3EBCB00EC8818 = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +190,7 @@
 			children = (
 				4227F2421FC3EBCB00EC8818 /* AppDelegate.swift */,
 				4227F2441FC3EBCB00EC8818 /* ViewController.swift */,
+				4204D37F1FF61F4500F9BD81 /* SendNewMessage */,
 				428122131FCD47A900E83707 /* UsersCell */,
 				423F36A31FC6A25800AE9987 /* ChatViewController.swift */,
 				423F36A51FC6A65700AE9987 /* ChatCells */,
@@ -725,6 +736,7 @@
 				42745DC41FC7F6A200D3DBEF /* NTConstants.swift in Sources */,
 				FC09BC101FC988CE00B49643 /* NTMessage.swift in Sources */,
 				425AFE711FD6AAFA00BBFEFA /* NTProtocols.swift in Sources */,
+				4204D3811FF61F9400F9BD81 /* SendNewMessageViewController.swift in Sources */,
 				423F36A41FC6A25800AE9987 /* ChatViewController.swift in Sources */,
 				4227F24B1FC3EBCB00EC8818 /* Nuntius.xcdatamodeld in Sources */,
 			);
