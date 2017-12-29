@@ -110,7 +110,10 @@ extension NTXMPPConnection{
         if xmppStream.isDisconnected && self.xmppAccount?.userName != nil && self.xmppAccount?.password != nil{
             let myXMPPjID = XMPPJID.init(string: NTUtility.getCurrentUserFullId())
             if xmppStream.myJID?.user != myXMPPjID?.user{
-                xmppStream.disconnect()
+                if let stream = xmppStream{
+                    stream.disconnect()
+                }
+                
             }
             xmppStream.myJID = myXMPPjID
             do{
@@ -306,6 +309,7 @@ extension NTXMPPConnection {
     func disconnectXMPPStream() -> () {
         if xmppStream != nil{
             xmppStream.disconnectAfterSending()
+            self.sharedPresenceManager().clearPresenceOfAllUsers()
         }
     }
     

@@ -27,7 +27,7 @@ class NTPresenceManager: NSObject {
         case .online:
             xmppPresence = XMPPPresence()
             statusText = "Online"
-            showText = ""
+//            showText = ""
 //        case .unavailable:
 //            xmppPresence = XMPPPresence.init(type: "unavailable")
 //            statusText = "Offline"
@@ -73,6 +73,11 @@ class NTPresenceManager: NSObject {
             return presence
         }
         return Presence.offline
+    }
+    
+    func clearPresenceOfAllUsers() -> Void {
+        userPresence = [:]
+        NTXMPPManager.sharedManager().presenceChanged(userId: "", presence: .offline)
     }
     
     
