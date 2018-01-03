@@ -135,7 +135,7 @@ public class NTUserData: NSManagedObject {
                 let result: [NTUserData] = try childMOC.fetch(fetchRequest)
                 for userData in result{
                     userData.chatState = ChatState.inactive.nsNumber
-                    userData.presence = Presence.offline.nsNumber
+                    userData.presence = Presence.unavailable.nsNumber
                 }
                 
             }

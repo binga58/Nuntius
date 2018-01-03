@@ -84,14 +84,17 @@ class ChatViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: true)
+        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NTXMPPManager.sharedManager().removeCurrentBuddy()
+        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .gone)
     }
     
     deinit {
+        NTXMPPManager.sharedManager().removeCurrentBuddy()
         self.removeNotificationObservers()
     }
     
@@ -105,8 +108,6 @@ extension ChatViewController{
         let nib = UINib.init(nibName: sentMessageCell, bundle: nil)
         chatTableView.register(nib, forCellReuseIdentifier: sentMessageCell)
         chatTableView.register(UINib.init(nibName: receiveMessageCell, bundle: nil), forCellReuseIdentifier: receiveMessageCell)
-        
-//        navTitle.title = user?.userId
         
     }
 }
@@ -242,8 +243,17 @@ extension ChatViewController{
     
 }
 
-//MARK:--------------- Text view Handlers ---------------
-extension ChatViewController{
+//MARK:--------------- Text view Delegate ---------------
+extension ChatViewController: UITextViewDelegate{
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .composing)
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
+        
+    }
     
 }
 
@@ -265,8 +275,7 @@ extension ChatViewController{
     @objc func keyboardWillShow(sender: NSNotification) -> Void {
         if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= (keyboardSize.height + 0)
-                debugPrint("\(self.view.frame) ========== \(keyboardSize.height)")
+                self.view.frame.origin.y -= keyboardSize.height
             }
         }
     }
@@ -275,7 +284,6 @@ extension ChatViewController{
         if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y != 0{
                 self.view.frame.origin.y += keyboardSize.height
-                debugPrint("\(self.view.frame) --------- \(keyboardSize.height)")
             }
         }
     }

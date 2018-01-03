@@ -128,7 +128,7 @@ enum ChatState: Int{
 enum Presence: Int {
     case online = 1
     case offline
-    case away, busy /*, unavailable*/
+    case away, busy, unavailable
     
     var nsNumber: NSNumber{
         return NSNumber.init(value: self.rawValue)

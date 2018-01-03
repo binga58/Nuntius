@@ -13,7 +13,7 @@ class NTXMPPManager: NSObject {
     
     static var xmppManager : NTXMPPManager!
     var xmppConnection : NTXMPPConnection?
-    var currentUser: NTUser?
+    var currentBuddy: NTUser?
     var operationQueue: OperationQueue = {
         var tempOperationQueue = OperationQueue.init()
         return tempOperationQueue
@@ -146,12 +146,12 @@ extension NTXMPPManager{
     
     func setCurrentBuddy(buddy: NTUser?) -> Void {
         if let user = buddy{
-            currentUser = user
+            currentBuddy = user
         }
     }
     
     func removeCurrentBuddy() -> Void {
-        currentUser = nil
+        currentBuddy = nil
     }
     
 }
@@ -188,8 +188,8 @@ extension NTXMPPManager{
 
 //MARK:--------------- Send Chat state to user -----------
 extension NTXMPPManager{
-    func sendChatStateToUser(userId: String, chatState: ChatState){
-        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId, chatState: chatState){
+    func sendChatStateToUser(userId: String?, chatState: ChatState){
+        if let user = userId, let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: user, chatState: chatState){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
         
@@ -315,7 +315,7 @@ extension NTXMPPManager{
     
     @objc private func appInBackground(){
         NTUserData.markAllUsersUnavailableAndSaveToPersistentStore()
-        self.disconnect()
+//        self.disconnect()
     }
     
     @objc func appInTerminate() {

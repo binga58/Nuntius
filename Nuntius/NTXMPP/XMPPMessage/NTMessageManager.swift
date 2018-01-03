@@ -238,20 +238,26 @@ class NTMessageManager: NSObject {
                 text = ""
             }
             var createdTimestamp: NSNumber!
-            if let archived = message.element(forName: NTConstants.archived), let time = archived.attribute(forName: NTConstants.id)?.stringValue{
+            if let delay = message.element(forName: NTConstants.delay), let dateString = delay.attribute(forName: NTConstants.stamp)?.stringValue, let date: NSDate = NSDate.init(xmppDateTime: dateString){
                 
-                createdTimestamp = NSNumber.init(value: (Double(time)! / 1000000))
+                createdTimestamp = NSNumber.init(value: date.timeIntervalSince1970)
             }else{
                 createdTimestamp = NTUtility.getCurrentTime()
             }
             
             let childMOC = NTDatabaseManager.sharedManager().getChildContext()
             
-            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC, completion: { (savedMessage) in
+            NTMessageData.messageForOneToOneChat(messageId: messageId as String, messageText: text, messageStatus: .delivered, messageType: .text, isMine: false, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: NTUtility.getCurrentTime(), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC, completion: { (nTMessageData) in
                 
-                if let _ = savedMessage{
+                if let savedMessage = nTMessageData{
                     NTDatabaseManager.sharedManager().saveToPersistentStore()
                     self.sendDeliveryReceipt(message: message)
+                    if NTXMPPManager.sharedManager().currentBuddy?.userId == savedMessage.hasUser?.userId{
+                        savedMessage.readTimestamp = NTUtility.getCurrentTime()
+                        self.sendReadReciptForOneToOneChatForMessage(nTMessageData: savedMessage)
+                        
+                    }
+                    
                 }
             })
             

@@ -22,8 +22,7 @@ class NTPresenceManager: NSObject {
         var xmppPresence: XMPPPresence!
         var statusText: String?
         var showText: String?
-        switch myPresence
-        {
+        switch myPresence{
         case .online:
             xmppPresence = XMPPPresence()
             statusText = "Online"
@@ -39,6 +38,8 @@ class NTPresenceManager: NSObject {
             xmppPresence = XMPPPresence()
             statusText = "Busy"
             showText = "dnd"
+        default:
+            break;
         }
         
         if let _ = statusText, let statusNode = DDXMLElement.element(withName: NTConstants.status) as? DDXMLElement{
