@@ -10,9 +10,11 @@ import UIKit
 import CoreData
 
 class ChatViewController: UIViewController {
+    //IBOutlets
     @IBOutlet weak var textVIew: UITextView!
+    @IBOutlet weak var chatTableView: UITableView!
     
-    @IBOutlet weak var navTitle: UINavigationItem!
+    //Variables
     var messageHeight: NSCache<NSString, NSNumber> = {
         let cache = NSCache<NSString, NSNumber>()
         cache.countLimit = 1000
@@ -28,8 +30,6 @@ class ChatViewController: UIViewController {
         messageFetchRequest.predicate = NSPredicate.init(format: "\(NTMessageData.messageDataHasUser).\(NTUserData.userDataUserId) == %@ && \(NTMessageData.messageDataHasUser).\(NTUserData.userDataIsGroup) == %@",(buddy?.userId)!,(buddy?.isGroup)!)
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataReceivedTimestamp)", ascending: true)
         messageFetchRequest.sortDescriptors = [primarySortDescriptor]
-//        messageFetchRequest.fetchBatchSize = 20
-        
         let frc = NSFetchedResultsController(
             fetchRequest: messageFetchRequest,
             managedObjectContext: NTDatabaseManager.sharedManager().getMainManagedObjectContext(),
@@ -42,7 +42,7 @@ class ChatViewController: UIViewController {
     }()
     
     
-    @IBOutlet weak var chatTableView: UITableView!
+    //MARK:----------------- View Life cycle methods ------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpTable()
@@ -52,6 +52,7 @@ class ChatViewController: UIViewController {
         } catch {
             print(error)
         }
+        self.addNotificationObservers()
         // Do any additional setup after loading the view.
     }
 
@@ -80,25 +81,20 @@ class ChatViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: true)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NTXMPPManager.sharedManager().removeCurrentBuddy()
     }
     
-    
-    @IBAction func sendTaped(_ sender: Any) {
-        let messageText = textVIew.text
-        textVIew.text = ""
-        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (buddy?.userId)! )
-//        chatTableView.insertRows(at: [NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath], with: .automatic)
-//        self.goToBottom()
-//        NTXMPPManager.xmppConnection?.loadarchivemsg()
-        
+    deinit {
+        self.removeNotificationObservers()
     }
     
-    @objc func goToBottom(){
-//        chatTableView.scrollToRow(at: NSIndexPath.init(row: messages.count - 1, section: 0) as IndexPath, at: .bottom, animated: true)
-    }
 }
 
 //MARK:-------------------- Table view helper --------------------
@@ -222,58 +218,65 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
                         }
                     }
                 }
-                
-//                if let cell = chatTableView.cellForRowAtIndexPath(indexPath) as? UITableViewCell {
-//                    configureCell(cell, withObject: object)
-//                }
             }
             
         case .move:
-
-            if let indexPath = indexPath {
-//                if let newIndexPath = newIndexPath {
-//                    chatTableView.deleteRowsAtIndexPaths([indexPath],
-//                                                     withRowAnimation: UITableViewRowAnimation.Fade)
-//                    chatTableView.insertRowsAtIndexPaths([newIndexPath],
-//                                                     withRowAnimation: UITableViewRowAnimation.Fade)
-//                }
-            }
+            break;
         }
     }
-//
-//    func controller(controller: NSFetchedResultsController,
-//                    didChangeSection sectionInfo: NSFetchedResultsSectionInfo,
-//                    atIndex sectionIndex: Int,
-//                    forChangeType type: NSFetchedResultsChangeType)
-//    {
-//        switch(type) {
-//
-//        case .Insert:
-//            tableView.insertSections(NSIndexSet(index: sectionIndex),
-//                                     withRowAnimation: UITableViewRowAnimation.Fade)
-//
-//        case .Delete:
-//            tableView.deleteSections(NSIndexSet(index: sectionIndex),
-//                                     withRowAnimation: UITableViewRowAnimation.Fade)
-//
-//        default:
-//            break
-//        }
-//    }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.chatTableView.endUpdates()
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: true)
-//        chatTableView.reloadData()
     }
     
 }
 
-extension UITableView{
-    func indexPathForLastRow() -> IndexPath {
-        return IndexPath(row: numberOfRows(inSection: numberOfSections - 1) - 1, section: numberOfSections - 1)
+//MARK:----------------- Button Actions ------------------
+extension ChatViewController{
+    @IBAction func sendTaped(_ sender: Any) {
+        let messageText = textVIew.text
+        textVIew.text = ""
+        NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (buddy?.userId)! )
     }
+    
+}
+
+//MARK:--------------- Text view Handlers ---------------
+extension ChatViewController{
+    
 }
 
 
+//MARK:--------------- Add/Remove Notifications ----------
+extension ChatViewController{
+    func addNotificationObservers() -> Void {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func removeNotificationObservers() -> Void {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
 
+//MARK:---------------- Keyboard handler --------------
+extension ChatViewController{
+    @objc func keyboardWillShow(sender: NSNotification) -> Void {
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= (keyboardSize.height + 0)
+                debugPrint("\(self.view.frame) ========== \(keyboardSize.height)")
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(sender: NSNotification) -> Void {
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+                debugPrint("\(self.view.frame) --------- \(keyboardSize.height)")
+            }
+        }
+    }
+}

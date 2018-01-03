@@ -309,7 +309,7 @@ extension NTXMPPConnection {
     func disconnectXMPPStream() -> () {
         if xmppStream != nil{
             xmppStream.disconnectAfterSending()
-            self.sharedPresenceManager().clearPresenceOfAllUsers()
+//            self.sharedPresenceManager().clearPresenceOfAllUsers()
         }
     }
     

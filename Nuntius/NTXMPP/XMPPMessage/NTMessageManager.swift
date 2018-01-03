@@ -175,7 +175,6 @@ class NTMessageManager: NSObject {
                 
                 if stanzaId == messageId{
                     
-                    
                     messageData.messageStatus = MessageStatus.read.nsNumber
                     
                     NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (success) in

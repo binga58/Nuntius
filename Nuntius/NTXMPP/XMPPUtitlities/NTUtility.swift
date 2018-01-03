@@ -92,3 +92,9 @@ protocol ManagedObjectType {
 protocol KeyCodable {
     associatedtype Key: RawRepresentable
 }
+
+extension UITableView{
+    func indexPathForLastRow() -> IndexPath {
+        return IndexPath(row: numberOfRows(inSection: numberOfSections - 1) - 1, section: numberOfSections - 1)
+    }
+}

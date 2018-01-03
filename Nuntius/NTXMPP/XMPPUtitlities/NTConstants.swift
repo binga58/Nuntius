@@ -114,11 +114,15 @@ enum MessageType: Int, EnumToNSNumber {
 
 
 enum ChatState: Int{
-    case active = 0
+    case gone = 0
+    case active
     case composing
     case paused
     case inactive
-    case gone
+    
+    var nsNumber: NSNumber{
+        return NSNumber.init(value: self.rawValue)
+    }
 }
 
 enum Presence: Int {

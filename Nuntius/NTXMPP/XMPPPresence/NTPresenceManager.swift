@@ -11,7 +11,7 @@ import XMPPFramework
 
 class NTPresenceManager: NSObject {
     
-    fileprivate var userPresence: [String:Presence] = [:]
+//    fileprivate var userPresence: [String:Presence] = [:]
     
     /**
      Creates presence node with given presence status
@@ -27,10 +27,6 @@ class NTPresenceManager: NSObject {
         case .online:
             xmppPresence = XMPPPresence()
             statusText = "Online"
-//            showText = ""
-//        case .unavailable:
-//            xmppPresence = XMPPPresence.init(type: "unavailable")
-//            statusText = "Offline"
         case .offline:
             xmppPresence = XMPPPresence()
             statusText = "Offline"
@@ -63,24 +59,6 @@ class NTPresenceManager: NSObject {
         
     }
     
-    func updateUserPresence(user: String, presence: Presence) {
-        userPresence[user] = presence
-        NTXMPPManager.sharedManager().presenceChanged(userId: user, presence: presence)
-    }
-    
-    func getPresence(user: String) -> Presence {
-        if let presence = userPresence[user]{
-            return presence
-        }
-        return Presence.offline
-    }
-    
-    func clearPresenceOfAllUsers() -> Void {
-        userPresence = [:]
-        NTXMPPManager.sharedManager().presenceChanged(userId: "", presence: .offline)
-    }
-    
-    
 }
 
 //MARK:------------------ XMPPStream presence delegate -------------
@@ -96,7 +74,6 @@ extension NTPresenceManager: XMPPStreamDelegate{
                 switch presence.showValue{
                 case .away:
                     userPresence = .away
-                    
                 case .DND:
                     userPresence = .busy
                 case .XA:
@@ -107,10 +84,26 @@ extension NTPresenceManager: XMPPStreamDelegate{
                     userPresence = .online
                 }
                 
-                self.updateUserPresence(user: fromUser, presence: userPresence)
+                let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+                NTUserData.userData(For: fromUser, isGroup: false, managedObjectContext: childMOC, completion: { (nTUserdata) in
+                    if let userData = nTUserdata{
+                        userData.presence = userPresence.nsNumber
+                        NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (_) in
+                            
+                        })
+                    }
+                })
                 
             }else{
-                self.updateUserPresence(user: fromUser, presence: .offline)
+                let childMOC = NTDatabaseManager.sharedManager().getChildContext()
+                NTUserData.userData(For: fromUser, isGroup: false, managedObjectContext: childMOC, completion: { (nTUserdata) in
+                    if let userData = nTUserdata{
+                        userData.presence = Presence.offline.nsNumber
+                        NTDatabaseManager.sharedManager().saveChildContext(context: childMOC, completion: { (_) in
+                            
+                        })
+                    }
+                })
             }
         }
         
@@ -120,6 +113,7 @@ extension NTPresenceManager: XMPPStreamDelegate{
     func xmppStream(_ sender: XMPPStream, didSend presence: XMPPPresence) {
         
     }
+    
 }
 
 extension NTPresenceManager: XMPPRosterDelegate{

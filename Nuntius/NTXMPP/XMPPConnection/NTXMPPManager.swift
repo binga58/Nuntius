@@ -87,11 +87,11 @@ class NTXMPPManager: NSObject {
 //MARK:-------------- Add delegate -------------------
 
 extension NTXMPPManager{
-    func addPresenceDelegate(viewController: PresenceChanged?) {
-        if let delegate = viewController{
-            self.presenceDelegate = delegate
-        }
-    }
+//    func addPresenceDelegate(viewController: PresenceChanged?) {
+//        if let delegate = viewController{
+//            self.presenceDelegate = delegate
+//        }
+//    }
     
 }
 
@@ -188,8 +188,8 @@ extension NTXMPPManager{
 
 //MARK:--------------- Send Chat state to user -----------
 extension NTXMPPManager{
-    func sendChatStateToUser(userId: String){
-        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId, chatState: .active){
+    func sendChatStateToUser(userId: String, chatState: ChatState){
+        if let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: userId, chatState: chatState){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }
         
@@ -314,12 +314,12 @@ extension NTXMPPManager{
     }
     
     @objc private func appInBackground(){
-        NTDatabaseManager.sharedManager().saveToPersistentStore()
+        NTUserData.markAllUsersUnavailableAndSaveToPersistentStore()
         self.disconnect()
     }
     
     @objc func appInTerminate() {
-        NTDatabaseManager.sharedManager().saveToPersistentStore()
+        NTUserData.markAllUsersUnavailableAndSaveToPersistentStore()
         self.disconnect()
         self.xmppConnection?.clearXMPPStream()
     }

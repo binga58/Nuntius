@@ -2,8 +2,8 @@
 //  NTUserData+CoreDataProperties.swift
 //  Nuntius
 //
-//  Created by Abhishek Sharma on 28/11/17.
-//  Copyright © 2017 Finoit Technologies. All rights reserved.
+//  Created by Abhishek Sharma on 02/01/18.
+//  Copyright © 2018 Finoit Technologies. All rights reserved.
 //
 //
 
@@ -20,17 +20,11 @@ extension NTUserData {
     @NSManaged public var isGroup: NSNumber?
     @NSManaged public var lastActivityTime: NSNumber?
     @NSManaged public var lastMessageId: String?
-    var presence: NSNumber? {
-        if let user = userId{
-            return NTXMPPManager.sharedManager().xmppConnection?.sharedPresenceManager().getPresence(user: user).nsNumber
-        }else{
-            return Presence.offline.nsNumber
-        }
-    }
+    @NSManaged public var presence: NSNumber?
     @NSManaged public var userId: String?
+    @NSManaged public var chatState: NSNumber?
     @NSManaged public var hasGroupMessages: NSSet?
     @NSManaged public var hasMessages: NSSet?
-    
 
 }
 
