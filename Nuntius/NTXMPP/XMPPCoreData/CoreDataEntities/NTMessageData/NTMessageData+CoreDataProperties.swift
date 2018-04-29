@@ -20,7 +20,7 @@ extension NTMessageData {
     @NSManaged public var createdTimestamp: NSNumber?
     @NSManaged public var deliveredTimestamp: NSNumber?
     @NSManaged public var isMine: NSNumber?
-    @NSManaged public var messageId: String?
+    @NSManaged public var msgId: String?
     @NSManaged public var messageStatus: NSNumber?
     @NSManaged public var messageText: String?
     @NSManaged public var messageType: NSNumber?

@@ -99,16 +99,16 @@ extension NTXMPPManager{
 //MARK:-------------- Send Messages -------------------
 extension NTXMPPManager{
     func sendMessage(messageText: String, userId: String){
-        let messageId = NTUtility.getMessageId()
+        let msgId = NTUtility.getMessageId()
         
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        NTMessageData.messageForOneToOneChat(messageId: messageId, messageText: messageText, messageStatus: .waiting, messageType: .text, isMine: true, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NSNumber.init(value: 0), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC) { (messageObj) in
+        NTMessageData.messageForOneToOneChat(msgId: msgId, messageText: messageText, messageStatus: .waiting, messageType: .text, isMine: true, userId: userId, createdTimestamp: NTUtility.getCurrentTime(), deliveredTimestamp: NSNumber.init(value: 0), readTimestamp: NSNumber.init(value: 0), receivedTimestamp: NTUtility.getCurrentTime(), managedObjectContext: childMOC) { (messageObj) in
             
             if let msg = messageObj{
                 NTDatabaseManager.sharedManager().saveToPersistentStore()
                 self.operationQueue.addOperation {
-                    if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, messageId: messageId){
+                    if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, msgId: msgId){
                         NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
                     }
                 }
@@ -125,7 +125,7 @@ extension NTXMPPManager{
             if let list = messageDataList{
                 for msg in list{
                     self.operationQueue.addOperation {
-                        if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, messageId: msg.messageId!){
+                        if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, msgId: msg.msgId!){
                             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
                         }
                     }

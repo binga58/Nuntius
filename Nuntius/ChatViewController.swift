@@ -8,8 +8,10 @@
 
 import UIKit
 import CoreData
+import MessageKit
+import MapKit
 
-class ChatViewController: UIViewController {
+class ChatViewController: MessagesViewController {
     //IBOutlets
     @IBOutlet weak var textVIew: UITextView!
     @IBOutlet weak var chatTableView: UITableView!
@@ -41,6 +43,8 @@ class ChatViewController: UIViewController {
         return frc as! NSFetchedResultsController<NTMessageData>
     }()
     
+    var allMessages = [NTMessageData]()
+    
     
     //MARK:----------------- View Life cycle methods ------------------
     override func viewDidLoad() {
@@ -49,9 +53,20 @@ class ChatViewController: UIViewController {
         self.title = buddy?.userId
         do {
             try fetchedResultsController.performFetch()
+            allMessages = fetchedResultsController.fetchedObjects ?? []
         } catch {
             print(error)
         }
+        
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
+//        messagesCollectionView.messageCellDelegate = self
+        messageInputBar.delegate = self
+        
+        scrollsToBottomOnKeybordBeginsEditing = true // default false
+        maintainPositionOnKeyboardFrameChanged = true // default false
+        
         self.addNotificationObservers()
         // Do any additional setup after loading the view.
     }
@@ -163,7 +178,7 @@ extension ChatViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         
         let messageData = fetchedResultsController.object(at: indexPath)
-        if let messageId = messageData.messageId, let msgHeight: NSNumber = self.messageHeight.object(forKey: messageId as NSString){
+        if let msgId = messageData.msgId, let msgHeight: NSNumber = self.messageHeight.object(forKey: msgId as NSString){
             return CGFloat(msgHeight.floatValue)
         }
         
@@ -179,7 +194,7 @@ extension ChatViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let messageData = fetchedResultsController.object(at: indexPath)
         let cellRect = tableView.rectForRow(at: indexPath)
-        messageHeight.setObject(NSNumber.init(value: Float(cellRect.height)), forKey: messageData.messageId! as NSString)
+        messageHeight.setObject(NSNumber.init(value: Float(cellRect.height)), forKey: messageData.msgId! as NSString)
         
     }
     
@@ -197,19 +212,27 @@ extension ChatViewController: NSFetchedResultsControllerDelegate{
         switch(type) {
             
         case .insert:
-            if let newIndexPath = newIndexPath {
-                chatTableView.insertRows(at: [newIndexPath as IndexPath], with: .bottom)
+            if let newIndexPath = newIndexPath, let message = anObject as? NTMessageData {
+                allMessages.insert(message, at: newIndexPath.row)
+//                chatTableView.insertRows(at: [newIndexPath as IndexPath], with: .bottom)
+                messagesCollectionView.insertSections([allMessages.count - 1])
+                messagesCollectionView.scrollToBottom()
             }
             
         case .delete:
-            if let indexPath = indexPath {
-                chatTableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
+            if let indexPath = indexPath, let message = anObject as? NTMessageData {
+                allMessages.remove(at: indexPath.row)
+                messagesCollectionView.deleteSections([allMessages.count - 1])
+//                chatTableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
             }
             
         case .update:
             if let indexPath = indexPath {
                 
                 let messageData: NTMessageData = fetchedResultsController.object(at: indexPath)
+                
+                
+                
                 if (messageData.isMine?.boolValue)!{
                     if let cell = chatTableView.cellForRow(at: indexPath) as? ChatSentMessageTableViewCell{
                         cell.configureCell(message: NTMessage.init(messageData: messageData))
@@ -286,5 +309,180 @@ extension ChatViewController{
                 self.view.frame.origin.y += keyboardSize.height
             }
         }
+    }
+}
+
+extension ChatViewController: MessagesDataSource{
+    func currentSender() -> Sender {
+        return Sender(id: NTXMPPManager.sharedManager().xmppAccount.userName!, displayName: (NTXMPPManager.sharedManager().xmppAccount.userName)!)
+    }
+    
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+        return allMessages[indexPath.section]
+    }
+    
+    func numberOfMessages(in messagesCollectionView: MessagesCollectionView) -> Int {
+        return allMessages.count
+    }
+    
+    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        let name = message.sender.displayName
+        return NSAttributedString(string: name, attributes: [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .caption1)])
+    }
+    
+    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        struct ConversationDateFormatter {
+            static let formatter: DateFormatter = {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .medium
+                return formatter
+            }()
+        }
+        let formatter = ConversationDateFormatter.formatter
+        let dateString = formatter.string(from: message.sentDate)
+        return NSAttributedString(string: dateString, attributes: [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .caption2)])
+    }
+}
+
+// MARK: - MessagesLayoutDelegate
+
+extension ChatViewController: MessagesLayoutDelegate {
+    
+    func avatarPosition(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition {
+        return AvatarPosition(horizontal: .natural, vertical: .messageBottom)
+    }
+    
+    func messagePadding(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets {
+        if isFromCurrentSender(message: message) {
+            return UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 4)
+        } else {
+            return UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 30)
+        }
+    }
+    
+    func cellTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+        if isFromCurrentSender(message: message) {
+            return .messageTrailing(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10))
+        } else {
+            return .messageLeading(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
+        }
+    }
+    
+    func cellBottomLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+        if isFromCurrentSender(message: message) {
+            return .messageLeading(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
+        } else {
+            return .messageTrailing(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10))
+        }
+    }
+    
+    func footerViewSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
+        
+        return CGSize(width: messagesCollectionView.bounds.width, height: 10)
+    }
+    
+    // MARK: - Location Messages
+    
+    func heightForLocation(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 200
+    }
+    
+}
+
+extension ChatViewController: MessageInputBarDelegate {
+    
+    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        
+        // Each NSTextAttachment that contains an image will count as one empty character in the text: String
+        
+        for component in inputBar.inputTextView.components {
+            
+//            if let image = component as? UIImage {
+//
+//                let imageMessage = MockMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//                messageList.append(imageMessage)
+//                messagesCollectionView.insertSections([messageList.count - 1])
+//
+//            } else
+            if let text = component as? String {
+            
+                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.blue])
+                
+                NTXMPPManager.sharedManager().sendMessage(messageText: text, userId: (buddy?.userId)! )
+                
+//                let message = MockMessage(attributedText: attributedText, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//                messageList.append(message)
+//                messagesCollectionView.insertSections([messageList.count - 1])
+            }
+            
+        }
+        
+        inputBar.inputTextView.text = String()
+        messagesCollectionView.scrollToBottom()
+    }
+    
+}
+
+// MARK: - MessagesDisplayDelegate
+
+extension ChatViewController: MessagesDisplayDelegate {
+    
+    // MARK: - Text Messages
+    
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? .white : .darkText
+    }
+    
+    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedStringKey : Any] {
+        return MessageLabel.defaultAttributes
+    }
+    
+    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+        return [.url, .address, .phoneNumber, .date]
+    }
+    
+    // MARK: - All Messages
+    
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? UIColor(red: 69/255, green: 193/255, blue: 89/255, alpha: 1) : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+    }
+    
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        let corner: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
+        return .bubbleTail(corner, .curved)
+        //        let configurationClosure = { (view: MessageContainerView) in}
+        //        return .custom(configurationClosure)
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//        let avatar = SampleData.shared.getAvatarFor(sender: message.sender)
+        avatarView.set(avatar: Avatar())
+    }
+    
+    // MARK: - Location Messages
+    
+    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
+        let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
+        let pinImage = #imageLiteral(resourceName: "pin")
+        annotationView.image = pinImage
+        annotationView.centerOffset = CGPoint(x: 0, y: -pinImage.size.height / 2)
+        return annotationView
+    }
+    
+    func animationBlockForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
+        return { view in
+            view.layer.transform = CATransform3DMakeScale(0, 0, 0)
+            view.alpha = 0.0
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [], animations: {
+                view.layer.transform = CATransform3DIdentity
+                view.alpha = 1.0
+            }, completion: nil)
+        }
+    }
+    
+    func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
+        
+        return LocationMessageSnapshotOptions()
     }
 }

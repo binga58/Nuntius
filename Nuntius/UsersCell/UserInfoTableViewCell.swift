@@ -31,7 +31,7 @@ class UserInfoTableViewCell: UITableViewCell {
         
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
         
-        if let messageId = userData.lastMessageId, let lastMessage: NTMessage = NTMessageData.message(messageId: messageId, managedObjectContext: childMOC){
+        if let msgId = userData.lastMessageId, let lastMessage: NTMessage = NTMessageData.message(msgId: msgId, managedObjectContext: childMOC){
             lastMessageLBL.text = lastMessage.messageText
         }
         let presence = Presence(rawValue: (userData.presence?.intValue)!)

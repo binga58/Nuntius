@@ -1131,7 +1131,7 @@ extern const NSTimeInterval XMPPStreamTimeoutNone;
  * 
  * Typically these kinds of elements are not allowed by the XMPP server.
  * But some custom implementations may use them.
- * The standard example is XEP-0198, which uses <r> & <a>elements.
+ * The standard example is XEP-0198, which uses <r> & <a> elements.
  * 
  * If you're using custom elements, you must register the custom element name(s).
  * Otherwise the xmppStream will treat non-XMPP elements as errors (xmppStream:didReceiveError:).

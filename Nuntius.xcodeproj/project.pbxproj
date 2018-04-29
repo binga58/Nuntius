@@ -419,8 +419,7 @@
 				4227F23B1FC3EBCB00EC8818 /* Sources */,
 				4227F23C1FC3EBCB00EC8818 /* Frameworks */,
 				4227F23D1FC3EBCB00EC8818 /* Resources */,
-				CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */,
-				9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */,
+				F2DBCCBEF1FCA046DD398F85 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -439,8 +438,6 @@
 				4227F2521FC3EBCB00EC8818 /* Sources */,
 				4227F2531FC3EBCB00EC8818 /* Frameworks */,
 				4227F2541FC3EBCB00EC8818 /* Resources */,
-				6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */,
-				58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -460,8 +457,6 @@
 				4227F25D1FC3EBCB00EC8818 /* Sources */,
 				4227F25E1FC3EBCB00EC8818 /* Frameworks */,
 				4227F25F1FC3EBCB00EC8818 /* Resources */,
-				20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */,
-				38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -551,21 +546,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		20E9C30D50066266C4868FE7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -582,66 +562,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B44D42231AAB98C1F1E75EEB /* [CP] Check Pods Manifest.lock */ = {
@@ -680,7 +600,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */ = {
+		F2DBCCBEF1FCA046DD398F85 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -690,6 +610,7 @@
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/KissXML/KissXML.framework",
+				"${BUILT_PRODUCTS_DIR}/MessageKit/MessageKit.framework",
 				"${BUILT_PRODUCTS_DIR}/XMPPFramework/XMPPFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/libidn/libidn.framework",
 			);
@@ -698,6 +619,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KissXML.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MessageKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XMPPFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libidn.framework",
 			);

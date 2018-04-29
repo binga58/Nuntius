@@ -9,13 +9,14 @@
 
 import Foundation
 import CoreData
+import MessageKit
 
 @objc(NTMessageData)
 public class NTMessageData: NSManagedObject {
     
     /**
      Saves message in the context
-     - parameter messageId: Message Id for user.
+     - parameter msgId: Message Id for user.
      - parameter messageText: text of message
      - parameter messageStatus: current status of message like sent, delivered, read etc.
      - parameter messageType: type of message like text or image.
@@ -28,16 +29,16 @@ public class NTMessageData: NSManagedObject {
      - parameter managedObjectContext: context in which message to be stored.
      - parameter completion: completion block called with saved message
      */
-    class func messageForOneToOneChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber,receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessageData?) -> ()) {
+    class func messageForOneToOneChat(msgId: String, messageText: String, messageStatus: MessageStatus, messageType: NTMessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber,receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext ,completion: @escaping (NTMessageData?) -> ()) {
         
-        self.messageForGroupChat(messageId: messageId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, receivedTimestamp: receivedTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
+        self.messageForGroupChat(msgId: msgId, messageText: messageText, messageStatus: messageStatus, messageType: messageType, isMine: isMine, userId: userId, createdTimestamp: createdTimestamp, deliveredTimestamp: deliveredTimestamp, readTimestamp: readTimestamp, receivedTimestamp: receivedTimestamp, managedObjectContext: managedObjectContext, groupId: nil, completion: completion)
         
     }
     
     
     /**
      Saves message in the context
-     - parameter messageId: Message Id for user.
+     - parameter msgId: Message Id for user.
      - parameter messageText: text of message
      - parameter messageStatus: current status of message like sent, delivered, read etc.
      - parameter messageType: type of message like text or image.
@@ -52,9 +53,9 @@ public class NTMessageData: NSManagedObject {
      - parameter completion: completion block called with saved message
      */
     
-    class func messageForGroupChat(messageId: String, messageText: String, messageStatus: MessageStatus, messageType: MessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessageData?) -> ()) {
+    class func messageForGroupChat(msgId: String, messageText: String, messageStatus: MessageStatus, messageType: NTMessageType, isMine: Bool, userId: String, createdTimestamp: NSNumber, deliveredTimestamp: NSNumber, readTimestamp: NSNumber, receivedTimestamp: NSNumber, managedObjectContext: NSManagedObjectContext, groupId: String? ,completion: @escaping (NTMessageData?) -> ()) {
         
-        NTMessageData.message(messageId: messageId, managedObjectContext: managedObjectContext) { (objectId) in
+        NTMessageData.message(msgId: msgId, managedObjectContext: managedObjectContext) { (objectId) in
             
             if let _ = objectId{
                 completion(nil)
@@ -62,7 +63,7 @@ public class NTMessageData: NSManagedObject {
                 managedObjectContext.perform {
                     let messageData: NTMessageData = managedObjectContext.insertObject()
                     
-                    messageData.messageId = messageId
+                    messageData.msgId = msgId
                     messageData.messageText = messageText
                     messageData.messageStatus = messageStatus.nsNumber
                     messageData.messageType = messageType.nsNumber
@@ -79,7 +80,7 @@ public class NTMessageData: NSManagedObject {
                         if let _ = groupId{
                             
                         }else{
-                            userData.lastMessageId = messageData.messageId
+                            userData.lastMessageId = messageData.msgId
                             userData.lastActivityTime = createdTimestamp
                         }
                         
@@ -93,7 +94,7 @@ public class NTMessageData: NSManagedObject {
                     
                     
                     if let groupData = messageData.hasGroup{
-                        groupData.lastMessageId = messageData.messageId
+                        groupData.lastMessageId = messageData.msgId
                         groupData.lastActivityTime = createdTimestamp
                         group = NTUser.init(ntUserData: groupData)
                     }
@@ -127,16 +128,16 @@ public class NTMessageData: NSManagedObject {
     
     /**
      Searches message in the context
-     - parameter messageId: Message Id to search.
+     - parameter msgId: Message Id to search.
      - parameter managedObjectContext: context in which to search.
      - parameter messageIdFetchCompletion: completion called on finding the message or returns nil.
      */
-    class func message(messageId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NTMessageData?) -> ()){
+    class func message(msgId: String, managedObjectContext: NSManagedObjectContext, messageIdFetchCompletion:@escaping (NTMessageData?) -> ()){
         
         managedObjectContext.perform {
             let fetchRequest = NTMessageData.messageFetchRequest()
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", messageId)
+            fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", msgId)
             do{
                 let result:[NTMessageData]? = try managedObjectContext.fetch(fetchRequest)
                 
@@ -156,14 +157,14 @@ public class NTMessageData: NSManagedObject {
     
     /**
      Searches message in the context
-     - parameter messageId: Message Id to search.
+     - parameter msgId: Message Id to search.
      - parameter managedObjectContext: context in which to search.
      - Returns: If found returns message object converted to message model class or nil if not found.
      */
-    class func message(messageId: String, managedObjectContext: NSManagedObjectContext) -> NTMessage?{
+    class func message(msgId: String, managedObjectContext: NSManagedObjectContext) -> NTMessage?{
         
         let fetchRequest = NTMessageData.messageFetchRequest()
-        fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", messageId)
+        fetchRequest.predicate = NSPredicate.init(format: "\(messageDataMessageId) == %@", msgId)
         fetchRequest.fetchLimit = 1
         let primarySortDescriptor = NSSortDescriptor(key: "\(NTMessageData.messageDataCreatedTimeStamp)", ascending: true)
         fetchRequest.sortDescriptors = [primarySortDescriptor]
@@ -187,9 +188,9 @@ public class NTMessageData: NSManagedObject {
 
 extension NTMessageData{
     
-    class func markMessageDeliverd(messageId: String, completion:@escaping (NTMessageData?) -> ()){
+    class func markMessageDeliverd(msgId: String, completion:@escaping (NTMessageData?) -> ()){
         let childMOC = NTDatabaseManager.sharedManager().getChildContext()
-        self.message(messageId: messageId, managedObjectContext: childMOC) { (nTMessageData) in
+        self.message(msgId: msgId, managedObjectContext: childMOC) { (nTMessageData) in
             if let messageData = nTMessageData{
                 
                 if (messageData.messageStatus?.intValue)! < MessageStatus.delivered.nsNumber.intValue{
@@ -315,7 +316,7 @@ extension NTMessageData{
 
 
 extension NTMessageData{
-    static let messageDataMessageId = "messageId"
+    static let messageDataMessageId = "msgId"
     static let messageDataCreatedTimeStamp = "createdTimestamp"
     static let messageDataDeliveredTimestamp = "deliveredTimestamp"
     static let messageDataIsMine = "isMine"
@@ -339,5 +340,24 @@ extension NTMessageData{
     }
 }
 
+extension NTMessageData: MessageType{
+    public var sender: Sender {
+        return (isMine?.boolValue ?? true) ? Sender(id: NTXMPPManager.sharedManager().xmppAccount.userName!, displayName: (NTXMPPManager.sharedManager().xmppAccount.userName)!) : Sender(id: (hasUser?.userId)!, displayName: (hasUser?.userId)!)
+    }
+    
+    public var messageId: String {
+        return msgId!
+    }
+    
+    public var sentDate: Date {
+        return (isMine?.boolValue ?? true) ? Date(timeIntervalSince1970: (createdTimestamp?.doubleValue ?? 0)) : Date(timeIntervalSince1970: (receivedTimestamp?.doubleValue ?? 0))
+    }
+    
+    public var data: MessageData {
+        return MessageData.text(messageText ?? "Demo")
+    }
+    
+    
+}
 
 

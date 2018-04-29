@@ -96,18 +96,18 @@ enum MessageStatus: Int,EnumToNSNumber {
     
 }
 
-enum MessageType: Int, EnumToNSNumber {
+enum NTMessageType: Int, EnumToNSNumber {
     var nsNumber: NSNumber{
         return NSNumber.init(value: self.rawValue)
     }
     
     case text = 0
     
-    static func numberToMessageType(number:NSNumber?) -> MessageType? {
+    static func numberToMessageType(number:NSNumber?) -> NTMessageType? {
         if let messageStatus = number?.intValue{
-            return MessageType.init(rawValue: messageStatus)
+            return NTMessageType.init(rawValue: messageStatus)
         }
-        return MessageType.text
+        return NTMessageType.text
     }
     
 }

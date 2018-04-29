@@ -26,10 +26,10 @@ class NTIQManger: NSObject {
 //        id='time_1'>
 //        <time xmlns='urn:xmpp:time'/>
 //        </iq>
-        let messageId = NTUtility.getMessageId()
+        let msgId = NTUtility.getMessageId()
         
         //Closure which defines action taken after we get the result from server
-        outstandingXMPPStanzaResponseBlocks[messageId] = { (success: Bool,iq: XMPPIQ) in
+        outstandingXMPPStanzaResponseBlocks[msgId] = { (success: Bool,iq: XMPPIQ) in
             if(success){
                 
                 if let timeElement = iq.element(forName: NTConstants.time), let utcTimeStanza = timeElement.element(forName: NTConstants.utc), let utcTime = utcTimeStanza.stringValue, let serverDateTime = NSDate.init(xmppDateTime: utcTime){
@@ -49,7 +49,7 @@ class NTIQManger: NSObject {
         //Creates stanza for requesting server time
         let serverTimeNode = XMPPIQ.init(iqType: .get)
         serverTimeNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
-        serverTimeNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        serverTimeNode.addAttribute(withName: NTConstants.id, stringValue: msgId)
         serverTimeNode.addAttribute(withName: NTConstants.to, stringValue: NTXMPPManager.sharedManager().xmppAccount.serverDomain!)
         
         let timenode = DDXMLElement.init(name: NTConstants.time, xmlns: NTConstants.xmlnsType.time)
@@ -68,10 +68,10 @@ class NTIQManger: NSObject {
 //        <query xmlns='http://jabber.org/protocol/disco#info'/>
 //        </iq>
         
-        let messageId = NTUtility.getMessageId()
+        let msgId = NTUtility.getMessageId()
         
         //Closure which defines action taken after we get the result from server
-        outstandingXMPPStanzaResponseBlocks[messageId] = { (success: Bool,iq: XMPPIQ) in
+        outstandingXMPPStanzaResponseBlocks[msgId] = { (success: Bool,iq: XMPPIQ) in
             if(success){
                 
             }
@@ -81,7 +81,7 @@ class NTIQManger: NSObject {
         
         let iqNode = XMPPIQ.init(iqType: .get)
         iqNode.addAttribute(withName: NTConstants.from, stringValue: NTUtility.getCurrentUserFullId())
-        iqNode.addAttribute(withName: NTConstants.id, stringValue: messageId)
+        iqNode.addAttribute(withName: NTConstants.id, stringValue: msgId)
         iqNode.addAttribute(withName: NTConstants.to, stringValue: NTXMPPManager.sharedManager().xmppAccount.serverDomain!)
         
 //        let queryNode = XMLElement.init(name: NTConstants.query, xmlns: <#T##String#>)
@@ -98,9 +98,9 @@ extension NTIQManger{
      */
     func callAndRemoveOutstandingBlock(success: Bool,iq: XMPPIQ){
         
-        if let messageId = iq.elementID, let block = outstandingXMPPStanzaResponseBlocks[messageId]{
+        if let msgId = iq.elementID, let block = outstandingXMPPStanzaResponseBlocks[msgId]{
             block(success,iq)
-            outstandingXMPPStanzaResponseBlocks.removeValue(forKey: messageId)
+            outstandingXMPPStanzaResponseBlocks.removeValue(forKey: msgId)
         }
         
     }
