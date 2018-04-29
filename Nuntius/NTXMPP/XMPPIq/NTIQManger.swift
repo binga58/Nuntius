@@ -88,6 +88,23 @@ class NTIQManger: NSObject {
         
         
     }
+    
+    func getLastActivity(userId:String) -> Void {
+        if let jid = XMPPJID(string: userId), let iq = XMPPIQ.lastActivityQuery(to: jid), let msgId = iq.elementID{
+            
+            let id = NTXMPPManager.sharedManager().xmppConnection?.xmppLastActivity.sendQuery(to: jid)
+            
+            self.outstandingXMPPStanzaResponseBlocks[id!] = { (success: Bool,iq: XMPPIQ) in
+                if(success){
+                    
+                }
+                
+            }
+            
+            NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: iq)
+            
+        }
+    }
 
 }
 

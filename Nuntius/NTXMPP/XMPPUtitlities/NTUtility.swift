@@ -98,3 +98,11 @@ extension UITableView{
         return IndexPath(row: numberOfRows(inSection: numberOfSections - 1) - 1, section: numberOfSections - 1)
     }
 }
+
+
+extension NSObject
+{
+    static func className() -> String{
+        return String(describing : self)
+    }
+}

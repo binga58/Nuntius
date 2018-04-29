@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import XMPPFramework
 
 struct NTConstants {
     static let time = "time"
@@ -47,6 +48,11 @@ struct NTConstants {
     static let dnd = "dnd"
     static let away = "away"
     static let xa = "xa"
+    static let active = "active"
+    static let gone = "gone"
+    static let composing = "composing"
+    static let paused = "paused"
+    static let inactive = "inactive"
     
     struct xmlnsType {
         static let time = "urn:xmpp:time"
@@ -113,7 +119,7 @@ enum MessageType: Int, EnumToNSNumber {
 }
 
 
-enum ChatState: Int{
+enum NTChatState: Int{
     case gone = 0
     case active
     case composing
@@ -122,6 +128,23 @@ enum ChatState: Int{
     
     var nsNumber: NSNumber{
         return NSNumber.init(value: self.rawValue)
+    }
+    
+    static func convertChatState(chatState: String) -> NTChatState {
+        switch chatState {
+        case NTConstants.active:
+            return NTChatState.active
+        case NTConstants.composing:
+            return NTChatState.composing
+        case NTConstants.paused:
+            return NTChatState.paused
+        case NTConstants.inactive:
+            return NTChatState.inactive
+        case NTConstants.gone:
+            return NTChatState.gone
+        default:
+            return NTChatState.gone
+        }
     }
 }
 

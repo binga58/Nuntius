@@ -44,6 +44,8 @@
 		FC09BC011FC9873200B49643 /* NTMessageData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BBFF1FC9873200B49643 /* NTMessageData+CoreDataClass.swift */; };
 		FC09BC021FC9873200B49643 /* NTMessageData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC001FC9873200B49643 /* NTMessageData+CoreDataProperties.swift */; };
 		FC09BC101FC988CE00B49643 /* NTMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC09BC0F1FC988CE00B49643 /* NTMessage.swift */; };
+		FC35DAF920964F3C0020D14E /* NTUserStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC35DAF820964F3C0020D14E /* NTUserStateView.swift */; };
+		FC35DAFC20964F530020D14E /* NTUserStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC35DAFB20964F530020D14E /* NTUserStateView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +116,8 @@
 		FC09BBFF1FC9873200B49643 /* NTMessageData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTMessageData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		FC09BC001FC9873200B49643 /* NTMessageData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NTMessageData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC09BC0F1FC988CE00B49643 /* NTMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTMessage.swift; sourceTree = "<group>"; };
+		FC35DAF820964F3C0020D14E /* NTUserStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTUserStateView.swift; sourceTree = "<group>"; };
+		FC35DAFB20964F530020D14E /* NTUserStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NTUserStateView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +197,7 @@
 				4204D37F1FF61F4500F9BD81 /* SendNewMessage */,
 				428122131FCD47A900E83707 /* UsersCell */,
 				423F36A31FC6A25800AE9987 /* ChatViewController.swift */,
+				FC35DAFA20964F420020D14E /* NTUserStateView */,
 				423F36A51FC6A65700AE9987 /* ChatCells */,
 				42745DBF1FC7F30400D3DBEF /* NTXMPP */,
 				4227F2461FC3EBCB00EC8818 /* Main.storyboard */,
@@ -408,6 +413,15 @@
 			path = NTMessage;
 			sourceTree = "<group>";
 		};
+		FC35DAFA20964F420020D14E /* NTUserStateView */ = {
+			isa = PBXGroup;
+			children = (
+				FC35DAF820964F3C0020D14E /* NTUserStateView.swift */,
+				FC35DAFB20964F530020D14E /* NTUserStateView.xib */,
+			);
+			path = NTUserStateView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -419,8 +433,7 @@
 				4227F23B1FC3EBCB00EC8818 /* Sources */,
 				4227F23C1FC3EBCB00EC8818 /* Frameworks */,
 				4227F23D1FC3EBCB00EC8818 /* Resources */,
-				CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */,
-				9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */,
+				85DFFBC38DC8F1F3B805ED97 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -439,8 +452,6 @@
 				4227F2521FC3EBCB00EC8818 /* Sources */,
 				4227F2531FC3EBCB00EC8818 /* Frameworks */,
 				4227F2541FC3EBCB00EC8818 /* Resources */,
-				6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */,
-				58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -460,8 +471,6 @@
 				4227F25D1FC3EBCB00EC8818 /* Sources */,
 				4227F25E1FC3EBCB00EC8818 /* Frameworks */,
 				4227F25F1FC3EBCB00EC8818 /* Resources */,
-				20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */,
-				38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -531,6 +540,7 @@
 				423F36A91FC6A68400AE9987 /* ChatSentMessageTableViewCell.xib in Resources */,
 				428122171FCD47F600E83707 /* UserInfoTableViewCell.xib in Resources */,
 				4227F2481FC3EBCB00EC8818 /* Main.storyboard in Resources */,
+				FC35DAFC20964F530020D14E /* NTUserStateView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,21 +561,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20D359A41C5673296C10AA83 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		20E9C30D50066266C4868FE7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -584,64 +579,30 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		38B93766A95AA2826A00F62D /* [CP] Copy Pods Resources */ = {
+		85DFFBC38DC8F1F3B805ED97 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusUITests/Pods-NuntiusUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		58D498A3AF2A97DB45516AA2 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B6BE8FEA5A28CFD48F54204 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/KissXML/KissXML.framework",
+				"${BUILT_PRODUCTS_DIR}/XMPPFramework/XMPPFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/libidn/libidn.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KissXML.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XMPPFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libidn.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NuntiusTests/Pods-NuntiusTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9D6CD82DD63547DD6399F84C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B44D42231AAB98C1F1E75EEB /* [CP] Check Pods Manifest.lock */ = {
@@ -680,32 +641,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CF74F3E5406190BF1FA33D3D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
-				"${BUILT_PRODUCTS_DIR}/KissXML/KissXML.framework",
-				"${BUILT_PRODUCTS_DIR}/XMPPFramework/XMPPFramework.framework",
-				"${BUILT_PRODUCTS_DIR}/libidn/libidn.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KissXML.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XMPPFramework.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libidn.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nuntius/Pods-Nuntius-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -717,6 +652,7 @@
 				423F36C41FC6FE3700AE9987 /* NTDatabaseManager.swift in Sources */,
 				4283ADC41FC576CD00F95560 /* NTUtility.swift in Sources */,
 				42D4BE391FC44D0D00057D12 /* NTXMPPManager.swift in Sources */,
+				FC35DAF920964F3C0020D14E /* NTUserStateView.swift in Sources */,
 				423F36AE1FC6A6C600AE9987 /* ChatReceiveMessageTableViewCell.swift in Sources */,
 				423F36B41FC6E0D400AE9987 /* NTPresenceManager.swift in Sources */,
 				425F67FD1FCBF08700A5D578 /* NTUserData+CoreDataProperties.swift in Sources */,

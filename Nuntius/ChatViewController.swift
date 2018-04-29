@@ -41,12 +41,21 @@ class ChatViewController: UIViewController {
         return frc as! NSFetchedResultsController<NTMessageData>
     }()
     
+    lazy var navigationView: NTUserStateView = {
+        
+        let chatStateView = NTUserStateView.getInstance()
+        chatStateView?.buddy = self.buddy
+        chatStateView?.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        return chatStateView ?? NTUserStateView()
+        
+    }()
+    
     
     //MARK:----------------- View Life cycle methods ------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpTable()
-        self.title = buddy?.userId
+        
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -64,7 +73,7 @@ class ChatViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: false)
-        
+        NTXMPPManager.sharedManager().xmppConnection?.iqManager.getLastActivity(userId: (buddy?.userId)!)
         NTXMPPManager.sharedManager().addInRoster(userId: buddy?.userId)
         NTXMPPManager.sharedManager().setCurrentBuddy(buddy: NTUser.init(ntUserData: buddy))
         NTXMPPManager.sharedManager().markMessagesRead(userData: buddy) { (success) in
@@ -83,6 +92,7 @@ class ChatViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupView()
         chatTableView.scrollToRow(at: chatTableView.indexPathForLastRow(), at: .bottom, animated: true)
         NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
     }
@@ -98,6 +108,16 @@ class ChatViewController: UIViewController {
         self.removeNotificationObservers()
     }
     
+}
+
+//MARK:-------------------- View setup helper --------------------
+extension ChatViewController{
+    func setupView() -> Void {
+        navigationView.updateState()
+        navigationView.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
+        navigationView.registerForNotification()
+        self.navigationItem.titleView = navigationView
+    }
 }
 
 //MARK:-------------------- Table view helper --------------------
@@ -239,6 +259,7 @@ extension ChatViewController{
         let messageText = textVIew.text
         textVIew.text = ""
         NTXMPPManager.sharedManager().sendMessage(messageText: messageText!, userId: (buddy?.userId)! )
+        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
     }
     
 }
@@ -247,11 +268,16 @@ extension ChatViewController{
 extension ChatViewController: UITextViewDelegate{
     
     func textViewDidBeginEditing(_ textView: UITextView) {
+        
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .composing)
+        return true
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
+//        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
         
     }
     

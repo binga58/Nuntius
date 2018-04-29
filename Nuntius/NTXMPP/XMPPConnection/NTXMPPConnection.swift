@@ -41,6 +41,9 @@ class NTXMPPConnection: NSObject {
     var xmppMessageArchivingModule: XMPPMessageArchiving!
     var xmppMessageArchiveManagement: XMPPMessageArchiveManagement!
     
+    //XMPPLastActivity
+    var xmppLastActivity: XMPPLastActivity!
+    
     //XMPPRoster
     var xmppRoster: XMPPRoster!
     var xmppRosterCoreDataStorage: XMPPRosterCoreDataStorage!
@@ -227,6 +230,8 @@ extension NTXMPPConnection {
 //        xmppStreamManagement.enable(withResumption: true, maxTimeout: 60)
 //        xmppStreamManagement.requestAck()
         
+        xmppLastActivity = XMPPLastActivity()
+        
         //initialize xmppPing
         xmppPing = XMPPPing.init(dispatchQueue: NTXMPPManager.sharedManager().getQueue())
         xmppPing.respondsToQueries = true
@@ -280,6 +285,7 @@ extension NTXMPPConnection {
         xmppAutoPing.activate(xmppStream)
         //        xmppvCardAvatar.activate(xmppStream)
         xmppCapabilities.activate(xmppStream)
+        xmppLastActivity.activate(xmppStream)
         
         //add delegate
         xmppStream.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
@@ -292,6 +298,7 @@ extension NTXMPPConnection {
         xmppStreamManagement.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppStreamManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
         xmppMessageArchiveManagement.addDelegate(self.sharedMessageManager(), delegateQueue: NTXMPPManager.sharedManager().getQueue())
+        xmppLastActivity.addDelegate(self, delegateQueue: NTXMPPManager.sharedManager().getQueue())
         
         xmppRoomCoreDataStorage = XMPPRoomCoreDataStorage()
         xmppRoomCoreDataStorage.autoRecreateDatabaseFile = false
@@ -365,6 +372,10 @@ extension NTXMPPConnection {
             xmppMessageDeliveryReceipts.removeDelegate(NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager() as Any)
             xmppMessageDeliveryReceipts.deactivate()
         }
+        if xmppLastActivity != nil{
+            xmppLastActivity.removeDelegate(self)
+            xmppLastActivity.deactivate()
+        }
         //clear objects
         xmppReconnect = nil
         xmppRoster = nil
@@ -394,7 +405,7 @@ extension NTXMPPConnection {
         xmppMUC = nil
         
         xmppMessageDeliveryReceipts = nil
-        
+        xmppLastActivity = nil
         
         xmppStream.disconnect()
         xmppStream = nil
@@ -490,6 +501,21 @@ extension NTXMPPConnection: XMPPStreamManagementDelegate{
 //    }
     
    
+}
+
+extension NTXMPPConnection: XMPPLastActivityDelegate{
+    func numberOfIdleTimeSeconds(for sender: XMPPLastActivity!, queryIQ iq: XMPPIQ!, currentIdleTimeSeconds idleSeconds: UInt) -> UInt {
+        return 30
+    }
+    
+    func xmppLastActivity(_ sender: XMPPLastActivity!, didReceiveResponse response: XMPPIQ!) {
+        let time = response.lastActivitySeconds()
+        print("time in seconds \(time)")
+    }
+    
+    func xmppLastActivity(_ sender: XMPPLastActivity!, didNotReceiveResponse queryID: String!, dueToTimeout timeout: TimeInterval) {
+        
+    }
 }
 
 

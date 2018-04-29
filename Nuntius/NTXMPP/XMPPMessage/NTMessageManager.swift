@@ -71,7 +71,7 @@ class NTMessageManager: NSObject {
         
     }
     
-    func createChatStateStanza(userId: String, chatState: ChatState) -> DDXMLElement {
+    func createChatStateStanza(userId: String, chatState: NTChatState) -> DDXMLElement {
         guard let messageNode: DDXMLElement = DDXMLElement.element(withName: NTConstants.message) as? DDXMLElement else{
             return DDXMLElement()
         }
@@ -309,6 +309,21 @@ class NTMessageManager: NSObject {
         }
     }
     
+    //MARK:-------------------- Save chat state -------------------
+    func saveChatState(message: XMPPMessage) -> Void {
+        if let fromUserId = message.from?.user{
+            let context = NTDatabaseManager.sharedManager().getChildContext()
+            NTUserData.userData(For: fromUserId, isGroup: false, managedObjectContext: context) { (userData) in
+                if let user = userData{
+                    user.chatState = NSNumber(value: (NTChatState.convertChatState(chatState: (message.chatState?.rawValue)!)).rawValue)
+                    NTDatabaseManager.sharedManager().saveChildContext(context: context, completion: { (_) in
+                        NotificationCenter.default.post(name: NSNotification.Name.init("updateState"), object: nil)
+                    })
+                }
+            }
+        }
+    }
+    
     //MARK:-------------------- Mark message sent -----------------
     func markMessageSent(message: String?) {
         if let messageId: String = message{
@@ -398,6 +413,10 @@ extension NTMessageManager: XMPPStreamDelegate{
             self.receiveReadReceipts(message: message)
             return
         }
+        if let _ = message.chatState{
+            self.saveChatState(message: message)
+            return
+        }
     }
     
     func xmppStream(_ sender: XMPPStream, didFailToSend message: XMPPMessage, error: Error) {
@@ -436,7 +455,7 @@ extension NTMessageManager : XMPPMessageArchiveManagementDelegate{
         }
     }
     
-    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFailToReceiveMessages error: XMPPIQ) {
+    func xmppMessageArchiveManagement(_ xmppMessageArchiveManagement: XMPPMessageArchiveManagement, didFailToReceiveMessages error: XMPPIQ?) {
         
     }
     

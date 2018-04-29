@@ -124,11 +124,11 @@ extension NTXMPPManager{
         NTMessageData.getAllUnsentMessages(managedObjectContext: childMOC) { (messageDataList) in
             if let list = messageDataList{
                 for msg in list{
-                    self.operationQueue.addOperation {
+//                    self.operationQueue.addOperation {
                         if let message = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createMessage(messageText: msg.messageText, userId: msg.hasUser?.userId, messageId: msg.messageId!){
                             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: message)
                         }
-                    }
+//                    }
                     
                 }
                 
@@ -188,7 +188,7 @@ extension NTXMPPManager{
 
 //MARK:--------------- Send Chat state to user -----------
 extension NTXMPPManager{
-    func sendChatStateToUser(userId: String?, chatState: ChatState){
+    func sendChatStateToUser(userId: String?, chatState: NTChatState){
         if let user = userId, let element = NTXMPPManager.sharedManager().xmppConnection?.sharedMessageManager().createChatStateStanza(userId: user, chatState: chatState){
             NTXMPPManager.sharedManager().xmppConnection?.sendElement(element: element)
         }

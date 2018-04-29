@@ -13,7 +13,11 @@
 @class XMPPIDTracker;
 @class XMPPMessage;
 
+
 NS_ASSUME_NONNULL_BEGIN
+
+/** 'urn:xmpp:mam:2' */
+extern NSString *const XMLNS_XMPP_MAM;
 
 @interface XMPPMessageArchiveManagement : XMPPModule
 
@@ -43,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 - (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didFinishReceivingMessagesWithSet:(XMPPResultSet *)resultSet;
 - (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didReceiveMAMMessage:(XMPPMessage *)message;
-- (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didFailToReceiveMessages:(XMPPIQ *)error;
+- (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didFailToReceiveMessages:(nullable XMPPIQ *)error;
 
 - (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didReceiveFormFields:(XMPPIQ *)iq;
 - (void)xmppMessageArchiveManagement:(XMPPMessageArchiveManagement *)xmppMessageArchiveManagement didFailToReceiveFormFields:(XMPPIQ *)iq;
