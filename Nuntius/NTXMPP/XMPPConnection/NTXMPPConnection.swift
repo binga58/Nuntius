@@ -314,9 +314,12 @@ extension NTXMPPConnection {
      Disconnects from xmpp server after sending all pending elements
      */
     func disconnectXMPPStream() -> () {
-        if xmppStream != nil{
-            xmppStream.disconnectAfterSending()
-//            self.sharedPresenceManager().clearPresenceOfAllUsers()
+        DispatchQueue.main.async {[weak self] in
+            if self?.xmppStream != nil{
+                
+                self?.xmppStream.disconnectAfterSending()
+                //            self.sharedPresenceManager().clearPresenceOfAllUsers()
+            }
         }
     }
     

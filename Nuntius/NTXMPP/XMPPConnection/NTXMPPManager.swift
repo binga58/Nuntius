@@ -314,8 +314,12 @@ extension NTXMPPManager{
     }
     
     @objc private func appInBackground(){
+        if let user = NTXMPPManager.sharedManager().currentBuddy?.userId{
+            
+            NTXMPPManager.sharedManager().sendChatStateToUser(userId: user, chatState: .gone)
+        }
         NTUserData.markAllUsersUnavailableAndSaveToPersistentStore()
-//        self.disconnect()
+        self.disconnect()
     }
     
     @objc func appInTerminate() {

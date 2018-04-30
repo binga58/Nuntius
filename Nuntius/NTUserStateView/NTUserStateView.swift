@@ -42,13 +42,13 @@ class NTUserStateView: UIView {
                     case .gone:
                         text = "gone"
                     case .active:
-                        text = "active"
+                        text = "online"
                     case .composing:
                         text = "typing"
                     case .paused:
-                        text = "active"
+                        text = "online"
                     case .inactive:
-                        text = "last active on - "
+                        text = "gone"
                     }
                 }
                 self.userChatState.text = text

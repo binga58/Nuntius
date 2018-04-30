@@ -272,7 +272,13 @@ extension ChatViewController: UITextViewDelegate{
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .composing)
+        let newString = (textView.text! as NSString).replacingCharacters(in: range, with: text) as String
+        if !newString.isEmpty{
+            NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .composing)
+        }else{
+            NTXMPPManager.sharedManager().sendChatStateToUser(userId: (buddy?.userId)!, chatState: .active)
+        }
+        
         return true
     }
     
